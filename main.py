@@ -24,6 +24,8 @@ class SoftwareRenderer():
         # UI
         r = pg.Rect(10,10,50,50)
         pg.draw.rect(self.screen, "blue", r)
+        r = pg.Rect(10,70,50,50)
+        pg.draw.rect(self.screen, "yellow", r)
 
 
         # draw current turrets

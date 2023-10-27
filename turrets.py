@@ -11,9 +11,9 @@ class Turret():
         self.plzone = pg.Rect((x-10,y-10), (70, 70)) # zone where no turret can be placed
 
         if type == 1:
-            self.color = "orange"
+            self.color = "blue"
         elif type == 2:
-            self.color = "green"
+            self.color = "yellow"
 
 def addTurret(renderer, t):
     renderer.turrets.append(t)
