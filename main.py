@@ -10,7 +10,7 @@ class SoftwareRenderer():
 
     def __init__(self):
         pg.init()
-        self.RES = self.WIDHT, self.HEIGHT = 160*5, 90*5
+        self.RES = self.WIDTH, self.HEIGHT = 160*5, 90*5
         self.screen = pg.display.set_mode(self.RES)
         self.clock = pg.time.Clock()
         self.FPS = 60
@@ -58,7 +58,19 @@ class SoftwareRenderer():
         for UIe in self.UI:
             UIe.draw(self)
 
+        # draw grid lines if SHIFT pressed
+        keys = pg.key.get_pressed()
+        if keys[pg.K_LSHIFT]:
+            # draw horizonatally
+            for i in range(self.WIDTH//70+1):
+                pg.draw.line(self.screen, "white", (i*70, 0), (i*70, self.HEIGHT))
 
+            # draw vertically
+            for i in range(self.HEIGHT//70+1):
+                pg.draw.line(self.screen, "white", (0, i*70), (self.WIDTH, i*70))
+
+    def handleKeyPress(self):
+        pass
 
     def handleEvents(self):
         # Handles pygame events
@@ -77,6 +89,7 @@ class SoftwareRenderer():
 
             self.draw()
             self.handleEvents()
+            self.handleKeyPress()
 
             # Set FPS as the name of the window
             pg.display.set_caption(
