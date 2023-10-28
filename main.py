@@ -32,10 +32,6 @@ class SoftwareRenderer():
         
         self.screen.fill("purple")
 
-        # draw UI
-        for UIe in self.UI:
-            UIe.draw(self)
-
 
         # draw current turrets
         for turret in self.turrets:
@@ -52,6 +48,10 @@ class SoftwareRenderer():
                     break
 
             self.handturret.draw(self, rectColor)
+
+        # draw UI
+        for UIe in self.UI:
+            UIe.draw(self)
 
 
         
