@@ -23,10 +23,10 @@ class SoftwareRenderer():
         # This will be an Array that contains UIe class
         # the type variable lets the code know what turret this is for
         self.UI = [
-            UIe(1, (5,5), "blue"),
-            UIe(2, (5,65), "yellow"),
-            UIe(3, (5,125), "green", renderer=triangle_render),
-            UIe(4, (5,185), "brown", renderer=hexagon_render),
+            UIe(1, (10,5), "blue"),
+            UIe(2, (10,65), "yellow"),
+            UIe(3, (10,125), "green", renderer=triangle_render),
+            UIe(4, (10,185), "brown", renderer=hexagon_render),
         ]
 
         # init turrets
@@ -66,6 +66,10 @@ class SoftwareRenderer():
             self.selectedTurret.draw(self, rectColor)
 
         # draw UI
+        bRect = pg.Rect((0,0), (80, self.HEIGHT))
+        pg.draw.rect(self.screen, "beige", bRect)
+        pg.draw.rect(self.screen, pg.Color(206,126,0), bRect, 4)
+
         for UIe in self.UI:
             UIe.draw(self)
 
