@@ -17,15 +17,30 @@ class SoftwareRenderer():
         self.turrets = []
         self.handturret = Turret(1, -10, -10)
 
+        # UI
+        # This will be an Array that contains Objects with all the UI elements like buttons
+        # the type variable lets the code know what turret this is for
+        self.UI = [
+            {
+                "rect": pg.Rect((10,10), (50,50)),
+                "type": 1,
+                "color": "blue"
+            },
+            {
+                "rect": pg.Rect(10,70,50,50),
+                "type": 2,
+                "color": "yellow"
+            }
+        ]
+
     def draw(self):
-        # Handles anything related to drawing something to the screen
+        # This func handles anything related to drawing something to the screen
+        
         self.screen.fill("purple")
 
-        # UI
-        r = pg.Rect(10,10,50,50)
-        pg.draw.rect(self.screen, "blue", r)
-        r = pg.Rect(10,70,50,50)
-        pg.draw.rect(self.screen, "yellow", r)
+        # draw UI
+        for UIe in self.UI:
+            pg.draw.rect(self.screen, UIe["color"], UIe["rect"])
 
 
         # draw current turrets

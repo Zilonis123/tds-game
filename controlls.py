@@ -5,7 +5,7 @@ def mouse_click(render):
     mx,my = pg.mouse.get_pos()
 
     # Check if mouse was clicked on a UI element
-    t = _check_UI(mx,my)
+    t = _check_UI(render, mx,my)
     if not t and not render.actionRN == "grabturret":
         return
     
@@ -24,11 +24,10 @@ def mouse_click(render):
     render.actionRN = "grabturret"
     render.handturret = Turret(t, mx, my)
 
-def _check_UI(mx,my):
+def _check_UI(render, mx,my):
     # checks if the the given pos is over a "button"
 
-    if pg.Rect(10,10,50,50).collidepoint(mx,my):
-        return 1
-    elif pg.Rect(10,70,50,50).collidepoint(mx,my):
-        return 2
+    for UIe in render.UI:
+        if UIe["rect"].collidepoint(mx, my):
+            return UIe["type"]
     return False
