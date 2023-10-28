@@ -1,4 +1,5 @@
 import pygame as pg
+from .usefulmath import translate_rect_to_circ
 
 class UIe:
     def __init__(self, type, pos, color, turret="none"):
@@ -17,7 +18,7 @@ class UIe:
         self.turret = turret
         if self.type == "delete":
             self.render = "circle"
-            self.rect = pg.Rect((self.top-15, self.left-15), (30,30))
+            self.rect = pg.Rect(translate_rect_to_circ(self.rect), (30,30))
 
     def draw(self, render):
         if self.render == "circle":
