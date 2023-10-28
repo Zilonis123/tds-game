@@ -4,7 +4,7 @@ import math
 from helper.controlls import *
 from helper.UI import UIe
 from helper.turrets import Turret
-from helper.renderers import triangle_render, hexagon_render
+from helper.renderers import *
 
 class SoftwareRenderer():
 
@@ -25,7 +25,7 @@ class SoftwareRenderer():
             UIe(1, (10,10), "blue"),
             UIe(2, (10,75), "yellow"),
             UIe(3, (10,140), "green", renderer=triangle_render),
-            UIe(3, (10,205), "pink", renderer=hexagon_render),
+            UIe(4, (10,205), "pink", renderer=hexagon_render),
         ]
 
         # init turrets
