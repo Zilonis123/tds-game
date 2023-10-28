@@ -21,5 +21,5 @@ class Turret():
             color = self.color
         pg.draw.rect(render.screen, color, self.rect)
 
-def addTurret(renderer, t):
-    renderer.turrets.append(t)
+def addTurret(render, t):
+    render.turrets.append(t)

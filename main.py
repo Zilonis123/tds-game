@@ -19,7 +19,7 @@ class SoftwareRenderer():
         self.handturret = Turret(1, -10, -10)
 
         # UI
-        # This will be an Array that contains Objects with all the UI elements like buttons
+        # This will be an Array that contains UIe class
         # the type variable lets the code know what turret this is for
         self.UI = [
             UIe(1, (10,10), "blue"),
@@ -66,6 +66,7 @@ class SoftwareRenderer():
                 mouse_click(self)
 
     def run(self):
+        # main game loop
 
         self.running = True
         while self.running:
