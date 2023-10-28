@@ -22,10 +22,10 @@ class SoftwareRenderer():
         # This will be an Array that contains UIe class
         # the type variable lets the code know what turret this is for
         self.UI = [
-            UIe(1, (10,10), "blue"),
-            UIe(2, (10,75), "yellow"),
-            UIe(3, (10,140), "green", renderer=triangle_render),
-            UIe(4, (10,205), "pink", renderer=hexagon_render),
+            UIe(1, (5,5), "blue"),
+            UIe(2, (5,65), "yellow"),
+            UIe(3, (5,125), "green", renderer=triangle_render),
+            UIe(4, (5,185), "brown", renderer=hexagon_render),
         ]
 
         # init turrets
