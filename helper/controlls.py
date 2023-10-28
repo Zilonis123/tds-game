@@ -71,7 +71,7 @@ def _click_turret(render, mx, my):
         # check if we are trying to deselect a turret
         if clickedOn == render.selectedTurret:
             render.actionRN = "none"
-            
+
             # remove delete button
             for UI in render.UI:
                 if UI.turret == render.selectedTurret:
@@ -84,7 +84,7 @@ def _click_turret(render, mx, my):
 
     # create the UI elements needed4
 
-    pos = (clickedOn.x+50, clickedOn.y-40)
+    pos = (clickedOn.x+50, clickedOn.y-7) # calculate offset
     deleteBtn = UIe("delete", pos, "red", clickedOn)
     render.UI.append(deleteBtn)
 
