@@ -18,3 +18,4 @@ class UIe:
         if self.type == "delete":
             render.turrets.remove(self.turret)
             render.UI.remove(self)
+            render.actionRN = "none"

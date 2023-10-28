@@ -17,7 +17,7 @@ class SoftwareRenderer():
         self.actionRN = "none"
 
         self.turrets = []
-        self.handturret = Turret(1, -10, -10)
+        self.selectedTurret = Turret(1, -10, -10)
 
         # UI
         # This will be an Array that contains UIe class
@@ -43,11 +43,11 @@ class SoftwareRenderer():
             # change color depending if the turret can be placed
             rectColor = "green"
             for turret in self.turrets:
-                if turret.plzone.colliderect(self.handturret.rect):
+                if turret.plzone.colliderect(self.selectedTurret.rect):
                     rectColor = "red"
                     break
 
-            self.handturret.draw(self, rectColor)
+            self.selectedTurret.draw(self, rectColor)
 
         # draw UI
         for UIe in self.UI:
@@ -79,11 +79,11 @@ class SoftwareRenderer():
             pg.display.set_caption(
                 str(math.floor(self.clock.get_fps()))+"FPS - TD")
 
-            # if turret in hand update self.handturret
+            # if turret in hand update self.selectedTurret
             if self.actionRN == "grabturret":
-                t = self.handturret.type
+                t = self.selectedTurret.type
                 mx,my = pg.mouse.get_pos()
-                self.handturret = Turret(t, mx, my)
+                self.selectedTurret = Turret(t, mx, my)
 
             pg.display.flip()
             self.clock.tick(self.FPS)

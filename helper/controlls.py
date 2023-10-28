@@ -5,7 +5,8 @@ from .UI import UIe
 def mouse_click(render):
     mx,my = pg.mouse.get_pos()
 
-    # Check if mouse was clicked on a UI element
+
+    # Check if mouse was clicked on a UI element and not action is done right now
     res = _check_UI(render, mx,my)
 
     if res == False:
@@ -22,7 +23,8 @@ def _check_UI(render, mx,my):
 
     for UIe in render.UI:
         if UIe.rect.collidepoint(mx, my):
-            if UIe.isTurretspawn:
+            canPlaceTurret = render.actionRN == "none" or render.actionRN == "grabTurret"
+            if UIe.isTurretspawn and canPlaceTurret:
                 # if UI element is a turretspawn .. make a turret
                 _grab_turret(render, UIe.type)
                 return
@@ -42,17 +44,17 @@ def _grab_turret(render, type="none"):
 
         # check if turret collides with any existing turret
         for turret in render.turrets:
-            if turret.plzone.colliderect(render.handturret.rect):
+            if turret.plzone.colliderect(render.selectedTurret.rect):
                 return
         # else - "build" the turret
 
-        addTurret(render, render.handturret)
+        addTurret(render, render.selectedTurret)
         render.actionRN = "none"
         return
     # else - select a turret
 
     render.actionRN = "grabturret"
-    render.handturret = Turret(type, mx, my)
+    render.selectedTurret = Turret(type, mx, my)
 
 def _click_turret(render, mx, my):
     # check if we have clicked on a turret
@@ -61,17 +63,29 @@ def _click_turret(render, mx, my):
         if turret.rect.collidepoint(mx, my):
             clickedOn = turret 
     
-    if clickedOn == "none" and not render.actionRN == "selectTurret":
+    if clickedOn == "none":
         return
     
-    # check if we are trying to deselect a turret
-    if render.actionRN == "selectTurret" and clickedOn != "none":
-        render.actionRN = "none"
+    # check if we have a selected turret and if we are trying to select another one
+    if render.actionRN == "selectTurret":
+        # check if we are trying to deselect a turret
+        if clickedOn == render.selectedTurret:
+            render.actionRN = "none"
+            
+            # remove delete button
+            for UI in render.UI:
+                if UI.turret == render.selectedTurret:
+                    render.UI.remove(UI)
+
         return
    
     # select the turret
     render.actionRN = "selectTurret"
 
-    # create the UI elements needed
-    deleteBtn = UIe("delete", (clickedOn.x+50, clickedOn.y-40), "red", clickedOn)
+    # create the UI elements needed4
+
+    pos = (clickedOn.x+50, clickedOn.y-40)
+    deleteBtn = UIe("delete", pos, "red", clickedOn)
     render.UI.append(deleteBtn)
+
+    render.selectedTurret = clickedOn
