@@ -32,6 +32,8 @@ class SoftwareRenderer():
         self.turrets = []
         self.selectedTurret = Turret(1, -10, -10, self)
 
+        self.gridsize=60
+
     def draw(self):
         # This func handles anything related to drawing something to the screen
         
@@ -62,12 +64,12 @@ class SoftwareRenderer():
         keys = pg.key.get_pressed()
         if keys[pg.K_LSHIFT]:
             # draw horizonatally
-            for i in range(self.WIDTH//70+1):
-                pg.draw.line(self.screen, "white", (i*70, 0), (i*70, self.HEIGHT))
+            for i in range(self.WIDTH//self.gridsize+1):
+                pg.draw.line(self.screen, "white", (i*self.gridsize, 0), (i*self.gridsize, self.HEIGHT))
 
             # draw vertically
-            for i in range(self.HEIGHT//70+1):
-                pg.draw.line(self.screen, "white", (0, i*70), (self.WIDTH, i*70))
+            for i in range(self.HEIGHT//self.gridsize+1):
+                pg.draw.line(self.screen, "white", (0, i*self.gridsize), (self.WIDTH, i*self.gridsize))
 
     def handleKeyPress(self):
         pass
@@ -99,6 +101,17 @@ class SoftwareRenderer():
             if self.actionRN == "grabturret":
                 t = self.selectedTurret.type
                 mx,my = pg.mouse.get_pos()
+                
+                # if grid lines enabled
+                keys = pg.key.get_pressed()
+                if keys[pg.K_LSHIFT]:
+                    # snap to grid
+                    mx=mx+50/2
+                    my=my+50/2
+                    mx=round(mx/70)*self.gridsize
+                    my=round(my/70)*self.gridsize
+                    mx=mx-50-(self.gridsize-50)//2
+                    my=my-50-(self.gridsize-50)//2
                 self.selectedTurret = Turret(t, mx, my, self)
 
             pg.display.flip()
