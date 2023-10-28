@@ -2,10 +2,10 @@ import pygame as pg
 import math
 
 from helper.controlls import *
-from helper.UI import UIe
-from helper.turrets import Turret
-from helper.renderers import *
-from helper.enemies import Enemy
+from helper.Visuals.UI import UIe
+from helper.Entities.turrets import Turret
+from helper.Visuals.renderers import *
+from helper.Entities.enemies import Enemy
 
 class SoftwareRenderer():
 
@@ -103,7 +103,7 @@ class SoftwareRenderer():
             self.handleKeyPress()
 
             # Tick enemies
-            for enemy in enemies:
+            for enemy in self.enemies:
                 enemy.tick(self)
 
             # Set FPS as the name of the window

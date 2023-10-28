@@ -1,4 +1,4 @@
-from .renderers import circle_renderer, healthbar
+from ..Visuals.renderers import circle_renderer, healthbar
 import pygame as pg
 
 class Enemy():
