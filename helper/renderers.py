@@ -48,5 +48,4 @@ def healthbar(render, pos, health, maxhealth, size=5):
     pg.draw.line(render.screen, darkred, (x-uSize, y), (x+uSize, y), size)
 
     length = round((health/maxhealth)*(uSize*2))
-    print(length)
     pg.draw.line(render.screen, green, (x-uSize, y), ((x-uSize)+length,y), size)

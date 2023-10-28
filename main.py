@@ -102,6 +102,10 @@ class SoftwareRenderer():
             self.handleEvents()
             self.handleKeyPress()
 
+            # Tick enemies
+            for enemy in enemies:
+                enemy.tick(self)
+
             # Set FPS as the name of the window
             pg.display.set_caption(
                 str(math.floor(self.clock.get_fps()))+"FPS - TD")

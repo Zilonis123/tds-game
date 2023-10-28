@@ -24,3 +24,11 @@ class Enemy():
 
         # healthbar
         healthbar(render, (self.rect.center[0], self.rect.center[1]-20), self.health, self.maxhealth)
+
+    def tick(self, render):
+        pass
+    
+    def __eq__(self, other):
+        if isInstance(other, Enemy):
+            return self.uid == other.uid
+        return 
