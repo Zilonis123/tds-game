@@ -32,3 +32,6 @@ def hexagon_render(render, rect, color, isOutline=0):
         vertices.append((hexagon_x, hexagon_y))
 
     pg.draw.polygon(render.screen, color, vertices, isOutline)
+
+def circle_renderer(render, rect, color, isOutline=0, radius=30):
+    pg.draw.circle(render.screen, color, rect.center, radius, isOutline)
