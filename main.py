@@ -16,16 +16,19 @@ class SoftwareRenderer():
         
         self.actionRN = "none"
 
-        self.turrets = []
-        self.selectedTurret = Turret(1, -10, -10)
 
         # UI
         # This will be an Array that contains UIe class
         # the type variable lets the code know what turret this is for
         self.UI = [
             UIe(1, (10,10), "blue"),
-            UIe(2, (10,75), "yellow")
+            UIe(2, (10,75), "yellow"),
+            UIe(3, (10,140), "green"),
         ]
+
+        # init turrets
+        self.turrets = []
+        self.selectedTurret = Turret(1, -10, -10, self)
 
     def draw(self):
         # This func handles anything related to drawing something to the screen
@@ -41,7 +44,7 @@ class SoftwareRenderer():
         if self.actionRN == "grabturret":
 
             # change color depending if the turret can be placed
-            rectColor = "green"
+            rectColor = self.selectedTurret.color
             for turret in self.turrets:
                 if turret.plzone.colliderect(self.selectedTurret.rect):
                     rectColor = "red"
@@ -83,7 +86,7 @@ class SoftwareRenderer():
             if self.actionRN == "grabturret":
                 t = self.selectedTurret.type
                 mx,my = pg.mouse.get_pos()
-                self.selectedTurret = Turret(t, mx, my)
+                self.selectedTurret = Turret(t, mx, my, self)
 
             pg.display.flip()
             self.clock.tick(self.FPS)

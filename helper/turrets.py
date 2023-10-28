@@ -1,7 +1,7 @@
 import pygame as pg
 
 class Turret():
-    def __init__(self, type, x, y):
+    def __init__(self, type, x, y, render):
         self.type = type
         self.x = x
         self.y = y
@@ -17,15 +17,17 @@ class Turret():
         self.uid = tuple_str + str(self.type)
 
         # choose color
-        if type == 1:
-            self.color = "blue"
-        elif type == 2:
-            self.color = "yellow"
+        for UIe in render.UI:
+            if UIe.type == type:
+                self.color = UIe.color
     
     def draw(self, render, color="none"):
         if color == "none":
             color = self.color
         pg.draw.rect(render.screen, color, self.rect)
+        # if selected draw outline
+        if render.selectedTurret == self:
+            pg.draw.rect(render.screen, "white", self.rect, 3)
 
     def __eq__(self, other):
         if isinstance(other, Turret):

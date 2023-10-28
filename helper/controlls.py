@@ -50,11 +50,13 @@ def _grab_turret(render, type="none"):
 
         addTurret(render, render.selectedTurret)
         render.actionRN = "none"
+        # remove selected turret
+        render.selectedTurret = Turret(1, -999, -999, render)
         return
     # else - select a turret
 
     render.actionRN = "grabturret"
-    render.selectedTurret = Turret(type, mx, my)
+    render.selectedTurret = Turret(type, mx, my, render)
 
 def _click_turret(render, mx, my):
     def remove_delete_btn(render):
@@ -74,6 +76,8 @@ def _click_turret(render, mx, my):
         if render.actionRN == "selectTurret":
             remove_delete_btn(render)
             render.actionRN = "none"
+            # remove selected turret
+            render.selectedTurret = Turret(1, -999, -999, render)
         return
     
     # deselect current turret and select another one
@@ -85,6 +89,7 @@ def _click_turret(render, mx, my):
         # if we are trying to select the same turrent .. dont allow it
         if clickedOn == render.selectedTurret:
             render.actionRN = "none"
+            render.selectedTurret = Turret(1, -999, -999, render)
             return
 
    
