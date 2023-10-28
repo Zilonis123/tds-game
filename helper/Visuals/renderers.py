@@ -49,3 +49,14 @@ def healthbar(render, pos, health, maxhealth, size=5):
 
     length = round((health/maxhealth)*(uSize*2))
     pg.draw.line(render.screen, green, (x-uSize, y), ((x-uSize)+length,y), size)
+    text(render, str(health), "white", (x, y-5), 10)
+
+def text(render, text, color, pos, size=18):
+    # init font
+    font = pg.font.Font('freesansbold.ttf', size)
+    surface = font.render(text, True, color)
+
+    rect = surface.get_rect()
+    rect.center = pos
+
+    render.screen.blit(surface, rect)
