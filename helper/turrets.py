@@ -20,14 +20,15 @@ class Turret():
         for UIe in render.UI:
             if UIe.type == type:
                 self.color = UIe.color
+                self.renderer = UIe.renderer
     
     def draw(self, render, color="none"):
         if color == "none":
             color = self.color
-        pg.draw.rect(render.screen, color, self.rect)
+        self.renderer(render, self.rect, color)
         # if selected draw outline
         if render.selectedTurret == self:
-            pg.draw.rect(render.screen, "white", self.rect, 3)
+            self.renderer(render, self.rect, "white", 3)
 
     def __eq__(self, other):
         if isinstance(other, Turret):
