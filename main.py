@@ -30,9 +30,7 @@ class SoftwareRenderer():
 
         # draw current turrets
         for turret in self.turrets:
-            turretRect = pg.Rect(turret.pos, (50,50))
-            pg.draw.rect(self.screen, turret.color, turretRect)
-
+            turret.draw(self)
 
         # draw current in hand
         if self.actionRN == "grabturret":
@@ -44,7 +42,7 @@ class SoftwareRenderer():
                     rectColor = "red"
                     break
 
-            pg.draw.rect(self.screen, rectColor, self.handturret.rect)
+            self.handturret.draw(self, rectColor)
 
 
         
