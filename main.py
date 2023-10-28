@@ -5,6 +5,7 @@ from helper.controlls import *
 from helper.UI import UIe
 from helper.turrets import Turret
 from helper.renderers import *
+from helper.enemies import Enemy
 
 class SoftwareRenderer():
 
@@ -12,8 +13,8 @@ class SoftwareRenderer():
         pg.init()
         self.RES = self.WIDTH, self.HEIGHT = 160*5, 90*5
         self.screen = pg.display.set_mode(self.RES)
-        self.clock = pg.time.Clock()
         self.FPS = 60
+        self.clock = pg.time.Clock()
         
         self.actionRN = "none"
 
@@ -34,10 +35,18 @@ class SoftwareRenderer():
 
         self.gridsize=60
 
+        # Enemies
+        self.enemies = []
+        self.enemies.append(Enemy(1, (100,100)))
+
     def draw(self):
         # This func handles anything related to drawing something to the screen
         
         self.screen.fill("darkgray")
+
+        # draw enemies
+        for enemy in self.enemies:
+            enemy.draw(self)
 
 
         # draw current turrets

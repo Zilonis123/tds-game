@@ -33,5 +33,20 @@ def hexagon_render(render, rect, color, isOutline=0):
 
     pg.draw.polygon(render.screen, color, vertices, isOutline)
 
-def circle_renderer(render, rect, color, isOutline=0, radius=30):
+def circle_renderer(render, rect, color, isOutline=0, radius=15):
     pg.draw.circle(render.screen, color, rect.center, radius, isOutline)
+
+def healthbar(render, pos, health, maxhealth, size=5):
+    darkred = pg.Color(83,0,0)
+    green = pg.Color(0,206,17)
+    
+    x,y=pos
+
+    uSize = 25 # uSize - universal size // half of the line
+
+    # line background
+    pg.draw.line(render.screen, darkred, (x-uSize, y), (x+uSize, y), size)
+
+    length = round((health/maxhealth)*(uSize*2))
+    print(length)
+    pg.draw.line(render.screen, green, (x-uSize, y), ((x-uSize)+length,y), size)
