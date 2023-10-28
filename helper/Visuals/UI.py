@@ -1,5 +1,5 @@
 import pygame as pg
-from .usefulmath import translate_rect_to_circ
+from ..usefulmath import translate_rect_to_circ
 from .renderers import square_render
 
 # UIe - UI element

@@ -1,6 +1,6 @@
 import pygame as pg
-from .turrets import *
-from .UI import UIe
+from .Entities.turrets import *
+from .Visuals.UI import UIe
 
 def mouse_click(render):
     mx,my = pg.mouse.get_pos()

@@ -2,9 +2,10 @@ import pygame as pg
 import math
 
 from helper.controlls import *
-from helper.UI import UIe
-from helper.turrets import Turret
-from helper.renderers import *
+from helper.Visuals.UI import UIe
+from helper.Entities.turrets import Turret
+from helper.Visuals.renderers import *
+from helper.Entities.enemies import Enemy
 
 class SoftwareRenderer():
 
@@ -12,8 +13,8 @@ class SoftwareRenderer():
         pg.init()
         self.RES = self.WIDTH, self.HEIGHT = 160*5, 90*5
         self.screen = pg.display.set_mode(self.RES)
-        self.clock = pg.time.Clock()
         self.FPS = 60
+        self.clock = pg.time.Clock()
         
         self.actionRN = "none"
 
@@ -22,10 +23,10 @@ class SoftwareRenderer():
         # This will be an Array that contains UIe class
         # the type variable lets the code know what turret this is for
         self.UI = [
-            UIe(1, (5,5), "blue"),
-            UIe(2, (5,65), "yellow"),
-            UIe(3, (5,125), "green", renderer=triangle_render),
-            UIe(4, (5,185), "brown", renderer=hexagon_render),
+            UIe(1, (10,5), "blue"),
+            UIe(2, (10,65), "yellow"),
+            UIe(3, (10,125), "green", renderer=triangle_render),
+            UIe(4, (10,185), "brown", renderer=hexagon_render),
         ]
 
         # init turrets
@@ -34,10 +35,18 @@ class SoftwareRenderer():
 
         self.gridsize=60
 
+        # Enemies
+        self.enemies = []
+        self.enemies.append(Enemy(1, (100,100)))
+
     def draw(self):
         # This func handles anything related to drawing something to the screen
         
         self.screen.fill("darkgray")
+
+        # draw enemies
+        for enemy in self.enemies:
+            enemy.draw(self)
 
 
         # draw current turrets
@@ -57,6 +66,10 @@ class SoftwareRenderer():
             self.selectedTurret.draw(self, rectColor)
 
         # draw UI
+        bRect = pg.Rect((0,0), (80, self.HEIGHT))
+        pg.draw.rect(self.screen, "beige", bRect)
+        pg.draw.rect(self.screen, pg.Color(206,126,0), bRect, 4)
+
         for UIe in self.UI:
             UIe.draw(self)
 
@@ -92,6 +105,10 @@ class SoftwareRenderer():
             self.draw()
             self.handleEvents()
             self.handleKeyPress()
+
+            # Tick enemies
+            for enemy in self.enemies:
+                enemy.tick(self)
 
             # Set FPS as the name of the window
             pg.display.set_caption(

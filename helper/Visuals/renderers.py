@@ -32,3 +32,31 @@ def hexagon_render(render, rect, color, isOutline=0):
         vertices.append((hexagon_x, hexagon_y))
 
     pg.draw.polygon(render.screen, color, vertices, isOutline)
+
+def circle_renderer(render, rect, color, isOutline=0, radius=15):
+    pg.draw.circle(render.screen, color, rect.center, radius, isOutline)
+
+def healthbar(render, pos, health, maxhealth, size=5):
+    darkred = pg.Color(83,0,0)
+    green = pg.Color(0,206,17)
+    
+    x,y=pos
+
+    uSize = 25 # uSize - universal size // half of the line
+
+    # line background
+    pg.draw.line(render.screen, darkred, (x-uSize, y), (x+uSize, y), size)
+
+    length = round((health/maxhealth)*(uSize*2))
+    pg.draw.line(render.screen, green, (x-uSize, y), ((x-uSize)+length,y), size)
+    text(render, str(health), "white", (x, y-5), 10)
+
+def text(render, text, color, pos, size=18):
+    # init font
+    font = pg.font.Font('freesansbold.ttf', size)
+    surface = font.render(text, True, color)
+
+    rect = surface.get_rect()
+    rect.center = pos
+
+    render.screen.blit(surface, rect)
