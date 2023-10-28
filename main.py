@@ -4,6 +4,7 @@ import math
 from helper.controlls import *
 from helper.UI import UIe
 from helper.turrets import Turret
+from helper.renderers import triangle_render
 
 class SoftwareRenderer():
 
@@ -23,7 +24,7 @@ class SoftwareRenderer():
         self.UI = [
             UIe(1, (10,10), "blue"),
             UIe(2, (10,75), "yellow"),
-            UIe(3, (10,140), "green"),
+            UIe(3, (10,140), "green", renderer=triangle_render),
         ]
 
         # init turrets
@@ -56,8 +57,6 @@ class SoftwareRenderer():
         for UIe in self.UI:
             UIe.draw(self)
 
-
-        
 
 
     def handleEvents(self):
