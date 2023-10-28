@@ -58,9 +58,11 @@ def _grab_turret(render, type="none"):
 
 def _click_turret(render, mx, my):
     def remove_delete_btn(render):
+        # function to remove delete button
         for UI in render.UI:
             if UI.turret == render.selectedTurret:
                 render.UI.remove(UI)
+
     # check if we have clicked on a turret
     clickedOn = "none"
     for turret in render.turrets:
@@ -90,8 +92,8 @@ def _click_turret(render, mx, my):
     render.actionRN = "selectTurret"
 
     # create the UI elements needed4
-
-    pos = (clickedOn.x+50, clickedOn.y-7) # calculate offset
+    rect = clickedOn.rect
+    pos = (rect.x+rect.width, rect.y-rect.height//7) # calculate offset
     deleteBtn = UIe("delete", pos, "red", clickedOn)
     render.UI.append(deleteBtn)
 

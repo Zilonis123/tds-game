@@ -8,10 +8,11 @@ class Turret():
         self.pos = (x,y)
         self.size = (50,50) # may be subject to change
 
-        self.rect = pg.Rect(self.pos, (50, 50))
-        self.plzone = pg.Rect((x-10,y-10), (70, 70)) # zone where no turret can be placed
+        self.rect = pg.Rect(self.pos, self.size)
+        dz = 10 # deadzone -- extra pixels where nothing can be palced
+        self.plzone = pg.Rect((x-dz,y-dz), (self.size[0]+dz*2, self.size[1]+dz*2)) # zone where no turret can be placed
 
-        # generatate an uiq
+        # generatate an UId
         tuple_str = ''.join(map(str, self.pos))
         self.uid = tuple_str + str(self.type)
 

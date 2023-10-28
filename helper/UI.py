@@ -18,7 +18,10 @@ class UIe:
         self.turret = turret
         if self.type == "delete":
             self.render = "circle"
-            self.rect = pg.Rect(translate_rect_to_circ(self.rect), (30,30))
+
+            # "Hitbox"
+            self.rect = pg.Rect(pos, (30,30))
+            self.rect = pg.Rect(translate_rect_to_circ(self.rect), (self.rect.w, self.rect.h))
 
     def draw(self, render):
         if self.render == "circle":
