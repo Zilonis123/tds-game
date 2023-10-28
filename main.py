@@ -2,6 +2,7 @@ import pygame as pg
 import math
 from controlls import *
 from turrets import Turret
+from UI import UIe
 
 class SoftwareRenderer():
 
@@ -21,16 +22,8 @@ class SoftwareRenderer():
         # This will be an Array that contains Objects with all the UI elements like buttons
         # the type variable lets the code know what turret this is for
         self.UI = [
-            {
-                "rect": pg.Rect((10,10), (50,50)),
-                "type": 1,
-                "color": "blue"
-            },
-            {
-                "rect": pg.Rect(10,70,50,50),
-                "type": 2,
-                "color": "yellow"
-            }
+            UIe(1, (10,10), "blue"),
+            UIe(2, (10,75), "yellow")
         ]
 
     def draw(self):
@@ -40,7 +33,7 @@ class SoftwareRenderer():
 
         # draw UI
         for UIe in self.UI:
-            pg.draw.rect(self.screen, UIe["color"], UIe["rect"])
+            UIe.draw(self)
 
 
         # draw current turrets

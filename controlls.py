@@ -28,6 +28,6 @@ def _check_UI(render, mx,my):
     # checks if the the given pos is over a "button"
 
     for UIe in render.UI:
-        if UIe["rect"].collidepoint(mx, my):
-            return UIe["type"]
+        if UIe.rect.collidepoint(mx, my):
+            return UIe.type
     return False
