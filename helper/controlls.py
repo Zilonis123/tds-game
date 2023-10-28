@@ -1,5 +1,5 @@
 import pygame as pg
-from turrets import *
+from .turrets import *
 
 def mouse_click(render):
     mx,my = pg.mouse.get_pos()

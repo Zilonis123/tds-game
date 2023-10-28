@@ -1,8 +1,9 @@
 import pygame as pg
 import math
-from controlls import *
-from turrets import Turret
-from UI import UIe
+
+from helper.controlls import *
+from helper.UI import UIe
+from helper.turrets import Turret
 
 class SoftwareRenderer():
 
