@@ -36,6 +36,12 @@ def hexagon_render(render, rect, color, isOutline=0):
 def circle_renderer(render, rect, color, isOutline=0, radius=15):
     pg.draw.circle(render.screen, color, rect.center, radius, isOutline)
 
+def draw_circle_alpha(render, color, center, radius):
+    target_rect = pg.Rect(center, (0, 0)).inflate((radius * 2, radius * 2))
+    shape_surf = pg.Surface(target_rect.size, pg.SRCALPHA)
+    pg.draw.circle(shape_surf, color, (radius, radius), radius)
+    render.screen.blit(shape_surf, target_rect)
+
 def healthbar(render, pos, health, maxhealth, size=5):
     darkred = pg.Color(83,0,0)
     green = pg.Color(0,206,17)

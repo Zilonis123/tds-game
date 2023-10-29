@@ -40,3 +40,4 @@ class UIe:
             render.turrets.remove(self.turret)
             render.UI.remove(self)
             render.actionRN = "none"
+            render.selectedTurret = "none"

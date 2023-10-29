@@ -51,9 +51,16 @@ class SoftwareRenderer():
 
 
         # draw current turrets
+        
         for turret in self.turrets:
+            if self.selectedTurret != "none" and self.selectedTurret == turret:
+                continue
             turret.draw(self)
+        # draw selected turret 1st
+        if self.selectedTurret != "none":
+            self.selectedTurret.draw(self)
 
+            
         # draw current in hand
         if self.actionRN == "grabturret":
 

@@ -1,5 +1,5 @@
 import pygame as pg
-from ..Visuals.renderers import text
+from ..Visuals.renderers import text, draw_circle_alpha
 from ..usefulmath import diagonally_pathfind, translate_rect_to_circ
 from .bullets import Bullet
 
@@ -20,14 +20,17 @@ class Turret():
             self.cIncrease = 15
             self.strenght = 3
             self.bSpeed = 10
+            self.range = 100
         elif type == 3:
             self.cIncrease = 60
             self.strenght = 15
             self.bSpeed = 30
+            self.range = 230
         elif type == 4:
             self.cIncrease = 30
             self.strenght = 6
             self.bSpeed = 12
+            self.range = 110
 
 
         self.rect = pg.Rect(self.pos, self.size)
@@ -78,6 +81,8 @@ class Turret():
         # if selected draw outline
         if render.selectedTurret == self:
             self.renderer(render, self.rect, "white", 3)
+            color = pg.Color(255, 255, 255, 100)
+            draw_circle_alpha(render, color, self.rect.center, radius=self.range)
         if self.health < self.maxhealth:
             text(render, str(self.health), "white", self.rect.center, size=15)
 
