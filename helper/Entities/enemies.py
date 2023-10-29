@@ -39,23 +39,32 @@ class Enemy():
     def tick(self, render):
         # tick cooldown
         self.cooldown -= 1
+        self._move_to_turret(render)
 
+    def _find_turret(self, render, ignore=[]):
+        target = "none"
+        targetdiff = (999, 999)
+        for turret in render.turrets:
+            if turret.uid in ignore:
+                continue
+
+            difference = (abs(turret.pos[0]-self.pos[0]), abs(turret.pos[1]-self.pos[1]))
+
+            if difference < targetdiff:
+                targetdiff = difference
+                target = turret.uid
+        if target != "none":
+            self.targetTurret = target
+ 
+    def _move_to_turret(self, render):
         if self.targetTurret == "none":
             # search for a turret that's the closest to the enemy
             # isnt 100% effective
             # may need improvement
-            target = "none"
-            targetdiff = (999, 999)
-            for turret in render.turrets:
-                difference = (abs(turret.pos[0]-self.pos[0]), abs(turret.pos[1]-self.pos[1]))
+            self._find_turret(render)
 
-                if difference < targetdiff:
-                    targetdiff = difference
-                    target = turret.uid
-            if target != "none":
-                self.targetTurret = target
-            else:
-                return
+        if self.targetTurret == "none":
+            return
 
         # if we have a turret selected go attack it
 
@@ -82,22 +91,55 @@ class Enemy():
         # for debug lets draw a line from the enemy to the turret
         pg.draw.line(render.screen, "red", self.rect.center, turret.rect.center, 4)
 
-        direction = h_v_pathfind(self.rect.center, turret.rect.center)
-        
+        direction = diagonally_pathfind(self.rect.center, turret.rect.center)
+        #direction = (direction[0]*self.speed, direction[1]*self.speed)
         self.rect = self.rect.move(direction[0], direction[1])
 
         # check for collisions
-        # NOTE: currently only checks the target turret
+        
+        # enemies
+        for e in render.enemies:
+            if e == self:
+                continue
+            
+            if e.rect.colliderect(self.rect):
+                dx, dy = e.rect.centerx - self.rect.centerx, e.rect.centery - self.rect.centery
+                side = ["left", "right", "top", "bottom"][(abs(dx) > abs(dy)) * (dx > 0) + (abs(dy) > abs(dx)) * 2 * (dy > 0)]
+                # side is the side that we collided with
+                print(f"{self.uid} collided with {e.uid} on the {side} side.")
 
+                d = (direction[0]*-1, direction[1]*-1)
+                self.rect = self.rect.move(d)
+
+                # try to move 1 direction
+                if not e.rect.colliderect(self.rect.move(direction[0], 0)):
+                    # move x
+                    self.rect = self.rect.move(direction[0], 0)
+                elif not e.rect.colliderect(self.rect.move(0, direction[1])):
+                    self.rect = self.rect.move(0, direction[1])
+
+                if side == "left" or side == "right":
+                    if not e.rect.colliderect(self.rect.move(0, 1)):
+                        self.rect = self.rect.move(0, 1)
+                    else:
+                        self.rect = self.rect.move(0, -1)
+                else:
+                    if not e.rect.colliderect(self.rect.move(1, 0)):
+                        self.rect = self.rect.move(1, 0)
+                    else:
+                        self.rect = self.rect.move(-1, 0)
+
+
+                # if we are still in collision try going to a different turret
+                self._find_turret(render, [self.targetTurret])
+
+        # target turret
         if turret.rect.colliderect(self.rect):
             print("collided with " + str(turret.uid))
             return
 
-        # debug text direction
-        text(render, str(direction), "white", self.rect.center)
-
     def __eq__(self, other):
-        if isInstance(other, Enemy):
+        if isinstance(other, Enemy):
             return self.uid == other.uid
         return 
 
@@ -126,8 +168,10 @@ def h_v_pathfind(position1, position2):
 
     # Calculate the direction while only allowing horizontal and vertical movement
     if abs(delta_x) != 0:
-        # Move horizontally
-        direction = (1 if delta_x > 0 else -1, 0)
+        if abs(delta_x) < 1:
+            direction = (delta_x, 0)
+        else:
+            direction = (1 if delta_x > 0 else -1, 0)
     else:
         # Move vertically
         direction = (0, 1 if delta_y > 0 else -1)
