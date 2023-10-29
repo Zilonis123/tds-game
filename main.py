@@ -37,7 +37,6 @@ class SoftwareRenderer():
 
         # Enemies
         self.enemies = []
-        self.enemies.append(Enemy(1, (200,200)))
 
 
         # bullets
@@ -132,13 +131,16 @@ class SoftwareRenderer():
             pg.display.set_caption(
                 str(math.floor(self.clock.get_fps()))+"FPS - TD")
 
+            keys = pg.key.get_pressed()
+            if keys[pg.K_RSHIFT]:
+               self.enemies.append(Enemy(1, (200,200)))
+
             # if turret in hand update self.selectedTurret
             if self.actionRN == "grabturret":
                 t = self.selectedTurret.type
                 mx,my = pg.mouse.get_pos()
                 
                 # if grid lines enabled
-                keys = pg.key.get_pressed()
                 if keys[pg.K_LSHIFT]:
                     # snap to grid
                     mx=mx+50/2

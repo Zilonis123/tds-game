@@ -5,19 +5,23 @@ class Bullet():
     def __init__(self, spx, spy, pos, strength):
         self.spx = spx
         self.spy = spy
+        self.speed = 10
         self.x, self.y = pos
         self.strength = strength
         self.rect = pg.Rect(pos, (18,18))
 
     def tick(self, render):
         # move
-        self.x += self.spx/5
-        self.y += self.spy/5
-        self.rect = self.rect.move(round(self.x), round(self.y))
-        print(self.x)
+        self.x += self.spx*self.speed
+        self.y += self.spy*self.speed
+        self.rect.x = round(self.x)
+        self.rect.y = round(self.y)
 
-        
-        
+        outofbounds = self.x>render.WIDTH or self.x<0 or self.y>render.HEIGHT or self.y<0
+        if outofbounds:
+            render.bullets.remove(self)
+            return
+
         # collisions
         for enemy in render.enemies:
             if enemy.rect.colliderect(self.rect):
