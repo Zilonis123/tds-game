@@ -102,6 +102,13 @@ class Turret():
         if self.health <= 0:
             # ded
             render.turrets.remove(self)
+            if render.selectedTurret == self:
+                render.selectedTurret = "none"
+                for UI in render.UI:
+                    if UI.turret == self:
+                        render.UI.remove(UI)
+
+                
     
     def _find_enemy(self, render, ignore=[]):
         target = "none"
