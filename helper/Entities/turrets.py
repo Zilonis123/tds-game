@@ -1,4 +1,5 @@
 import pygame as pg
+from ..Visuals.renderers import text
 
 class Turret():
     def __init__(self, type, x, y, render):
@@ -7,6 +8,7 @@ class Turret():
         self.y = y
         self.pos = (x,y)
         self.size = (50,50) # may be subject to change
+        self.health = self.maxhealth = 100
 
         self.rect = pg.Rect(self.pos, self.size)
         dz = 10 # deadzone -- extra pixels where nothing can be palced
@@ -29,6 +31,8 @@ class Turret():
         # if selected draw outline
         if render.selectedTurret == self:
             self.renderer(render, self.rect, "white", 3)
+        if self.health < self.maxhealth:
+            text(render, str(self.health), "white", self.rect.center, size=15)
 
     def __eq__(self, other):
         if isinstance(other, Turret):
