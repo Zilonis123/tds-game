@@ -53,6 +53,7 @@ def healthbar(render, pos, health, maxhealth, size=5):
 
 def text(render, text, color, pos, size=18):
     # init font
+
     font = pg.font.Font('freesansbold.ttf', size)
     surface = font.render(text, True, color)
 

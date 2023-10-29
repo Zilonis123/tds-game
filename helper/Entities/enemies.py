@@ -1,6 +1,7 @@
 from ..Visuals.renderers import circle_renderer, healthbar, text
 import pygame as pg
-from .turrets import Turret, findturret_by_id
+from .turrets import findturret_by_id
+import math
 
 class Enemy():
     def __init__(self, type, pos, renderer=circle_renderer):
@@ -9,6 +10,8 @@ class Enemy():
         self.health = 100
         self.maxhealth = 100
         self.renderer = renderer
+
+        self.speed = 2
 
         self.rect = pg.Rect(pos, (30,30))
 
@@ -59,7 +62,21 @@ class Enemy():
         # for debug lets draw a line from the enemy to the turret
         pg.draw.line(render.screen, "red", self.rect.center, turret.rect.center, 4)
 
+        dx = turret.rect.center[0] - self.rect.center[0]
+        dy = turret.rect.center[1] - self.rect.center[1]
 
+        magnitude = math.sqrt(dx**2 + dy**2)
+
+        if 2 > magnitude < 2:
+            # If the positions are the same, return (0, 0)
+            direction = (0, 0)
+        else:
+            direction = (round(dx / magnitude*self.speed), round(dy / magnitude*self.speed))
+
+        self.rect = self.rect.move(direction[0], direction[1])
+
+        # debug text direction
+        text(render, str(direction), "white", self.rect.center)
 
     def __eq__(self, other):
         if isInstance(other, Enemy):
