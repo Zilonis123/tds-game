@@ -59,12 +59,25 @@ class Enemy():
             self.targetTurret = "none"
             return
         
+        # check if we can move
+        # if we have collided return
+        if turret.rect.colliderect(self.rect):
+            # this is where we would deal damage to the turret
+            return
+
         # for debug lets draw a line from the enemy to the turret
         pg.draw.line(render.screen, "red", self.rect.center, turret.rect.center, 4)
 
         direction = h_v_pathfind(self.rect.center, turret.rect.center)
         
         self.rect = self.rect.move(direction[0], direction[1])
+
+        # check for collisions
+        # NOTE: currently only checks the target turret
+
+        if turret.rect.colliderect(self.rect):
+            print("collided with " + str(turret.uid))
+            return
 
         # debug text direction
         text(render, str(direction), "white", self.rect.center)
