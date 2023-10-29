@@ -34,6 +34,16 @@ class Turret():
         if self.health < self.maxhealth:
             text(render, str(self.health), "white", self.rect.center, size=15)
 
+    def damage(self, render, damage):
+        self.health -= damage
+
+        # ideally here we would show that this tower is getting damaged
+
+        if self.health <= 0:
+            # ded
+            render.turrets.remove(self)
+        
+
     def __eq__(self, other):
         if isinstance(other, Turret):
             return self.uid == other.uid

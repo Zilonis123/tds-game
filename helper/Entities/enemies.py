@@ -13,6 +13,9 @@ class Enemy():
 
         self.speed = 2
 
+        self.cooldown = -1 # if higher than 0 cant attack
+        self.strength = 10
+
         self.rect = pg.Rect(pos, (30,30))
 
         # UId
@@ -32,6 +35,9 @@ class Enemy():
         healthbar(render, (self.rect.center[0], self.rect.center[1]-20), self.health, self.maxhealth)
 
     def tick(self, render):
+        # tick cooldown
+        self.cooldown -= 1
+
         if self.targetTurret == "none":
             # search for a turret that's the closest to the enemy
             # isnt 100% effective
@@ -63,6 +69,12 @@ class Enemy():
         # if we have collided return
         if turret.rect.colliderect(self.rect):
             # this is where we would deal damage to the turret
+            if self.cooldown < 0:
+                turret.damage(render, self.strength)
+
+                # 60 = 1s
+                # 30 = .5s
+                self.cooldown = 30
             return
 
         # for debug lets draw a line from the enemy to the turret
