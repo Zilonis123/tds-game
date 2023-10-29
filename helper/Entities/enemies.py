@@ -1,6 +1,6 @@
 from ..Visuals.renderers import circle_renderer, healthbar, text
 import pygame as pg
-from .turrets import findturret_by_id
+from ..usefulmath import diagonally_pathfind
 import math
 
 class Enemy():
@@ -48,7 +48,8 @@ class Enemy():
             if turret.uid in ignore:
                 continue
 
-            difference = (abs(turret.pos[0]-self.pos[0]), abs(turret.pos[1]-self.pos[1]))
+            difference = (abs(turret.rect.center[0]-self.rect.center[0]), 
+            abs(turret.rect.center[1]-self.rect.center[1]))
 
             if difference < targetdiff:
                 targetdiff = difference
@@ -138,27 +139,17 @@ class Enemy():
             print("collided with " + str(turret.uid))
             return
 
+    def damage(self, render, damage):
+        self.health -= damage
+        if self.health < 0:
+            # ded
+            render.enemies.remove(self)
+            return
+
     def __eq__(self, other):
         if isinstance(other, Enemy):
             return self.uid == other.uid
         return 
-
-def diagonally_pathfind(b, a):
-    dx = a[0] - b[0]
-    dy = a[1] - b[1]
-
-    dx = round(dx)
-    dy = round(dy)
-
-    magnitude = math.sqrt(dx**2 + dy**2)
-
-    if 2 > magnitude < 2:
-        # If the positions are the same, return (0, 0)
-        direction = (0, 0)
-    else:
-        direction = (round(dx / magnitude), round(dy / magnitude))
-    
-    return direction
 
 
 def h_v_pathfind(position1, position2):
@@ -178,3 +169,14 @@ def h_v_pathfind(position1, position2):
 
 
     return direction
+
+def findturret_by_id(render, uid):
+    turret = [turret for turret in render.turrets if turret.uid == uid]
+    if len(turret) == 0:
+        return False
+
+    # we can assume that theres only ever going to be 1 turret by that UId since no 2 turrets
+    # can be in the same x,y coordinates at once
+    # also to insure that isnt the case the uids are taking to factor the type of the
+    # turret
+    return turret[0]
