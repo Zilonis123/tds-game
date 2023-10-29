@@ -32,7 +32,9 @@ class Enemy():
         self.renderer(render, self.rect, "black", 1)
 
         # healthbar
-        healthbar(render, (self.rect.center[0], self.rect.center[1]-20), self.health, self.maxhealth)
+        # only display healthbar if its smaller than max health
+        if self.health < self.maxhealth:
+            healthbar(render, (self.rect.center[0], self.rect.center[1]-20), self.health, self.maxhealth)
 
     def tick(self, render):
         # tick cooldown
