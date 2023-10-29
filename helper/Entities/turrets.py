@@ -2,6 +2,7 @@ import pygame as pg
 from ..Visuals.renderers import text, draw_circle_alpha
 from ..usefulmath import diagonally_pathfind, translate_rect_to_circ
 from .bullets import Bullet
+import math
 
 class Turret():
     def __init__(self, type, x, y, render):
@@ -65,6 +66,13 @@ class Turret():
             if not enemy:
                 self.attacking = "none"
                 return
+
+            d = math.sqrt((enemy.rect.center[0] - self.rect.center[0])**2+(enemy.rect.center[1] - self.rect.center[1]) ** 2)
+            can_shoot = d <= self.range
+
+            if not can_shoot:
+                return
+
             direction = diagonally_pathfind(self.rect.center, enemy.rect.center)
 
             # create bullet
