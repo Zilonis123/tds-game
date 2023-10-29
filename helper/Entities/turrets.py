@@ -41,3 +41,15 @@ class Turret():
 
 def addTurret(render, t):
     render.turrets.append(t)
+
+
+def findturret_by_id(render, uid):
+    turret = [turret for turret in render.turrets if turret.uid == uid]
+    if len(turret) == 0:
+        return False
+
+    # we can assume that theres only ever going to be 1 turret by that UId since no 2 turrets
+    # can be in the same x,y coordinates at once
+    # also to insure that isnt the case the uids are taking to factor the type of the
+    # turret
+    return turret[0]

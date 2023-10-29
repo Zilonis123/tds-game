@@ -37,7 +37,7 @@ class SoftwareRenderer():
 
         # Enemies
         self.enemies = []
-        self.enemies.append(Enemy(1, (100,100)))
+        self.enemies.append(Enemy(1, (200,200)))
 
     def draw(self):
         # This func handles anything related to drawing something to the screen
