@@ -62,17 +62,8 @@ class Enemy():
         # for debug lets draw a line from the enemy to the turret
         pg.draw.line(render.screen, "red", self.rect.center, turret.rect.center, 4)
 
-        dx = turret.rect.center[0] - self.rect.center[0]
-        dy = turret.rect.center[1] - self.rect.center[1]
-
-        magnitude = math.sqrt(dx**2 + dy**2)
-
-        if 2 > magnitude < 2:
-            # If the positions are the same, return (0, 0)
-            direction = (0, 0)
-        else:
-            direction = (round(dx / magnitude*self.speed), round(dy / magnitude*self.speed))
-
+        direction = h_v_pathfind(self.rect.center, turret.rect.center)
+        
         self.rect = self.rect.move(direction[0], direction[1])
 
         # debug text direction
@@ -82,3 +73,37 @@ class Enemy():
         if isInstance(other, Enemy):
             return self.uid == other.uid
         return 
+
+def diagonally_pathfind(b, a):
+    dx = a[0] - b[0]
+    dy = a[1] - b[1]
+
+    dx = round(dx)
+    dy = round(dy)
+
+    magnitude = math.sqrt(dx**2 + dy**2)
+
+    if 2 > magnitude < 2:
+        # If the positions are the same, return (0, 0)
+        direction = (0, 0)
+    else:
+        direction = (round(dx / magnitude), round(dy / magnitude))
+    
+    return direction
+
+
+def h_v_pathfind(position1, position2):
+    # horizontal and vertically .. dont allow diagonalls
+    delta_x = position2[0] - position1[0]
+    delta_y = position2[1] - position1[1]
+
+    # Calculate the direction while only allowing horizontal and vertical movement
+    if abs(delta_x) != 0:
+        # Move horizontally
+        direction = (1 if delta_x > 0 else -1, 0)
+    else:
+        # Move vertically
+        direction = (0, 1 if delta_y > 0 else -1)
+
+
+    return direction
