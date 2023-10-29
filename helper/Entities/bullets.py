@@ -2,10 +2,10 @@ import pygame as pg
 from ..Visuals.renderers import circle_renderer
 
 class Bullet():
-    def __init__(self, spx, spy, pos, strength):
+    def __init__(self, spx, spy, pos, strength, bulletSpeed):
         self.spx = spx
         self.spy = spy
-        self.speed = 10
+        self.speed = bulletSpeed
         self.x, self.y = pos
         self.strength = strength
         self.rect = pg.Rect(pos, (18,18))

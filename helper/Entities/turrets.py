@@ -15,6 +15,21 @@ class Turret():
         self.cooldown = -1 # if >0 then can shoot
         self.attacking = "none"
 
+        # figure out the turrets cooldown increase
+        if type == 1:
+            self.cIncrease = 15
+            self.strenght = 3
+            self.bSpeed = 10
+        elif type == 3:
+            self.cIncrease = 60
+            self.strenght = 15
+            self.bSpeed = 30
+        elif type == 4:
+            self.cIncrease = 30
+            self.strenght = 6
+            self.bSpeed = 12
+
+
         self.rect = pg.Rect(self.pos, self.size)
         dz = 10 # deadzone -- extra pixels where nothing can be palced
         self.plzone = pg.Rect((x-dz,y-dz), (self.size[0]+dz*2, self.size[1]+dz*2)) # zone where no turret can be placed
@@ -50,11 +65,11 @@ class Turret():
             direction = diagonally_pathfind(self.rect.center, enemy.rect.center)
 
             # create bullet
-            b = Bullet(direction[0], direction[1], self.rect.center, 8)
+            b = Bullet(direction[0], direction[1], self.rect.center, self.cIncrease, self.bSpeed)
             render.bullets.append(b)
 
             # cooldown
-            self.cooldown = 15
+            self.cooldown = self.cIncrease
     
     def draw(self, render, color="none"):
         if color == "none":
