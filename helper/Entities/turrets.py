@@ -47,14 +47,14 @@ class Turret():
             if not enemy:
                 self.attacking = "none"
                 return
-            direction = diagonally_pathfind(enemy.rect.center, self.rect.center)
+            direction = diagonally_pathfind(self.rect.center, enemy.rect.center)
 
             # create bullet
             b = Bullet(direction[0], direction[1], self.rect.center, 1)
             render.bullets.append(b)
 
             # cooldown
-            self.cooldown = 15
+            self.cooldown = 1000000
     
     def draw(self, render, color="none"):
         if color == "none":

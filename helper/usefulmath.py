@@ -19,6 +19,6 @@ def diagonally_pathfind(b, a):
         # If the positions are the same, return (0, 0)
         direction = (0, 0)
     else:
-        direction = (round(dx / magnitude), round(dy / magnitude))
+        direction = ((dx / magnitude), (dy / magnitude))
     
     return direction

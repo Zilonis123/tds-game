@@ -93,7 +93,7 @@ class Enemy():
         pg.draw.line(render.screen, "red", self.rect.center, turret.rect.center, 4)
 
         direction = diagonally_pathfind(self.rect.center, turret.rect.center)
-        #direction = (direction[0]*self.speed, direction[1]*self.speed)
+        direction = (round(direction[0]*self.speed), round(direction[1]*self.speed))
         self.rect = self.rect.move(direction[0], direction[1])
 
         # check for collisions
