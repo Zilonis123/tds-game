@@ -60,7 +60,7 @@ class SoftwareRenderer():
         if self.selectedTurret != "none":
             self.selectedTurret.draw(self)
 
-            
+
         # draw current in hand
         if self.actionRN == "grabturret":
 
@@ -89,6 +89,8 @@ class SoftwareRenderer():
         keys = pg.key.get_pressed()
         if keys[pg.K_LSHIFT]:
             self.draw_grid()
+        elif keys[pg.K_SPACE]:
+            self.enemies = []
             
     def draw_grid(self):
         # draw horizonatally

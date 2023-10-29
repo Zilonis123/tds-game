@@ -19,19 +19,23 @@ class Turret():
         # figure out the turrets cooldown increase
         if type == 1:
             self.cIncrease = 15
-            self.strenght = 9
+            self.strenght = 7
             self.bSpeed = 10
-            self.range = 150
+            self.range = 120
+            self.health = self.maxhealth = 200
         elif type == 3:
             self.cIncrease = 60
             self.strenght = 15
             self.bSpeed = 30
             self.range = 230
+            self.health = self.maxhealth = 50
         elif type == 4:
             self.cIncrease = 30
             self.strenght = 10
             self.bSpeed = 12
             self.range = 150
+            self.health = self.maxhealth = 100
+
 
 
         self.rect = pg.Rect(self.pos, self.size)
