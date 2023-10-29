@@ -1,5 +1,7 @@
 import pygame as pg
 from ..Visuals.renderers import text
+from ..usefulmath import diagonally_pathfind, translate_rect_to_circ
+from .bullets import Bullet
 
 class Turret():
     def __init__(self, type, x, y, render):
@@ -9,6 +11,9 @@ class Turret():
         self.pos = (x,y)
         self.size = (50,50) # may be subject to change
         self.health = self.maxhealth = 100
+
+        self.cooldown = -1 # if >0 then can shoot
+        self.attacking = "none"
 
         self.rect = pg.Rect(self.pos, self.size)
         dz = 10 # deadzone -- extra pixels where nothing can be palced
@@ -23,6 +28,33 @@ class Turret():
             if UIe.type == type:
                 self.color = UIe.color
                 self.renderer = UIe.renderer
+
+    def tick(self, render):
+        self.cooldown -= 1
+        # figure out if we can shoot smth
+
+        if self.attacking == "none":
+            # find smth to kill
+            self._find_enemy(render)
+            # if still nothing .. then damnn
+            if self.attacking == "none":
+                return
+        
+        # shoot :)
+        if self.cooldown < 0:
+            # find dir
+            enemy = findenemy_by_id(render, self.attacking)
+            if not enemy:
+                self.attacking = "none"
+                return
+            direction = diagonally_pathfind(self.rect.center, enemy.rect.center)
+
+            # create bullet
+            b = Bullet(direction[0], direction[1], self.rect.center, 8)
+            render.bullets.append(b)
+
+            # cooldown
+            self.cooldown = 15
     
     def draw(self, render, color="none"):
         if color == "none":
@@ -42,7 +74,22 @@ class Turret():
         if self.health <= 0:
             # ded
             render.turrets.remove(self)
-        
+    
+    def _find_enemy(self, render, ignore=[]):
+        target = "none"
+        targetdiff = (999, 999)
+        for enemy in render.enemies:
+            if enemy.uid in ignore:
+                continue
+
+            difference = (abs(enemy.rect.center[0]-self.rect.center[0]), 
+            abs(enemy.rect.center[1]-self.rect.center[1]))
+
+            if difference < targetdiff:
+                targetdiff = difference
+                target = enemy.uid
+        if target != "none":
+            self.attacking = target
 
     def __eq__(self, other):
         if isinstance(other, Turret):
@@ -53,13 +100,13 @@ def addTurret(render, t):
     render.turrets.append(t)
 
 
-def findturret_by_id(render, uid):
-    turret = [turret for turret in render.turrets if turret.uid == uid]
-    if len(turret) == 0:
+def findenemy_by_id(render, uid):
+    enemy = [enemy for enemy in render.enemies if enemy.uid == uid]
+    if len(enemy) == 0:
         return False
 
     # we can assume that theres only ever going to be 1 turret by that UId since no 2 turrets
     # can be in the same x,y coordinates at once
     # also to insure that isnt the case the uids are taking to factor the type of the
     # turret
-    return turret[0]
+    return enemy[0]

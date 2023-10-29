@@ -37,12 +37,10 @@ class SoftwareRenderer():
 
         # Enemies
         self.enemies = []
-        self.enemies.append(Enemy(1, (200,200)))
-        self.enemies.append(Enemy(1, (300,200)))
-        self.enemies.append(Enemy(1, (400,200)))
-        self.enemies.append(Enemy(1, (500,200)))
-        self.enemies.append(Enemy(1, (600,200)))
 
+
+        # bullets
+        self.bullets = []
     def draw(self):
         # This func handles anything related to drawing something to the screen
         
@@ -69,6 +67,10 @@ class SoftwareRenderer():
 
             self.selectedTurret.draw(self, rectColor)
 
+        # bullets
+        for bullet in self.bullets:
+            bullet.draw(self)
+
         # draw UI
         bRect = pg.Rect((0,0), (80, self.HEIGHT))
         pg.draw.rect(self.screen, "beige", bRect)
@@ -80,13 +82,16 @@ class SoftwareRenderer():
         # draw grid lines if SHIFT pressed
         keys = pg.key.get_pressed()
         if keys[pg.K_LSHIFT]:
-            # draw horizonatally
-            for i in range(self.WIDTH//self.gridsize+1):
-                pg.draw.line(self.screen, "white", (i*self.gridsize, 0), (i*self.gridsize, self.HEIGHT))
+            self.draw_grid()
+            
+    def draw_grid(self):
+        # draw horizonatally
+        for i in range(self.WIDTH//self.gridsize+1):
+            pg.draw.line(self.screen, "white", (i*self.gridsize, 0), (i*self.gridsize, self.HEIGHT))
 
-            # draw vertically
-            for i in range(self.HEIGHT//self.gridsize+1):
-                pg.draw.line(self.screen, "white", (0, i*self.gridsize), (self.WIDTH, i*self.gridsize))
+        # draw vertically
+        for i in range(self.HEIGHT//self.gridsize+1):
+            pg.draw.line(self.screen, "white", (0, i*self.gridsize), (self.WIDTH, i*self.gridsize))
 
     def handleKeyPress(self):
         pass
@@ -114,9 +119,21 @@ class SoftwareRenderer():
             for enemy in self.enemies:
                 enemy.tick(self)
 
+            # Tick bullets
+            for bullet in self.bullets:
+                bullet.tick(self)
+
+            # tick turrets
+            for turret in self.turrets:
+                turret.tick(self)
+
             # Set FPS as the name of the window
             pg.display.set_caption(
                 str(math.floor(self.clock.get_fps()))+"FPS - TD")
+
+            keys = pg.key.get_pressed()
+            if keys[pg.K_RSHIFT]:
+               self.enemies.append(Enemy(1, (200,200)))
 
             # if turret in hand update self.selectedTurret
             if self.actionRN == "grabturret":
@@ -124,7 +141,6 @@ class SoftwareRenderer():
                 mx,my = pg.mouse.get_pos()
                 
                 # if grid lines enabled
-                keys = pg.key.get_pressed()
                 if keys[pg.K_LSHIFT]:
                     # snap to grid
                     mx=mx+50/2
