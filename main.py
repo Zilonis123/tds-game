@@ -24,14 +24,13 @@ class SoftwareRenderer():
         # the type variable lets the code know what turret this is for
         self.UI = [
             UIe(1, (10,5), "blue"),
-            UIe(2, (10,65), "yellow"),
             UIe(3, (10,125), "green", renderer=triangle_render),
             UIe(4, (10,185), "brown", renderer=hexagon_render),
         ]
 
         # init turrets
         self.turrets = []
-        self.selectedTurret = Turret(1, -10, -10, self)
+        self.selectedTurret = Turret(1, -999, -999, self)
 
         self.gridsize=60
 
@@ -52,8 +51,15 @@ class SoftwareRenderer():
 
 
         # draw current turrets
+        
         for turret in self.turrets:
+            if self.selectedTurret != "none" and self.selectedTurret == turret:
+                continue
             turret.draw(self)
+        # draw selected turret 1st
+        if self.selectedTurret != "none":
+            self.selectedTurret.draw(self)
+
 
         # draw current in hand
         if self.actionRN == "grabturret":
@@ -83,6 +89,8 @@ class SoftwareRenderer():
         keys = pg.key.get_pressed()
         if keys[pg.K_LSHIFT]:
             self.draw_grid()
+        elif keys[pg.K_SPACE]:
+            self.enemies = []
             
     def draw_grid(self):
         # draw horizonatally

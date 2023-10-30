@@ -51,7 +51,7 @@ def _grab_turret(render, type="none"):
         addTurret(render, render.selectedTurret)
         render.actionRN = "none"
         # remove selected turret
-        render.selectedTurret = Turret(1, -999, -999, render)
+        render.selectedTurret = "none"
         return
     # else - select a turret
 

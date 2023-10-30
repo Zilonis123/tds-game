@@ -1,7 +1,8 @@
 import pygame as pg
-from ..Visuals.renderers import text
-from ..usefulmath import diagonally_pathfind, translate_rect_to_circ
+from ..Visuals.renderers import text, draw_circle_alpha
+from ..usefulmath import diagonally_pathfind, adjust_color
 from .bullets import Bullet
+import math
 
 class Turret():
     def __init__(self, type, x, y, render):
@@ -14,6 +15,34 @@ class Turret():
 
         self.cooldown = -1 # if >0 then can shoot
         self.attacking = "none"
+
+        self.turretheadclr = 50 # this is not the color, but the difference in the color between the body
+        # positive = lighter 
+        # negative = darker
+
+        # figure out the turrets cooldown increase
+        if type == 1:
+            self.cIncrease = 15
+            self.strenght = 7
+            self.bSpeed = 10
+            self.range = 120
+            self.health = self.maxhealth = 200
+        elif type == 3:
+            self.cIncrease = 60
+            self.strenght = 15
+            self.bSpeed = 30
+            self.range = 230
+            self.health = self.maxhealth = 50
+            self.turretheadclr = -100
+        elif type == 4:
+            self.cIncrease = 30
+            self.strenght = 10
+            self.bSpeed = 12
+            self.range = 150
+            self.health = self.maxhealth = 100
+
+
+        self.headangle = 0
 
         self.rect = pg.Rect(self.pos, self.size)
         dz = 10 # deadzone -- extra pixels where nothing can be palced
@@ -47,24 +76,71 @@ class Turret():
             if not enemy:
                 self.attacking = "none"
                 return
+
+            d = math.sqrt((enemy.rect.center[0] - self.rect.center[0])**2+(enemy.rect.center[1] - self.rect.center[1]) ** 2)
+            can_shoot = d <= self.range
+
+            if not can_shoot:
+                return
+
             direction = diagonally_pathfind(self.rect.center, enemy.rect.center)
 
             # create bullet
-            b = Bullet(direction[0], direction[1], self.rect.center, 8)
+            b = Bullet(direction[0], direction[1], self.rect.center, self.cIncrease, self.bSpeed)
             render.bullets.append(b)
 
             # cooldown
-            self.cooldown = 15
+            self.cooldown = self.cIncrease
     
     def draw(self, render, color="none"):
         if color == "none":
             color = self.color
         self.renderer(render, self.rect, color)
+
+
+        # draw turret head
+        size = (self.rect.w//2, self.rect.h//2)
+        pos = (self.rect.center[0]-size[0]//2, self.rect.center[1]-size[1]//2)
+
+        if self.type == 3:
+            # triangle
+            pos = (pos[0], pos[1]+10)
+        
+        headrect = pg.Rect(pos, size)
+        if self.attacking != "none":
+            # calculate the angle
+            e = findenemy_by_id(render, self.attacking)
+            if not e:
+                self.attacking != "none"
+            else:
+                x1,y1 = e.rect.center
+                x2,y2 = headrect.center
+                dy = x2 - x1
+                dx = y2 - y1
+
+                # Calculate the angle in radians
+                angle_radians = math.atan2(dy, dx)
+
+                # Convert the angle to degrees if needed
+                angle_degrees = math.degrees(angle_radians)
+
+                # Ensure the angle is between 0 and 360 degrees
+                self.headangle = (angle_degrees + 360) % 360
+
+        color = adjust_color(self.color, self.turretheadclr)
+
+        self.renderer(render, headrect, color, rotation_angle=self.headangle)
+
+
+        # draw health
+        if self.health < self.maxhealth:
+            text(render, str(self.health), "white", self.rect.center, size=15)
+
         # if selected draw outline
         if render.selectedTurret == self:
             self.renderer(render, self.rect, "white", 3)
-        if self.health < self.maxhealth:
-            text(render, str(self.health), "white", self.rect.center, size=15)
+            color = pg.Color(255, 255, 255, 100)
+            draw_circle_alpha(render, color, self.rect.center, radius=self.range)
 
     def damage(self, render, damage):
         self.health -= damage
@@ -74,6 +150,13 @@ class Turret():
         if self.health <= 0:
             # ded
             render.turrets.remove(self)
+            if render.selectedTurret == self:
+                render.selectedTurret = "none"
+                for UI in render.UI:
+                    if UI.turret == self:
+                        render.UI.remove(UI)
+
+                
     
     def _find_enemy(self, render, ignore=[]):
         target = "none"

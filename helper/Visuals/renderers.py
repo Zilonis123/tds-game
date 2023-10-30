@@ -4,21 +4,49 @@
 import pygame as pg
 import math
 
-def triangle_render(render, rect, color, isOutline=0):
-    x=rect.x
-    y=rect.y
-    w=rect.width
-    h=rect.height
+def triangle_render(render, rect, color, isOutline=0, rotation_angle=0):
+    x = rect.x
+    y = rect.y
+    w = rect.width
+    h = rect.height
 
-    vertexes = [(x+w//2,y), (x,y+h), (x+w,y+h)]
+    rotation_angle *= -1
 
-    # draw
-    pg.draw.polygon(render.screen, color, vertexes, isOutline)
+    # Calculate triangle vertices
+    vertices = [(x + w // 2, y), (x, y + h), (x + w, y + h)]
 
-def square_render(render, rect, color, isOutline=0):
-    pg.draw.rect(render.screen, color, rect, isOutline)
+    # Calculate rotation pivot point (center of the triangle)
+    pivot = (x + w // 2, y + h // 2)
 
-def hexagon_render(render, rect, color, isOutline=0):
+    # Rotate the vertices
+    rotated_vertices = []
+    for vertex in vertices:
+        angle_rad = math.radians(rotation_angle)
+        x_rotated = math.cos(angle_rad) * (vertex[0] - pivot[0]) - math.sin(angle_rad) * (vertex[1] - pivot[1]) + pivot[0]
+        y_rotated = math.sin(angle_rad) * (vertex[0] - pivot[0]) + math.cos(angle_rad) * (vertex[1] - pivot[1]) + pivot[1]
+        rotated_vertices.append((x_rotated, y_rotated))
+
+    # Draw the rotated triangle
+    pg.draw.polygon(render.screen, color, rotated_vertices, isOutline)
+
+
+def square_render(render, rect, color, width=0, rotation_angle=0):
+    # Create a square with a specified rotation angle
+    rotated_surface = pg.Surface(rect.size, pg.SRCALPHA)
+    rotated_surface.fill((0, 0, 0, 0))  # Fill with transparent color
+    square = pg.draw.rect(rotated_surface, color, (0, 0, rect.width, rect.height), width)
+
+    # Rotate the square
+    rotated_square = pg.transform.rotate(rotated_surface, rotation_angle)
+
+    # Get the rect of the rotated square
+    rotated_rect = rotated_square.get_rect(center=rect.center)
+
+    # Blit the rotated square onto the screen
+    render.screen.blit(rotated_square, rotated_rect.topleft)
+
+
+def hexagon_render(render, rect, color, isOutline=0, rotation_angle=0):
     x,y=rect.center
     size = rect.width / math.sqrt(3)
 
@@ -26,7 +54,7 @@ def hexagon_render(render, rect, color, isOutline=0):
     angle_deg = 360 / 6
     vertices = []
     for i in range(6):
-        angle_rad = math.radians(angle_deg * i)
+        angle_rad = math.radians(angle_deg * i + rotation_angle)
         hexagon_x = x + size * math.cos(angle_rad)
         hexagon_y = y + size * math.sin(angle_rad)
         vertices.append((hexagon_x, hexagon_y))
@@ -35,6 +63,12 @@ def hexagon_render(render, rect, color, isOutline=0):
 
 def circle_renderer(render, rect, color, isOutline=0, radius=15):
     pg.draw.circle(render.screen, color, rect.center, radius, isOutline)
+
+def draw_circle_alpha(render, color, center, radius):
+    target_rect = pg.Rect(center, (0, 0)).inflate((radius * 2, radius * 2))
+    shape_surf = pg.Surface(target_rect.size, pg.SRCALPHA)
+    pg.draw.circle(shape_surf, color, (radius, radius), radius)
+    render.screen.blit(shape_surf, target_rect)
 
 def healthbar(render, pos, health, maxhealth, size=5):
     darkred = pg.Color(83,0,0)

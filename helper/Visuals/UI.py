@@ -6,7 +6,7 @@ from .renderers import square_render
 class UIe:
     def __init__(self, type, pos, color, turret="none",  renderer=square_render):
         self.pos = pos
-        self.color = color
+        self.color = pg.Color(color) # Use pygame Color because its better
         self.top = pos[0]
         self.left = pos[1]
 
@@ -40,3 +40,4 @@ class UIe:
             render.turrets.remove(self.turret)
             render.UI.remove(self)
             render.actionRN = "none"
+            render.selectedTurret = "none"
