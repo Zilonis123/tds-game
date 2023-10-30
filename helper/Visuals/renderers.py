@@ -15,10 +15,23 @@ def triangle_render(render, rect, color, isOutline=0):
     # draw
     pg.draw.polygon(render.screen, color, vertexes, isOutline)
 
-def square_render(render, rect, color, isOutline=0):
-    pg.draw.rect(render.screen, color, rect, isOutline)
+def square_render(render, rect, color, width=0, rotation_angle=0):
+    # Create a square with a specified rotation angle
+    rotated_surface = pg.Surface(rect.size, pg.SRCALPHA)
+    rotated_surface.fill((0, 0, 0, 0))  # Fill with transparent color
+    square = pg.draw.rect(rotated_surface, color, (0, 0, rect.width, rect.height), width)
 
-def hexagon_render(render, rect, color, isOutline=0):
+    # Rotate the square
+    rotated_square = pg.transform.rotate(rotated_surface, rotation_angle)
+
+    # Get the rect of the rotated square
+    rotated_rect = rotated_square.get_rect(center=rect.center)
+
+    # Blit the rotated square onto the screen
+    render.screen.blit(rotated_square, rotated_rect.topleft)
+
+
+def hexagon_render(render, rect, color, isOutline=0, rotation_angle=0):
     x,y=rect.center
     size = rect.width / math.sqrt(3)
 
@@ -26,7 +39,7 @@ def hexagon_render(render, rect, color, isOutline=0):
     angle_deg = 360 / 6
     vertices = []
     for i in range(6):
-        angle_rad = math.radians(angle_deg * i)
+        angle_rad = math.radians(angle_deg * i + rotation_angle)
         hexagon_x = x + size * math.cos(angle_rad)
         hexagon_y = y + size * math.sin(angle_rad)
         vertices.append((hexagon_x, hexagon_y))
