@@ -1,6 +1,7 @@
 import pygame as pg
 from ..usefulmath import translate_rect_to_circ
 from .renderers import square_render
+from ..Entities.turrets import Turret
 
 # UIe - UI element
 class UIe:
@@ -15,6 +16,7 @@ class UIe:
         self.rect = pg.Rect(pos, (50,50))
         self.renderer = renderer
 
+        self.presscost = 100 # how much money do we steal from u if yu press the button
 
         # delete logic
         self.turret = turret
@@ -37,7 +39,13 @@ class UIe:
 
     def action(self, render):
         if self.isTurretspawn:
-            # create a turret
+            # grab turret
+            mx,my = pg.mouse.get_pos()
+
+            render.actionRN = "grabturret"
+            render.selectedTurret = Turret(self.type, mx, my, render)
+
+            render.cash -= self.presscost
         elif self.type == "delete":
             render.turrets.remove(self.turret)
             render.UI.remove(self)

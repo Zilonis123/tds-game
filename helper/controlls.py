@@ -7,56 +7,44 @@ def mouse_click(render):
 
 
     # Check if mouse was clicked on a UI element and not action is done right now
-    res = _check_UI(render, mx,my)
+    res = click_UI(render, mx,my)
 
     if res == False:
         # check if we have a turret in our hands
         if render.actionRN == "grabturret":
-            _grab_turret(render)
+            _place_turret(render)
         else:
             # check if we are clicking on a placed turret
             _click_turret(render, mx, my)
     
 
-def _check_UI(render, mx,my):
+def click_UI(render, mx,my):
     # checks if the the given pos is over a "button"
 
     for UIe in render.UI:
         if UIe.rect.collidepoint(mx, my):
-            canPlaceTurret = render.actionRN == "none" or render.actionRN == "grabTurret"
-            if UIe.isTurretspawn and canPlaceTurret:
-                # if UI element is a turretspawn .. make a turret
-                _grab_turret(render, UIe.type)
-                return
-            else:
-                UIe.action(render)
-                return
+
+            # press it
+            UIe.action(render)
+            return True
+
 
     # no ui was clicked
     return False
 
-def _grab_turret(render, type="none"):
+def _place_turret(render):
+    # check if turret collides with any existing turret
+    for turret in render.turrets:
+        if turret.plzone.colliderect(render.selectedTurret.rect):
+            return
+    # else - place the turret
 
-    mx,my = pg.mouse.get_pos()
-
-    # If we have a turret selected -
-    if render.actionRN == "grabturret":
-
-        # check if turret collides with any existing turret
-        for turret in render.turrets:
-            if turret.plzone.colliderect(render.selectedTurret.rect):
-                return
-        # else - "build" the turret
-
-        addTurret(render, render.selectedTurret)
-        render.actionRN = "none"
-        # remove selected turret
-        render.selectedTurret = "none"
-        return
-    # else - select a turret
-
-    render.actionRN = "grabturret"
-    render.selectedTurret = Turret(type, mx, my, render)
+    addTurret(render, render.selectedTurret)
+    render.actionRN = "none"
+    
+    # remove selected turret
+    render.selectedTurret = "none"
+    return
 
 def _click_turret(render, mx, my):
     def remove_delete_btn(render):

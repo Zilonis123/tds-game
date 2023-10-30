@@ -124,7 +124,6 @@ class SoftwareRenderer():
 
         self.running = True
         while self.running:
-
             self.draw()
             self.handleEvents()
             self.handleKeyPress()
