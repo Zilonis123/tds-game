@@ -16,6 +16,10 @@ class Turret():
         self.cooldown = -1 # if >0 then can shoot
         self.attacking = "none"
 
+        # stats
+        self.kills = 0
+        self.damagedealt = 0
+
         self.turretheadclr = 50 # this is not the color, but the difference in the color between the body
         # positive = lighter 
         # negative = darker
@@ -87,7 +91,7 @@ class Turret():
             direction = diagonally_pathfind(self.rect.center, enemy.rect.center)
 
             # create bullet
-            b = Bullet(direction[0], direction[1], self.rect.center, self.cIncrease, self.bSpeed)
+            b = Bullet(direction[0], direction[1], self.rect.center, self.cIncrease, self.bSpeed, turret=self)
             render.bullets.append(b)
 
             # cooldown
@@ -112,6 +116,11 @@ class Turret():
             self.renderer(render, self.rect, "white", 3)
             color = pg.Color(255, 255, 255, 100)
             draw_circle_alpha(render, color, self.rect.center, radius=self.range)
+
+            # display stats
+            if render.actionRN != "grabturret":
+                text(render, "Kills: " + str(self.kills), "black", (self.rect.topleft[0]-50, self.rect.topleft[1]))
+                text(render, "Damage: " + str(self.damagedealt), "black", (self.rect.topleft[0]-40, self.rect.topleft[1]+20))
 
     def _draw_head(self, render, color):
         size = (self.rect.w//2, self.rect.h//2)

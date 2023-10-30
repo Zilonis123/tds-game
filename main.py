@@ -164,6 +164,8 @@ class SoftwareRenderer():
                     my=round(my/70)*self.gridsize
                     mx=mx-50-(self.gridsize-50)//2
                     my=my-50-(self.gridsize-50)//2
+                else:
+                    mx,my = (mx-self.selectedTurret.rect.w//2, my-self.selectedTurret.rect.h//2)
                 self.selectedTurret = Turret(t, mx, my, self)
 
             pg.display.flip()
