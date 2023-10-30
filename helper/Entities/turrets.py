@@ -1,6 +1,6 @@
 import pygame as pg
 from ..Visuals.renderers import text, draw_circle_alpha
-from ..usefulmath import diagonally_pathfind, translate_rect_to_circ
+from ..usefulmath import diagonally_pathfind, adjust_color
 from .bullets import Bullet
 import math
 
@@ -16,6 +16,10 @@ class Turret():
         self.cooldown = -1 # if >0 then can shoot
         self.attacking = "none"
 
+        self.turretheadclr = 50 # this is not the color, but the difference in the color between the body
+        # positive = lighter 
+        # negative = darker
+
         # figure out the turrets cooldown increase
         if type == 1:
             self.cIncrease = 15
@@ -29,6 +33,7 @@ class Turret():
             self.bSpeed = 30
             self.range = 230
             self.health = self.maxhealth = 50
+            self.turretheadclr = -100
         elif type == 4:
             self.cIncrease = 30
             self.strenght = 10
@@ -90,13 +95,24 @@ class Turret():
         if color == "none":
             color = self.color
         self.renderer(render, self.rect, color)
+
+        # draw turret head
+        # calc head rect
+        size = (self.rect.w//2, self.rect.h//2)
+        color = adjust_color(self.color, self.turretheadclr)
+        headrect = pg.Rect((self.rect.center[0]-size[0]//2, self.rect.center[1]-size[1]//2), size)
+        self.renderer(render, headrect, color)
+
+
+        # draw health
+        if self.health < self.maxhealth:
+            text(render, str(self.health), "white", self.rect.center, size=15)
+
         # if selected draw outline
         if render.selectedTurret == self:
             self.renderer(render, self.rect, "white", 3)
             color = pg.Color(255, 255, 255, 100)
             draw_circle_alpha(render, color, self.rect.center, radius=self.range)
-        if self.health < self.maxhealth:
-            text(render, str(self.health), "white", self.rect.center, size=15)
 
     def damage(self, render, damage):
         self.health -= damage
