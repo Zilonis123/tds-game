@@ -30,7 +30,7 @@ class SoftwareRenderer():
 
         # init turrets
         self.turrets = []
-        self.selectedTurret = Turret(1, -10, -10, self)
+        self.selectedTurret = Turret(1, -999, -999, self)
 
         self.gridsize=60
 
