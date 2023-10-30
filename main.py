@@ -19,6 +19,7 @@ class SoftwareRenderer():
         
         self.actionRN = "none"
 
+        self.cash = 999 # debug value
 
         # UI
         # This will be an Array that contains UIe class
@@ -41,27 +42,59 @@ class SoftwareRenderer():
 
         # bullets
         self.bullets = []
+
     def draw(self):
         # This func handles anything related to drawing something to the screen
         
         self.screen.fill("darkgray")
 
         # draw enemies
-        for enemy in self.enemies:
-            enemy.draw(self)
+        for e in self.enemies: e.draw(self)
 
 
-        # draw current turrets
-        
+        # turrets
+        self._draw_turrets()
+
+        # bullets
+        for b in self.bullets: b.draw(self)
+
+        # draw UI
+        self._draw_UI()
+    
+    def _draw_UI(self):
+        bRect = pg.Rect((0,0), (80, self.HEIGHT))
+        pg.draw.rect(self.screen, "beige", bRect)
+        pg.draw.rect(self.screen, pg.Color(206,126,0), bRect, 4)
+
+        for UIe in self.UI:
+            UIe.draw(self)
+
+        # draw grid lines if SHIFT pressed
+        keys = pg.key.get_pressed()
+        if keys[pg.K_LSHIFT]:
+            self._draw_grid()
+            
+    def _draw_grid(self):
+        # draw horizonatally
+        for i in range(self.WIDTH//self.gridsize+1):
+            pg.draw.line(self.screen, "white", (i*self.gridsize, 0), (i*self.gridsize, self.HEIGHT))
+
+        # draw vertically
+        for i in range(self.HEIGHT//self.gridsize+1):
+            pg.draw.line(self.screen, "white", (0, i*self.gridsize), (self.WIDTH, i*self.gridsize))
+
+    def _draw_turrets(self):
+
         for turret in self.turrets:
             if self.selectedTurret != "none" and self.selectedTurret == turret:
                 continue
             turret.draw(self)
+
         # draw selected turret 1st
         if self.selectedTurret != "none":
             self.selectedTurret.draw(self)
 
-
+        
         # draw current in hand
         if self.actionRN == "grabturret":
 
@@ -73,34 +106,6 @@ class SoftwareRenderer():
                     break
 
             self.selectedTurret.draw(self, rectColor)
-
-        # bullets
-        for bullet in self.bullets:
-            bullet.draw(self)
-
-        # draw UI
-        bRect = pg.Rect((0,0), (80, self.HEIGHT))
-        pg.draw.rect(self.screen, "beige", bRect)
-        pg.draw.rect(self.screen, pg.Color(206,126,0), bRect, 4)
-
-        for UIe in self.UI:
-            UIe.draw(self)
-
-        # draw grid lines if SHIFT pressed
-        keys = pg.key.get_pressed()
-        if keys[pg.K_LSHIFT]:
-            self.draw_grid()
-        elif keys[pg.K_SPACE]:
-            self.enemies = []
-            
-    def draw_grid(self):
-        # draw horizonatally
-        for i in range(self.WIDTH//self.gridsize+1):
-            pg.draw.line(self.screen, "white", (i*self.gridsize, 0), (i*self.gridsize, self.HEIGHT))
-
-        # draw vertically
-        for i in range(self.HEIGHT//self.gridsize+1):
-            pg.draw.line(self.screen, "white", (0, i*self.gridsize), (self.WIDTH, i*self.gridsize))
 
     def handleKeyPress(self):
         pass
@@ -143,6 +148,8 @@ class SoftwareRenderer():
             keys = pg.key.get_pressed()
             if keys[pg.K_RSHIFT]:
                self.enemies.append(Enemy(1, (200,200)))
+            elif keys[pg.K_SPACE]:
+                self.enemies = []
 
             # if turret in hand update self.selectedTurret
             if self.actionRN == "grabturret":

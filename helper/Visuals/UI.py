@@ -4,7 +4,7 @@ from .renderers import square_render
 
 # UIe - UI element
 class UIe:
-    def __init__(self, type, pos, color, turret="none",  renderer=square_render):
+    def __init__(self, type, pos, color, turret="none", renderer=square_render):
         self.pos = pos
         self.color = pg.Color(color) # Use pygame Color because its better
         self.top = pos[0]
@@ -36,8 +36,11 @@ class UIe:
             self.renderer(render, self.rect, self.color)
 
     def action(self, render):
-        if self.type == "delete":
+        if self.isTurretspawn:
+            # create a turret
+        elif self.type == "delete":
             render.turrets.remove(self.turret)
             render.UI.remove(self)
             render.actionRN = "none"
             render.selectedTurret = "none"
+        

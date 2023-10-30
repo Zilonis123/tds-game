@@ -1,6 +1,6 @@
 import pygame as pg
 from ..Visuals.renderers import text, draw_circle_alpha
-from ..usefulmath import diagonally_pathfind, adjust_color
+from ..usefulmath import diagonally_pathfind, adjust_color, pointInCircle
 from .bullets import Bullet
 import math
 
@@ -21,6 +21,8 @@ class Turret():
         # negative = darker
 
         # figure out the turrets cooldown increase
+
+        # range - radius of the "range" circle
         if type == 1:
             self.cIncrease = 15
             self.strenght = 7
@@ -77,8 +79,7 @@ class Turret():
                 self.attacking = "none"
                 return
 
-            d = math.sqrt((enemy.rect.center[0] - self.rect.center[0])**2+(enemy.rect.center[1] - self.rect.center[1]) ** 2)
-            can_shoot = d <= self.range
+            can_shoot = pointInCircle(enemy.rect.center, self.rect.center, self.range)
 
             if not can_shoot:
                 return
@@ -99,11 +100,25 @@ class Turret():
 
 
         # draw turret head
+        self._draw_head(render, color)
+
+
+        # draw health
+        if self.health < self.maxhealth:
+            text(render, str(self.health), "white", self.rect.center, size=15)
+
+        # if selected draw outline and range
+        if render.selectedTurret == self:
+            self.renderer(render, self.rect, "white", 3)
+            color = pg.Color(255, 255, 255, 100)
+            draw_circle_alpha(render, color, self.rect.center, radius=self.range)
+
+    def _draw_head(self, render, color):
         size = (self.rect.w//2, self.rect.h//2)
         pos = (self.rect.center[0]-size[0]//2, self.rect.center[1]-size[1]//2)
 
         if self.type == 3:
-            # triangle
+            # triangle offset
             pos = (pos[0], pos[1]+10)
         
         headrect = pg.Rect(pos, size)
@@ -127,20 +142,9 @@ class Turret():
                 # Ensure the angle is between 0 and 360 degrees
                 self.headangle = (angle_degrees + 360) % 360
 
-        color = adjust_color(self.color, self.turretheadclr)
+        color = adjust_color(color, self.turretheadclr)
 
         self.renderer(render, headrect, color, rotation_angle=self.headangle)
-
-
-        # draw health
-        if self.health < self.maxhealth:
-            text(render, str(self.health), "white", self.rect.center, size=15)
-
-        # if selected draw outline
-        if render.selectedTurret == self:
-            self.renderer(render, self.rect, "white", 3)
-            color = pg.Color(255, 255, 255, 100)
-            draw_circle_alpha(render, color, self.rect.center, radius=self.range)
 
     def damage(self, render, damage):
         self.health -= damage
@@ -163,6 +167,11 @@ class Turret():
         targetdiff = (999, 999)
         for enemy in render.enemies:
             if enemy.uid in ignore:
+                continue
+
+            in_range = pointInCircle(enemy.rect.center, self.rect.center, self.range)
+
+            if not in_range:
                 continue
 
             difference = (abs(enemy.rect.center[0]-self.rect.center[0]), 

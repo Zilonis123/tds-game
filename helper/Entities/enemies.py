@@ -107,7 +107,6 @@ class Enemy():
                 dx, dy = e.rect.centerx - self.rect.centerx, e.rect.centery - self.rect.centery
                 side = ["left", "right", "top", "bottom"][(abs(dx) > abs(dy)) * (dx > 0) + (abs(dy) > abs(dx)) * 2 * (dy > 0)]
                 # side is the side that we collided with
-                print(f"{self.uid} collided with {e.uid} on the {side} side.")
 
                 d = (direction[0]*-1, direction[1]*-1)
                 self.rect = self.rect.move(d)
@@ -136,7 +135,6 @@ class Enemy():
 
         # target turret
         if turret.rect.colliderect(self.rect):
-            print("collided with " + str(turret.uid))
             return
 
     def damage(self, render, damage):

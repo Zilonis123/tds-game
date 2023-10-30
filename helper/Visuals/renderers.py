@@ -15,35 +15,40 @@ def triangle_render(render, rect, color, isOutline=0, rotation_angle=0):
     # Calculate triangle vertices
     vertices = [(x + w // 2, y), (x, y + h), (x + w, y + h)]
 
-    # Calculate rotation pivot point (center of the triangle)
-    pivot = (x + w // 2, y + h // 2)
+    if rotation_angle != 0:
+        # Calculate rotation pivot point (center of the triangle)
+        pivot = (x + w // 2, y + h // 2)
 
-    # Rotate the vertices
-    rotated_vertices = []
-    for vertex in vertices:
-        angle_rad = math.radians(rotation_angle)
-        x_rotated = math.cos(angle_rad) * (vertex[0] - pivot[0]) - math.sin(angle_rad) * (vertex[1] - pivot[1]) + pivot[0]
-        y_rotated = math.sin(angle_rad) * (vertex[0] - pivot[0]) + math.cos(angle_rad) * (vertex[1] - pivot[1]) + pivot[1]
-        rotated_vertices.append((x_rotated, y_rotated))
-
-    # Draw the rotated triangle
+        # Rotate the vertices
+        rotated_vertices = []
+        for vertex in vertices:
+            angle_rad = math.radians(rotation_angle)
+            x_rotated = math.cos(angle_rad) * (vertex[0] - pivot[0]) - math.sin(angle_rad) * (vertex[1] - pivot[1]) + pivot[0]
+            y_rotated = math.sin(angle_rad) * (vertex[0] - pivot[0]) + math.cos(angle_rad) * (vertex[1] - pivot[1]) + pivot[1]
+            rotated_vertices.append((x_rotated, y_rotated))
+    else:
+        rotated_vertices = vertices
+        
     pg.draw.polygon(render.screen, color, rotated_vertices, isOutline)
 
 
 def square_render(render, rect, color, width=0, rotation_angle=0):
-    # Create a square with a specified rotation angle
-    rotated_surface = pg.Surface(rect.size, pg.SRCALPHA)
-    rotated_surface.fill((0, 0, 0, 0))  # Fill with transparent color
-    square = pg.draw.rect(rotated_surface, color, (0, 0, rect.width, rect.height), width)
+    if rotation_angle != 0:
+        # Create a square with a specified rotation angle
+        rotated_surface = pg.Surface(rect.size, pg.SRCALPHA)
+        rotated_surface.fill((0, 0, 0, 0))  # Fill with transparent color
+        square = pg.draw.rect(rotated_surface, color, (0, 0, rect.width, rect.height), width)
 
-    # Rotate the square
-    rotated_square = pg.transform.rotate(rotated_surface, rotation_angle)
+        # Rotate the square
+        rotated_square = pg.transform.rotate(rotated_surface, rotation_angle)
 
-    # Get the rect of the rotated square
-    rotated_rect = rotated_square.get_rect(center=rect.center)
+        # Get the rect of the rotated square
+        rotated_rect = rotated_square.get_rect(center=rect.center)
 
-    # Blit the rotated square onto the screen
-    render.screen.blit(rotated_square, rotated_rect.topleft)
+        # Blit the rotated square onto the screen
+        render.screen.blit(rotated_square, rotated_rect.topleft)
+    else:
+        pg.draw.rect(render.screen, color, rect, width)
 
 
 def hexagon_render(render, rect, color, isOutline=0, rotation_angle=0):
