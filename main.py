@@ -1,5 +1,6 @@
 import pygame as pg
 import math
+import time
 
 from helper.controlls import *
 from helper.Visuals.UI import UIe
@@ -163,5 +164,9 @@ class SoftwareRenderer():
             self.clock.tick(self.FPS)
 
 if __name__ == "__main__":
+
+    start = time.time()
     game = SoftwareRenderer()
+    end = time.time()
+    print("Took " + str(round(end - start, 2)) + "s to initialize")
     game.run()
