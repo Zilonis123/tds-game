@@ -2,6 +2,7 @@ from ..Visuals.renderers import circle_renderer, healthbar, text
 import pygame as pg
 from ..usefulmath import diagonally_pathfind
 import math
+import random
 
 class Enemy():
     def __init__(self, type, pos, renderer=circle_renderer):
@@ -20,7 +21,8 @@ class Enemy():
 
         # UId
         tuple_str = ''.join(map(str, self.pos))
-        self.uid = tuple_str + str(self.type)
+        self.uid = tuple_str + str(self.type) + str(int(random.uniform(0.0, 1000.0)))
+
 
         self.targetTurret = "none"
 
@@ -38,6 +40,7 @@ class Enemy():
 
     def tick(self, render):
         # tick cooldown
+        print(self.uid)
         self.cooldown -= 1
         self._move_to_turret(render)
 
