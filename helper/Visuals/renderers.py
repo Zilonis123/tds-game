@@ -4,16 +4,31 @@
 import pygame as pg
 import math
 
-def triangle_render(render, rect, color, isOutline=0):
-    x=rect.x
-    y=rect.y
-    w=rect.width
-    h=rect.height
+def triangle_render(render, rect, color, isOutline=0, rotation_angle=0):
+    x = rect.x
+    y = rect.y
+    w = rect.width
+    h = rect.height
 
-    vertexes = [(x+w//2,y), (x,y+h), (x+w,y+h)]
+    rotation_angle *= -1
 
-    # draw
-    pg.draw.polygon(render.screen, color, vertexes, isOutline)
+    # Calculate triangle vertices
+    vertices = [(x + w // 2, y), (x, y + h), (x + w, y + h)]
+
+    # Calculate rotation pivot point (center of the triangle)
+    pivot = (x + w // 2, y + h // 2)
+
+    # Rotate the vertices
+    rotated_vertices = []
+    for vertex in vertices:
+        angle_rad = math.radians(rotation_angle)
+        x_rotated = math.cos(angle_rad) * (vertex[0] - pivot[0]) - math.sin(angle_rad) * (vertex[1] - pivot[1]) + pivot[0]
+        y_rotated = math.sin(angle_rad) * (vertex[0] - pivot[0]) + math.cos(angle_rad) * (vertex[1] - pivot[1]) + pivot[1]
+        rotated_vertices.append((x_rotated, y_rotated))
+
+    # Draw the rotated triangle
+    pg.draw.polygon(render.screen, color, rotated_vertices, isOutline)
+
 
 def square_render(render, rect, color, width=0, rotation_angle=0):
     # Create a square with a specified rotation angle

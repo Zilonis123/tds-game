@@ -102,27 +102,33 @@ class Turret():
         size = (self.rect.w//2, self.rect.h//2)
         pos = (self.rect.center[0]-size[0]//2, self.rect.center[1]-size[1]//2)
 
+        if self.type == 3:
+            # triangle
+            pos = (pos[0], pos[1]+10)
+        
+        headrect = pg.Rect(pos, size)
         if self.attacking != "none":
             # calculate the angle
             e = findenemy_by_id(render, self.attacking)
             if not e:
-                return
-            x1,y1 = e.rect.center
-            x2,y2 = self.rect.center
-            dy = x2 - x1
-            dx = y2 - y1
+                self.attacking != "none"
+            else:
+                x1,y1 = e.rect.center
+                x2,y2 = headrect.center
+                dy = x2 - x1
+                dx = y2 - y1
 
-            # Calculate the angle in radians
-            angle_radians = math.atan2(dy, dx)
+                # Calculate the angle in radians
+                angle_radians = math.atan2(dy, dx)
 
-            # Convert the angle to degrees if needed
-            angle_degrees = math.degrees(angle_radians)
+                # Convert the angle to degrees if needed
+                angle_degrees = math.degrees(angle_radians)
 
-            # Ensure the angle is between 0 and 360 degrees
-            self.headangle = (angle_degrees + 360) % 360
+                # Ensure the angle is between 0 and 360 degrees
+                self.headangle = (angle_degrees + 360) % 360
 
         color = adjust_color(self.color, self.turretheadclr)
-        headrect = pg.Rect(pos, size)
+
         self.renderer(render, headrect, color, rotation_angle=self.headangle)
 
 
