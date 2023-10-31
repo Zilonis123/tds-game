@@ -5,6 +5,9 @@ from ..usefulmath import diagonally_pathfind
 from .Enemies.enemycollisions import *
 from .Enemies.enemytargets import *
 
+from helper.Entities.Enemies.enemypathfind import astar_pathfinding, draw_path
+
+
 import math
 import random
 
@@ -17,6 +20,10 @@ class Enemy():
         self.renderer = renderer
 
         self.speed = 2
+
+        self.path = None
+        self.pathstart = None
+        self.pathon = 0
 
         self.cooldown = -1 # if higher than 0 cant attack
         self.strength = 10
@@ -72,17 +79,42 @@ class Enemy():
         # check if we can move
         # if we have collided return
         if turret.rect.colliderect(self.rect):
-            # this is where we would deal damage to the turret
             if self.cooldown < 0:
                 turret.damage(render, self.strength)
 
-                # 60 = 1s
-                # 30 = .5s
                 self.cooldown = 30
             return
 
         direction = diagonally_pathfind(self.rect.center, turret.rect.center)
+
+        # rect_values = []
+    
+        # # Extract "rect" values from the first list
+        # for t in render.turrets:
+        #     if hasattr(t, "rect"):
+        #         rect_values.append(t.rect)
+        
+        # # Extract "rect" values from the second list
+        # for e in render.enemies:
+        #     if hasattr(e, "rect"):
+        #         rect_values.append(e.rect)
+
+        # if not self.path:
+        #     self.path = astar_pathfinding([], turret.rect.center,self.rect.center)
+        #     self.pathstart = self.rect.center
+        #     self.pathon = 0
+
+    
+        #     if not self.path:
+        #         return
+        # draw_path(render.screen, self.path, self.pathstart, 20)
+        # direction = self.path[self.pathon]
+        # self.pathon += 1
+
         direction = (round(direction[0]*self.speed), round(direction[1]*self.speed))
+
+
+
         self.rect = self.rect.move(direction[0], direction[1])
 
         # check for collisions
@@ -104,31 +136,10 @@ class Enemy():
     
 
 
-def h_v_pathfind(position1, position2):
-    # horizontal and vertically .. dont allow diagonalls
-    delta_x = position2[0] - position1[0]
-    delta_y = position2[1] - position1[1]
-
-    # Calculate the direction while only allowing horizontal and vertical movement
-    if abs(delta_x) != 0:
-        if abs(delta_x) < 1:
-            direction = (delta_x, 0)
-        else:
-            direction = (1 if delta_x > 0 else -1, 0)
-    else:
-        # Move vertically
-        direction = (0, 1 if delta_y > 0 else -1)
-
-
-    return direction
 
 def findturret_by_id(render, uid):
     turret = [turret for turret in render.turrets if turret.uid == uid]
     if len(turret) == 0:
         return False
 
-    # we can assume that theres only ever going to be 1 turret by that UId since no 2 turrets
-    # can be in the same x,y coordinates at once
-    # also to insure that isnt the case the uids are taking to factor the type of the
-    # turret
     return turret[0]

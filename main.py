@@ -8,6 +8,7 @@ from helper.Entities.turrets import Turret
 from helper.Visuals.renderers import *
 from helper.Entities.enemies import Enemy
 
+
 class SoftwareRenderer():
 
     def __init__(self):
@@ -38,7 +39,6 @@ class SoftwareRenderer():
 
         # Enemies
         self.enemies = []
-        self.enemies.append(Enemy(1, (200,200)))
         self.enemies.append(Enemy(1, (200,200)))
     
 
