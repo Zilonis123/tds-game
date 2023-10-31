@@ -147,16 +147,17 @@ class SoftwareRenderer():
             pg.display.set_caption(
                 str(math.floor(self.clock.get_fps()))+"FPS - TD")
 
+            mx,my = pg.mouse.get_pos()
+
             keys = pg.key.get_pressed()
             if keys[pg.K_RSHIFT]:
-               self.enemies.append(Enemy(1, (200,200)))
+               self.enemies.append(Enemy(1, (mx, my)))
             elif keys[pg.K_SPACE]:
                 self.enemies = []
 
             # if turret in hand update self.selectedTurret
             if self.actionRN == "grabturret":
                 t = self.selectedTurret.type
-                mx,my = pg.mouse.get_pos()
                 
                 # if grid lines enabled
                 if keys[pg.K_LSHIFT]:

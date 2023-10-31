@@ -5,7 +5,7 @@ from ..Entities.turrets import Turret
 
 # UIe - UI element
 class UIe:
-    def __init__(self, type, pos, color, turret=-1, renderer=square_render):
+    def __init__(self, type, pos, color, turret=None, renderer=square_render):
         self.pos = pos
         self.color = pg.Color(color) # Use pygame Color because its better
         self.top = pos[0]
