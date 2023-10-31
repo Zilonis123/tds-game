@@ -40,7 +40,6 @@ class Enemy():
 
     def tick(self, render):
         # tick cooldown
-        print(self.uid)
         self.cooldown -= 1
         self._move_to_turret(render)
 
@@ -107,38 +106,14 @@ class Enemy():
                 continue
             
             if e.rect.colliderect(self.rect):
-                dx, dy = e.rect.centerx - self.rect.centerx, e.rect.centery - self.rect.centery
-                side = ["left", "right", "top", "bottom"][(abs(dx) > abs(dy)) * (dx > 0) + (abs(dy) > abs(dx)) * 2 * (dy > 0)]
-                # side is the side that we collided with
+                self.handlecollision(e.rect)
+                self.targetTurret = "none"
 
-                d = (direction[0]*-1, direction[1]*-1)
-                self.rect = self.rect.move(d)
-
-                # try to move 1 direction
-                if not e.rect.colliderect(self.rect.move(direction[0], 0)):
-                    # move x
-                    self.rect = self.rect.move(direction[0], 0)
-                elif not e.rect.colliderect(self.rect.move(0, direction[1])):
-                    self.rect = self.rect.move(0, direction[1])
-
-                if side == "left" or side == "right":
-                    if not e.rect.colliderect(self.rect.move(0, 1)):
-                        self.rect = self.rect.move(0, 1)
-                    else:
-                        self.rect = self.rect.move(0, -1)
-                else:
-                    if not e.rect.colliderect(self.rect.move(1, 0)):
-                        self.rect = self.rect.move(1, 0)
-                    else:
-                        self.rect = self.rect.move(-1, 0)
-
-
-                # if we are still in collision try going to a different turret
-                self._find_turret(render, [self.targetTurret])
-
-        # target turret
-        if turret.rect.colliderect(self.rect):
-            return
+        # turrets
+        for t in render.turrets:
+            # if it isnt our target
+            if t.rect.colliderect(self.rect) and t != turret:
+                self.handlecollision(t.rect)
 
     def damage(self, render, damage):
         self.health -= damage
@@ -151,6 +126,25 @@ class Enemy():
         if isinstance(other, Enemy):
             return self.uid == other.uid
         return 
+
+    def handlecollision(self, rect2):
+        rect1 = self.rect.copy()
+
+        overlap_x = min(rect1.right, rect2.right) - max(rect1.left, rect2.left)
+        overlap_y = min(rect1.bottom, rect2.bottom) - max(rect1.top, rect2.top)
+
+        if overlap_x > 0 and overlap_y > 0:
+            if overlap_x < overlap_y:
+                if rect1.centerx < rect2.centerx:
+                    rect1.right = rect2.left
+                else:
+                    rect1.left = rect2.right
+            else:
+                if rect1.centery < rect2.centery:
+                    rect1.bottom = rect2.top
+                else:
+                    rect1.top = rect2.bottom
+        self.rect = rect1
 
 
 def h_v_pathfind(position1, position2):

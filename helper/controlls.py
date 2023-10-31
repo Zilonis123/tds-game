@@ -48,10 +48,10 @@ def _place_turret(render):
     return
 
 def remove_delete_btn(render):
-        # function to remove delete button
-        for UI in render.UI:
-            if UI.turret == render.selectedTurret:
-                render.UI.remove(UI)
+    # function to remove delete button
+    for UI in render.UI:
+        if UI.turret == render.selectedTurret:
+            render.UI.remove(UI)
 
 def _click_turret(render, mx, my):
     # check if we have clicked on a turret

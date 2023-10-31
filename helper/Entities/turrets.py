@@ -75,7 +75,7 @@ class Turret():
             if self.attacking == "none":
                 return
         
-        # shoot :)
+        # shoot 
         if self.cooldown < 0:
             # find dir
             enemy = findenemy_by_id(render, self.attacking)

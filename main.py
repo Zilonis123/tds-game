@@ -32,13 +32,15 @@ class SoftwareRenderer():
 
         # init turrets
         self.turrets = []
-        self.selectedTurret = Turret(1, -999, -999, self)
+        self.selectedTurret = "none"
 
         self.gridsize=60
 
         # Enemies
         self.enemies = []
-
+        self.enemies.append(Enemy(1, (200,200)))
+        self.enemies.append(Enemy(1, (200,200)))
+    
 
         # bullets
         self.bullets = []
@@ -124,6 +126,7 @@ class SoftwareRenderer():
 
         self.running = True
         while self.running:
+
             self.draw()
             self.handleEvents()
             self.handleKeyPress()
