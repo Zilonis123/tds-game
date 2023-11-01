@@ -17,7 +17,7 @@ def diagonally_pathfind(b, a):
         direction = (0, 0)
     else:
         direction = ((dx / magnitude), (dy / magnitude))
-    
+
     return direction
 
 def adjust_color(color, adjustment):

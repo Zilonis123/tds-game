@@ -1,8 +1,12 @@
 
 
+
+BLANK = [(0,0) for i in range(10)]
 # self is gonna be the enemy
 
 def check_collisions(self, render):
+    hasCollision = False
+
     # enemies
     for e in render.enemies:
         if e == self:
@@ -10,13 +14,17 @@ def check_collisions(self, render):
         
         if e.rect.colliderect(self.rect):
             handlecollision(self, e.rect)
-            self.targetTurret = None
+            hasCollision = True
 
     # turrets
     for t in render.turrets:
         # if it isnt our target
         if t.rect.colliderect(self.rect) and t.uid != self.targetTurret:
             handlecollision(self, t.rect)
+            hasCollision = True
+
+    if hasCollision:
+        self.path = BLANK
 
 
 def handlecollision(self, rect2):

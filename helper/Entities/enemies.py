@@ -21,7 +21,7 @@ class Enemy():
 
         self.speed = 2
 
-        self.path = None
+        self.path: list | None = None
         self.pathstart = None
         self.pathon = 0
 
@@ -85,31 +85,36 @@ class Enemy():
                 self.cooldown = 30
             return
 
-        direction = diagonally_pathfind(self.rect.center, turret.rect.center)
+        # direction = diagonally_pathfind(self.rect.center, turret.rect.center)
 
-        # rect_values = []
+
+        rect_values = []
     
         # # Extract "rect" values from the first list
         # for t in render.turrets:
-        #     if hasattr(t, "rect"):
+        #     if t.uid != self.targetTurret:
         #         rect_values.append(t.rect)
         
         # # Extract "rect" values from the second list
         # for e in render.enemies:
-        #     if hasattr(e, "rect"):
+        #     if e != self:
         #         rect_values.append(e.rect)
 
-        # if not self.path:
-        #     self.path = astar_pathfinding([], turret.rect.center,self.rect.center)
-        #     self.pathstart = self.rect.center
-        #     self.pathon = 0
+        if self.path != None and self.pathon+1 > len(self.path):
+            self.path = None
+
+        if not self.path:
+            self.path = astar_pathfinding(rect_values, self.rect.center,turret.rect.center, self.speed)
+            self.pathstart = self.rect.center
+            self.pathon = 0
 
     
-        #     if not self.path:
-        #         return
-        # draw_path(render.screen, self.path, self.pathstart, 20)
-        # direction = self.path[self.pathon]
-        # self.pathon += 1
+            if not self.path:
+                return
+
+        draw_path(render.screen, self.path, self.pathstart, 5)
+        direction = self.path[self.pathon]
+        self.pathon += 1
 
         direction = (round(direction[0]*self.speed), round(direction[1]*self.speed))
 
