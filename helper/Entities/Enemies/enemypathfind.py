@@ -29,6 +29,8 @@ def astar_pathfinding(map_rects, start: tuple, end: tuple, speed: int):
     done = False
     while not done:
 
+
+
         dx,dy = diagonally_pathfind(at, end)
         dx = round(dx*speed)
         dy = round(dy*speed)
@@ -42,3 +44,21 @@ def astar_pathfinding(map_rects, start: tuple, end: tuple, speed: int):
             done = True
     
     return path
+
+def point_collides_with_rect(point, rect):
+    # Calculate the distances from the point to each side of the rectangle
+    left_dist = point[0] - rect.left
+    right_dist = rect.right - point[0]
+    top_dist = point[1] - rect.top
+    bottom_dist = rect.bottom - point[1]
+
+    # Determine which side the point is colliding with
+    min_dist = min(left_dist, right_dist, top_dist, bottom_dist)
+    if min_dist == left_dist:
+        return "left"
+    elif min_dist == right_dist:
+        return "right"
+    elif min_dist == top_dist:
+        return "top"
+    else:
+        return "bottom"
