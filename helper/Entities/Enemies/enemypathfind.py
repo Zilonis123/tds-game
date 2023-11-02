@@ -5,14 +5,18 @@ import pygame
 from ...usefulmath import diagonally_pathfind
 
 
-def draw_path(screen, path, start, rect_size):
+def draw_path(screen, path, start, rect_size, green):
     current = start
     a = 0
+
+    clr = "RED"
+    if green:
+        clr = "GREEN"
 
     for dx, dy in path:
         new_x = current[0] + dx
         new_y = current[1] + dy
-        if a%4 == 0: pygame.draw.circle(screen, "red", current, 3)
+        if a%4 == 0: pygame.draw.circle(screen, clr, current, 3)
         current = (new_x, new_y)
         a+=1
 
@@ -31,15 +35,14 @@ def astar_pathfinding(map_rects, start: tuple, end: tuple, speed: int):
 
 
 
-        dx,dy = diagonally_pathfind(at, end)
-        dx = round(dx*speed)
-        dy = round(dy*speed)
-        at = (at[0]+dx, at[1]+dy)
-        path.append((dx, dy))
+        dx, dy = diagonally_pathfind(at, end)
+        scaled_dx, scaled_dy = round(dx * speed), round(dy * speed)
+        at = (at[0] + scaled_dx, at[1] + scaled_dy)
+        path.append((scaled_dx, scaled_dy))
 
 
     
-        if len(path) > 700:
+        if len(path) > 700 or (dx,dy) == (0,0):
             done = True
     
     return path

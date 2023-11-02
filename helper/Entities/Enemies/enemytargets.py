@@ -11,7 +11,7 @@ def find_turret(self, render, ignore=[]):
     for turret in render.turrets:
         rect = turret.rect
         # Calculate the center of the rectangle
-        rect_center = (rect.left + rect.width / 2, rect.top + rect.height / 2)
+        rect_center = rect.center
 
         # Calculate the distance between the point and the rectangle's center
         distance = math.hypot(point[0] - rect_center[0], point[1] - rect_center[1])

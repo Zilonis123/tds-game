@@ -23,6 +23,7 @@ class Enemy():
 
         self.path: list | None = None
         self.pathstart = None
+        self.pastPath = False
         self.pathon = 0
 
         self.cooldown = -1 # if higher than 0 cant attack
@@ -74,6 +75,8 @@ class Enemy():
             # no turret by that id was found
             # meaning the turret was deleted or destroyed
             self.targetTurret = None
+
+            self.path = None
             return
         
         # check if we can move
@@ -82,6 +85,7 @@ class Enemy():
             if self.cooldown < 0:
                 turret.damage(render, self.strength)
 
+                self.path = None
                 self.cooldown = 30
             return
 
@@ -103,8 +107,39 @@ class Enemy():
         if self.path != None and self.pathon+1 > len(self.path):
             self.path = None
 
-        if not self.path:
-            self.path = astar_pathfinding(rect_values, self.rect.center,turret.rect.center, self.speed)
+        if self.path == None:
+            #check_collisions(self, render)
+
+            path = None
+            dist = 10000
+            distToT = math.hypot(self.rect.centerx - turret.rect.centerx, self.rect.centery - turret.rect.centery)
+            for p in render.enemypathcache:
+                if p["end"] == turret.rect.center:
+
+                    _a = math.hypot(self.rect.centerx - p["start"][0], self.rect.centery - p["start"][1])
+
+                    if distToT+20 > p["distToTurret"]+_a and dist > p["distToTurret"]+_a:
+                        
+                        temp = astar_pathfinding(rect_values, self.rect.center, p["start"], self.speed)
+                        path = temp+p["path"]
+                        dist = p["distToTurret"]+_a
+
+            if path == None:
+                self.path = astar_pathfinding(rect_values, self.rect.center,turret.rect.center, self.speed)
+
+                self.pastPath = False
+
+
+                render.enemypathcache.append({
+                    "path": self.path,
+                    "end": turret.rect.center,
+                    "start": self.rect.center,
+                    "distToTurret": distToT
+                })
+            else:
+                self.path = path
+                self.pastPath = True
+            
             self.pathstart = self.rect.center
             self.pathon = 0
 
@@ -112,11 +147,11 @@ class Enemy():
             if not self.path:
                 return
 
-        draw_path(render.screen, self.path, self.pathstart, 5)
+        draw_path(render.screen, self.path, self.pathstart, 5, self.pastPath)
         direction = self.path[self.pathon]
         self.pathon += 1
 
-        direction = (round(direction[0]*self.speed), round(direction[1]*self.speed))
+        direction = (round(direction[0]), round(direction[1]))
 
 
 
@@ -124,7 +159,7 @@ class Enemy():
 
         # check for collisions
         
-        check_collisions(self, render)
+        #check_collisions(self, render)
 
     def damage(self, render, damage):
         self.health -= damage

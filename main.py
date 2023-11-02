@@ -1,6 +1,8 @@
 import pygame as pg
 import math
 import time
+import os
+import sys
 
 from helper.draw import *
 from helper.controlls import *
@@ -41,6 +43,7 @@ class SoftwareRenderer():
         # Enemies
         self.enemies = []
         self.enemies.append(Enemy(1, (200,200)))
+        self.enemypathcache = []
     
 
         # bullets
@@ -83,6 +86,12 @@ class SoftwareRenderer():
             elif event.type == pg.MOUSEBUTTONDOWN:
                 mouse_click(self)
 
+    def clearconsole(self):
+        if os.name == 'nt':
+            os.system('cls')
+        else:
+            os.system('clear')
+
     def run(self):
         # main game loop
 
@@ -95,8 +104,15 @@ class SoftwareRenderer():
 
             # Tick
             for enemy in self.enemies:enemy.tick(self)
-            for bullet in self.bullets:bullet.tick(self)
+
+            s = sys.getsizeof(self.enemypathcache)
+            print(f"enemy cache takes up {s} bytes")
+
+            if s > 1000:
+                self.enemypathcache = []
+
             for turret in self.turrets:turret.tick(self)
+            for b in self.bullets:b.tick(self)
 
             # Set FPS as the name of the window
             pg.display.set_caption(
@@ -104,6 +120,7 @@ class SoftwareRenderer():
 
 
             mx,my = pg.mouse.get_pos()
+            keys = pg.key.get_pressed()
 
             # if turret in hand update self.selectedTurret
             if self.actionRN == "grabturret":
