@@ -37,10 +37,9 @@ def astar_pathfinding(map_rects, start: tuple, end: tuple, speed: int):
         at = (at[0]+dx, at[1]+dy)
         path.append((dx, dy))
 
-        if at[0] == end[0]: print("a")
 
     
-        if len(path) > 700 or at[0] == end[0]:
+        if len(path) > 700:
             done = True
     
     return path

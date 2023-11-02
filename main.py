@@ -2,6 +2,7 @@ import pygame as pg
 import math
 import time
 
+from helper.draw import *
 from helper.controlls import *
 from helper.Visuals.UI import UIe
 from helper.Entities.turrets import Turret
@@ -53,64 +54,25 @@ class SoftwareRenderer():
         # draw enemies
         for e in self.enemies: e.draw(self)
 
-
-        # turrets
-        self._draw_turrets()
+        draw_turrets(self)
 
         # bullets
         for b in self.bullets: b.draw(self)
 
-        # draw UI
-        self._draw_UI()
+        draw_UI(self)
     
-    def _draw_UI(self):
-        bRect = pg.Rect((0,0), (80, self.HEIGHT))
-        pg.draw.rect(self.screen, "beige", bRect)
-        pg.draw.rect(self.screen, pg.Color(206,126,0), bRect, 4)
-
-        for UIe in self.UI:
-            UIe.draw(self)
-
-        # draw grid lines if SHIFT pressed
-        keys = pg.key.get_pressed()
-        if keys[pg.K_LSHIFT]:
-            self._draw_grid()
-            
-    def _draw_grid(self):
-        # draw horizonatally
-        for i in range(self.WIDTH//self.gridsize+1):
-            pg.draw.line(self.screen, "white", (i*self.gridsize, 0), (i*self.gridsize, self.HEIGHT))
-
-        # draw vertically
-        for i in range(self.HEIGHT//self.gridsize+1):
-            pg.draw.line(self.screen, "white", (0, i*self.gridsize), (self.WIDTH, i*self.gridsize))
-
-    def _draw_turrets(self):
-
-        for turret in self.turrets:
-            if self.selectedTurret != "none" and self.selectedTurret == turret:
-                continue
-            turret.draw(self)
-
-        # draw selected turret 1st
-        if self.selectedTurret != "none":
-            self.selectedTurret.draw(self)
-
-        
-        # draw current in hand
-        if self.actionRN == "grabturret":
-
-            # change color depending if the turret can be placed
-            rectColor = self.selectedTurret.color
-            for turret in self.turrets:
-                if turret.plzone.colliderect(self.selectedTurret.rect):
-                    rectColor = "red"
-                    break
-
-            self.selectedTurret.draw(self, rectColor)
+    
 
     def handleKeyPress(self):
-        pass
+        mx,my = pg.mouse.get_pos()
+
+        keys = pg.key.get_pressed()
+        if keys[pg.K_RSHIFT]:
+            self.enemies.append(Enemy(1, (mx, my)))
+        elif keys[pg.K_SPACE]:
+            self.enemies = []
+
+
 
     def handleEvents(self):
         # Handles pygame events
@@ -131,29 +93,17 @@ class SoftwareRenderer():
             self.handleEvents()
             self.handleKeyPress()
 
-            # Tick enemies
-            for enemy in self.enemies:
-                enemy.tick(self)
-
-            # Tick bullets
-            for bullet in self.bullets:
-                bullet.tick(self)
-
-            # tick turrets
-            for turret in self.turrets:
-                turret.tick(self)
+            # Tick
+            for enemy in self.enemies:enemy.tick(self)
+            for bullet in self.bullets:bullet.tick(self)
+            for turret in self.turrets:turret.tick(self)
 
             # Set FPS as the name of the window
             pg.display.set_caption(
                 str(math.floor(self.clock.get_fps()))+"FPS - TD")
 
-            mx,my = pg.mouse.get_pos()
 
-            keys = pg.key.get_pressed()
-            if keys[pg.K_RSHIFT]:
-               self.enemies.append(Enemy(1, (mx, my)))
-            elif keys[pg.K_SPACE]:
-                self.enemies = []
+            mx,my = pg.mouse.get_pos()
 
             # if turret in hand update self.selectedTurret
             if self.actionRN == "grabturret":
