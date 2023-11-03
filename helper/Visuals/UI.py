@@ -55,6 +55,7 @@ class UIe:
             render.selectedTurret = Turret(self.type, mx, my, render)
 
             render.cash -= self.cost
+            render.ttext.append({"cash": -self.cost, "time": 0})
         elif self.type == "delete":
             render.turrets.remove(self.turret)
             render.UI.remove(self)

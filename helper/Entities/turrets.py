@@ -33,6 +33,11 @@ class Turret():
             self.bSpeed = 10
             self.range = 120
             self.health = self.maxhealth = 200
+        elif type == 2:
+            self.cIncrease = 60
+            self.range = 0
+            self.health = self.maxhealth = 75
+            self.turretheadclr = 0
         elif type == 3:
             self.cIncrease = 60
             self.strenght = 15
@@ -46,6 +51,7 @@ class Turret():
             self.bSpeed = 12
             self.range = 150
             self.health = self.maxhealth = 100
+        
 
 
         self.headangle = 0
@@ -63,39 +69,14 @@ class Turret():
             if UIe.type == type:
                 self.color = UIe.color
                 self.renderer = UIe.renderer
+                break
 
     def tick(self, render):
         self.cooldown -= 1
         # figure out if we can shoot smth
 
-        if self.attacking == "none":
-            # find smth to kill
-            self._find_enemy(render)
-            # if still nothing .. then damnn
-            if self.attacking == "none":
-                return
-        
-        # shoot 
-        if self.cooldown < 0:
-            # find dir
-            enemy = findenemy_by_id(render, self.attacking)
-            if not enemy:
-                self.attacking = "none"
-                return
-
-            can_shoot = pointInCircle(enemy.rect.center, self.rect.center, self.range)
-
-            if not can_shoot:
-                return
-
-            direction = diagonally_pathfind(self.rect.center, enemy.rect.center)
-
-            # create bullet
-            b = Bullet(direction[0], direction[1], self.rect.center, self.cIncrease, self.bSpeed, turret=self)
-            render.bullets.append(b)
-
-            # cooldown
-            self.cooldown = self.cIncrease
+        if self.type != 2: tick_turret(self, render)
+        else: tick_farm(self, render)
     
     def draw(self, render, color="none"):
         if color == "none":
@@ -211,3 +192,41 @@ def findenemy_by_id(render, uid):
     # also to insure that isnt the case the uids are taking to factor the type of the
     # turret
     return enemy[0]
+
+def tick_turret(self, render):
+    if self.attacking == "none":
+        # find smth to kill
+        self._find_enemy(render)
+        # if still nothing .. then damnn
+        if self.attacking == "none":
+            return
+
+    # shoot 
+    if self.cooldown < 0:
+        # find dir
+        enemy = findenemy_by_id(render, self.attacking)
+        if not enemy:
+            self.attacking = "none"
+            return
+
+        can_shoot = pointInCircle(enemy.rect.center, self.rect.center, self.range)
+
+        if not can_shoot:
+            return
+
+        direction = diagonally_pathfind(self.rect.center, enemy.rect.center)
+
+        # create bullet
+        b = Bullet(direction[0], direction[1], self.rect.center, self.cIncrease, self.bSpeed, turret=self)
+        render.bullets.append(b)
+
+        # cooldown
+        self.cooldown = self.cIncrease
+
+
+def tick_farm(self, render):
+
+    if self.cooldown < 0:
+        render.addcash(50)
+
+        self.cooldown = 240

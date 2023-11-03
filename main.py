@@ -33,6 +33,7 @@ class SoftwareRenderer():
             UIe(1, (10,5), "blue"),
             UIe(3, (10,92), "green", renderer=triangle_render),
             UIe(4, (10,185), "brown", renderer=hexagon_render),
+            UIe(2, (10,277), "yellow")
         ]
 
         # init turrets
@@ -43,12 +44,18 @@ class SoftwareRenderer():
 
         # Enemies
         self.enemies = []
-        self.enemies.append(Enemy(1, (200,200)))
         self.enemypathcache = []
     
 
         # bullets
         self.bullets = []
+
+        # self temp text
+        self.ttext = []
+
+    def addcash(self, cash):
+        self.ttext.append({"cash": cash, "time": 0})
+        self.cash += cash
 
     def draw(self):
         # This func handles anything related to drawing something to the screen
@@ -64,7 +71,18 @@ class SoftwareRenderer():
         for b in self.bullets: b.draw(self)
 
         draw_UI(self)
-    
+
+        for t in self.ttext:
+            prefix = "+"
+            color = "green"
+            if t["cash"] < 0:
+                prefix=""
+                color = "red"
+
+            text(self, prefix+str(t["cash"]), color, (self.WIDTH, 50+t["time"]), type="topright")
+            t["time"] += 1
+            if t["time"] > 120:
+                self.ttext.remove(t)
     
 
     def handleKeyPress(self):
