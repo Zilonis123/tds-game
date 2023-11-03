@@ -30,7 +30,7 @@ class SoftwareRenderer():
         # the type variable lets the code know what turret this is for
         self.UI = [
             UIe(1, (10,5), "blue"),
-            UIe(3, (10,125), "green", renderer=triangle_render),
+            UIe(3, (10,92), "green", renderer=triangle_render),
             UIe(4, (10,185), "brown", renderer=hexagon_render),
         ]
 

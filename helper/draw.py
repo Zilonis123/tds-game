@@ -1,6 +1,7 @@
 
 
 import pygame as pg
+from .Visuals.renderers import text
 
 
 def draw_UI(render):
@@ -10,6 +11,9 @@ def draw_UI(render):
 
     for UIe in render.UI:
         UIe.draw(render)
+
+    # draw text
+    text(render, str(render.cash), "BLACK", (render.WIDTH, 0), size=30, type="topright", font="fonts/Gobold.otf")
 
     # draw grid lines if SHIFT pressed
     keys = pg.key.get_pressed()

@@ -90,13 +90,23 @@ def healthbar(render, pos, health, maxhealth, size=5):
     pg.draw.line(render.screen, green, (x-uSize, y), ((x-uSize)+length,y), size)
     text(render, str(health), "white", (x, y-5), 10)
 
-def text(render, text, color, pos, size=18):
+def text(render, text: str, color: pg.Color | str, pos: tuple[int, int], size=18, type="center", font="freesansbold.ttf"):
     # init font
 
-    font = pg.font.Font('freesansbold.ttf', size)
+    font = pg.font.Font(font, size)
     surface = font.render(text, True, color)
 
     rect = surface.get_rect()
-    rect.center = pos
+
+    if type == "center":
+        rect.center = pos
+    elif type == "topleft":
+        rect.topleft = pos
+    elif type == "topright":
+        rect.topright = pos
+    elif type == "bottomleft":
+        rect.bottomleft = pos
+    else:
+        rect.bottomright = pos
 
     render.screen.blit(surface, rect)
