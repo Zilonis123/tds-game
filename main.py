@@ -11,6 +11,7 @@ from helper.Entities.turrets import Turret
 from helper.Visuals.renderers import *
 from helper.Entities.enemies import Enemy
 
+from loguru import logger 
 
 class SoftwareRenderer():
 
@@ -104,12 +105,6 @@ class SoftwareRenderer():
 
             # Tick
             for enemy in self.enemies:enemy.tick(self)
-
-            s = sys.getsizeof(self.enemypathcache)
-            print(f"enemy cache takes up {s} bytes")
-
-            if s > 1000:
-                self.enemypathcache = []
 
             for turret in self.turrets:turret.tick(self)
             for b in self.bullets:b.tick(self)

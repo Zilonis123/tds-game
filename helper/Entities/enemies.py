@@ -7,6 +7,8 @@ from .Enemies.enemytargets import *
 
 from helper.Entities.Enemies.enemypathfind import astar_pathfinding, draw_path
 
+import sys
+from loguru import logger
 
 import math
 import random
@@ -142,6 +144,9 @@ class Enemy():
             
             self.pathstart = self.rect.center
             self.pathon = 0
+
+            s = sys.getsizeof(render.enemypathcache)
+            logger.info(f"enemy cache takes up {s} bytes")
 
     
             if not self.path:
