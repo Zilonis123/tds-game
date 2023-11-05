@@ -5,18 +5,18 @@ from ..Entities.turrets import Turret
 
 # UIe - UI element
 class UIe:
-    def __init__(self, type, pos, color, turret=None, renderer=square_render):
+    def __init__(self, type: int|str, pos: tuple[int, int], color: str, turret=None, renderer=square_render):
         self.pos = pos
-        self.color = pg.Color(color) # Use pygame Color because its better
-        self.top = pos[0]
-        self.left = pos[1]
+        self.color: pg.Color = pg.Color(color) # Use pygame Color because its better
+        self.top: int = pos[0]
+        self.left: int = pos[1]
 
-        self.isTurretspawn = isinstance(type, int)
-        self.type = type
-        self.rect = pg.Rect(pos, (50,50))
+        self.isTurretspawn: bool = isinstance(type, int)
+        self.type: int = type
+        self.rect: pg.Rect = pg.Rect(pos, (50,50))
         self.renderer = renderer
 
-        self.cost = 100
+        self.cost: int = 100
 
         # delete logic
         self.turret = turret
@@ -24,7 +24,7 @@ class UIe:
 
             # "Hitbox"
             self.rect = pg.Rect(pos, (30,30))
-            self.rect = pg.Rect(translate_rect_to_circ(self.rect), (self.rect.w, self.rect.h))
+            self.rect: pg.Rect = pg.Rect(translate_rect_to_circ(self.rect), (self.rect.w, self.rect.h))
 
     def draw(self, render):
         if self.type == "delete":
