@@ -1,5 +1,6 @@
 import pygame as pg
 from .Entities.turrets import *
+from .Entities.enemies import Enemy
 from .Visuals.UI import UIe
 
 def mouse_click(render):
@@ -7,15 +8,18 @@ def mouse_click(render):
 
 
     # Check if mouse was clicked on a UI element and not action is done right now
-    res: bool = click_UI(render, mx,my)
+    clickedOnUI: bool = click_UI(render, mx,my)
 
-    if res == False:
+    if not clickedOnUI:
         # check if we have a turret in our hands
         if render.actionRN == "grabturret":
             _place_turret(render)
         else:
             # check if we are clicking on a placed turret
             _click_turret(render, mx, my)
+
+            # check if we are clicking on an enemy
+            click_enemy(render, mx, my)
     
 
 def click_UI(render, mx: float|int ,my: float|int):
@@ -50,15 +54,29 @@ def _place_turret(render):
 def remove_delete_btn(render):
     # function to remove delete button
     for UI in render.UI:
-        if UI.turret == render.selectedTurret:
+        if UI.type == "delete":
             render.UI.remove(UI)
+            break
+
+def click_enemy(render, mx: float, my: float):
+    enemyClicked: None | Enemy = None\
+    
+    for e in render.enemies:
+        if e.rect.collidepoint(mx, my):
+            enemyClicked = e
+            break
+
+    # select the enemy :0
+    if enemyClicked != None:
+        render.selectedEnemy = e
 
 def _click_turret(render, mx, my):
     # check if we have clicked on a turret
     clickedOn: None | Turret = None
     for turret in render.turrets:
         if turret.rect.collidepoint(mx, my):
-            clickedOn = turret 
+            clickedOn = turret
+            break
     
     if clickedOn == None:
         # if we have something selected deselect it
@@ -78,7 +96,7 @@ def _click_turret(render, mx, my):
         # if we are trying to select the same turrent .. dont allow it
         if clickedOn == render.selectedTurret:
             render.actionRN = None
-            render.selectedTurret = Turret(1, -999, -999, render)
+            render.selectedTurret = None
             return
 
    
@@ -88,7 +106,7 @@ def _click_turret(render, mx, my):
     # create the UI elements needed4
     rect: pg.Rect = clickedOn.rect
     pos: tuple[float, float] = (rect.x+rect.width, rect.y-rect.height//7) # calculate offset
-    deleteBtn: UIe = UIe("delete", pos, "red", clickedOn)
+    deleteBtn: UIe = UIe("delete", pos, "red")
     render.UI.append(deleteBtn)
 
     render.selectedTurret: Turret = clickedOn

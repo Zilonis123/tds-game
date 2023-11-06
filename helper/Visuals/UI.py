@@ -5,7 +5,7 @@ from ..Entities.turrets import Turret
 
 # UIe - UI element
 class UIe:
-    def __init__(self, type: int|str, pos: tuple[int, int], color: str, turret=None, renderer=square_render):
+    def __init__(self, type: int|str, pos: tuple[int, int], color: str, renderer=square_render):
         self.pos = pos
         self.color: pg.Color = pg.Color(color) # Use pygame Color because its better
         self.top: int = pos[0]
@@ -19,7 +19,6 @@ class UIe:
         self.cost: int = 100
 
         # delete logic
-        self.turret = turret
         if self.type == "delete":
 
             # "Hitbox"
@@ -57,8 +56,8 @@ class UIe:
             render.cash -= self.cost
             render.ttext.append({"cash": -self.cost, "time": 0})
         elif self.type == "delete":
-            render.turrets.remove(self.turret)
+            render.turrets.remove(render.selectedTurret)
             render.UI.remove(self)
-            render.actionRN = "none"
-            render.selectedTurret = "none"
+            render.actionRN = None
+            render.selectedTurret = None
         

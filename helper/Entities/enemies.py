@@ -40,7 +40,7 @@ class Enemy():
         self.uid: str = tuple_str + str(self.type) + str(int(random.uniform(0.0, 1000.0)))
 
 
-        self.targetTurret: Turret | None  = None
+        self.targetTurret: str | None  = None
 
         if type==1:
             self.color: str = "darkgreen"
@@ -53,6 +53,13 @@ class Enemy():
         # only display healthbar if its smaller than max health
         if self.health < self.maxhealth:
             healthbar(render, (self.rect.center[0], self.rect.center[1]-20), self.health, self.maxhealth)
+
+        # if we are selected draw more shit
+        if render.selectedEnemy == self:
+            text(render, f"Target {self.targetTurret}", "black", self.rect.topright, type="topleft", font="fonts/Gobold.otf")
+
+            if self.path != None:
+                draw_path(render.screen, self.path, self.pathstart, 5, self.pastPath)
 
     def tick(self, render):
         # tick cooldown
@@ -154,7 +161,6 @@ class Enemy():
             if not self.path:
                 return
 
-        draw_path(render.screen, self.path, self.pathstart, 5, self.pastPath)
         direction: tuple[int,int] = self.path[self.pathon]
         self.pathon += 1
 
@@ -170,6 +176,8 @@ class Enemy():
         if self.health < 0:
             # ded
             render.enemies.remove(self)
+            if render.selectedEnemy == self:
+                render.selectedEnemy = None
             return
 
     def __eq__(self, other):

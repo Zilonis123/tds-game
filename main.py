@@ -22,7 +22,7 @@ class SoftwareRenderer():
         self.FPS = 60
         self.clock = pg.time.Clock()
         
-        self.actionRN = "none"
+        self.actionRN = None
 
         self.cash = 999 # debug value
 
@@ -38,13 +38,14 @@ class SoftwareRenderer():
 
         # init turrets
         self.turrets = []
-        self.selectedTurret = "none"
+        self.selectedTurret = None
 
         self.gridsize=60
 
         # Enemies
-        self.enemies = []
+        self.enemies: list[Enemy] = []
         self.enemypathcache = []
+        self.selectedEnemy: Enemy | None = None
     
 
         # bullets

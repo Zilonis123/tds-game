@@ -33,12 +33,12 @@ def draw_grid(render):
 def draw_turrets(render):
 
     for turret in render.turrets:
-        if render.selectedTurret != "none" and render.selectedTurret == turret:
+        if render.selectedTurret == turret:
             continue
         turret.draw(render)
 
     # draw selected turret 1st
-    if render.selectedTurret != "none":
+    if render.selectedTurret != None:
         render.selectedTurret.draw(render)
 
     

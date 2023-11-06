@@ -5,7 +5,7 @@ import pygame
 from ...usefulmath import diagonally_pathfind
 
 
-def draw_path(screen, path, start, rect_size, green):
+def draw_path(screen, path: list[tuple[int,int]], start: tuple[float, float], rect_size: int, green: bool):
     current = start
     a = 0
 

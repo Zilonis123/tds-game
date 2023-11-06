@@ -76,7 +76,7 @@ class Turret():
         # choose color
         for UIe in render.UI:
             if UIe.type == type:
-                self.color: pg.Color | str = UIe.color
+                self.color: tuple[int,int,int,int] = UIe.color
                 self.renderer = UIe.renderer
                 break
 
@@ -109,10 +109,10 @@ class Turret():
 
             # display stats
             if render.actionRN != "grabturret":
-                text(render, f"Kills: {self.kills}", "black", (self.rect.topleft[0]-85, self.rect.topleft[1]), 
+                text(render, f"Kills: {self.kills}", "black", (self.rect.topleft[0]-100, self.rect.topleft[1]), 
                 type="topleft", font="fonts/Gobold.otf")
 
-                text(render, f"Damage: {self.damagedealt}", "black", (self.rect.topleft[0]-85, self.rect.topleft[1]+20),
+                text(render, f"Damage: {self.damagedealt}", "black", (self.rect.topleft[0]-100, self.rect.topleft[1]+20),
                 type="topleft", font="fonts/Gobold.otf")
 
                 text(render, f"UId: {self.uid}", "black", (self.rect.topright[0]+10, self.rect.topright[1]+20),
