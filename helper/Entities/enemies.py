@@ -1,6 +1,6 @@
 from ..Visuals.renderers import circle_renderer, healthbar, text
 import pygame as pg
-from ..usefulmath import diagonally_pathfind
+from ..usefulmath import diagonally_pathfind, findturret_by_id
 
 from .Enemies.enemycollisions import *
 from .Enemies.enemytargets import *
@@ -13,7 +13,7 @@ import sys
 from loguru import logger
 
 import math
-import random
+from random import uniform
 
 class Enemy():
     def __init__(self, type: int, pos: tuple[int | float, int | float], renderer=circle_renderer):
@@ -37,7 +37,7 @@ class Enemy():
 
         # UId
         tuple_str: str = ''.join(map(str, self.pos))
-        self.uid: str = tuple_str + str(self.type) + str(int(random.uniform(0.0, 1000.0)))
+        self.uid: str = tuple_str + str(self.type) + str(int(uniform(0.0, 1000.0)))
 
 
         self.targetTurret: str | None  = None
@@ -47,7 +47,7 @@ class Enemy():
 
     def draw(self, render):
         self.renderer(render, self.rect, self.color)
-        self.renderer(render, self.rect, "black", 1)
+        # self.renderer(render, self.rect, "black", 1)
 
         # healthbar
         # only display healthbar if its smaller than max health
@@ -60,6 +60,10 @@ class Enemy():
 
             if self.path != None:
                 draw_path(render.screen, self.path, self.pathstart, 5, self.pastPath)
+
+            self.renderer(render, self.rect, "white", 2)
+
+
 
     def tick(self, render):
         # tick cooldown
@@ -82,7 +86,7 @@ class Enemy():
 
         # for precausion let's check if the turret exists
         turret = findturret_by_id(render, self.targetTurret)
-        if not turret:
+        if turret == None:
             # no turret by that id was found
             # meaning the turret was deleted or destroyed
             self.targetTurret = None
@@ -187,11 +191,3 @@ class Enemy():
 
     
 
-
-
-def findturret_by_id(render, uid):
-    turret: Turret = [turret for turret in render.turrets if turret.uid == uid]
-    if len(turret) == 0:
-        return False
-
-    return turret[0]

@@ -3,6 +3,8 @@ from .Entities.turrets import *
 from .Entities.enemies import Enemy
 from .Visuals.UI import UIe
 
+from loguru import logger
+
 def mouse_click(render):
     mx,my = pg.mouse.get_pos()
 
@@ -59,7 +61,7 @@ def remove_delete_btn(render):
             break
 
 def click_enemy(render, mx: float, my: float):
-    enemyClicked: None | Enemy = None\
+    enemyClicked: None | Enemy = None
     
     for e in render.enemies:
         if e.rect.collidepoint(mx, my):
@@ -69,6 +71,9 @@ def click_enemy(render, mx: float, my: float):
     # select the enemy :0
     if enemyClicked != None:
         render.selectedEnemy = e
+        render.UI.append(UIe("changeTarget", e.rect.topright, "clear", info={"id": e.uid}))
+
+        logger.info(f"Created UI: {len(render.UI)}")
 
 def _click_turret(render, mx, my):
     # check if we have clicked on a turret
@@ -110,3 +115,5 @@ def _click_turret(render, mx, my):
     render.UI.append(deleteBtn)
 
     render.selectedTurret: Turret = clickedOn
+
+    logger.info(f"Created UI: {len(render.UI)}")

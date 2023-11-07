@@ -38,3 +38,22 @@ def adjust_color(color: str | pg.Color, adjustment: int) -> pg.Color:
 def pointInCircle(p1: tuple[int|float, int|float], circleCenter: tuple[int|float, int|float], radius: int) -> bool:
     d: float = math.sqrt((p1[0] - circleCenter[0])**2+(p1[1] - circleCenter[1]) ** 2)
     return d <= radius
+
+
+
+def findenemy_by_id(render, uid: str):
+    enemy = [enemy for enemy in render.enemies if enemy.uid == uid]
+    if len(enemy) == 0:
+        return None
+        
+    return enemy[0]
+
+
+
+
+def findturret_by_id(render, uid: str):
+    turret: Turret = [turret for turret in render.turrets if turret.uid == uid]
+    if len(turret) == 0:
+        return None
+
+    return turret[0]

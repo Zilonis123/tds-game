@@ -1,8 +1,5 @@
 import pygame as pg
-import math
-import time
-import os
-import sys
+import sys,os,time,math,psutil
 
 from helper.draw import *
 from helper.controlls import *
@@ -10,6 +7,7 @@ from helper.Visuals.UI import UIe
 from helper.Entities.turrets import Turret
 from helper.Visuals.renderers import *
 from helper.Entities.enemies import Enemy
+from helper.Entities.Enemies.enemycollisions import check_collisions
 
 from loguru import logger 
 
@@ -24,7 +22,7 @@ class SoftwareRenderer():
         
         self.actionRN = None
 
-        self.cash = 999 # debug value
+        self.cash = 10000 # debug value
 
         # UI
         # This will be an Array that contains UIe class
@@ -53,6 +51,9 @@ class SoftwareRenderer():
 
         # self temp text
         self.ttext = []
+
+
+        self.clearconsole()
 
     def addcash(self, cash):
         self.ttext.append({"cash": cash, "time": 0})
@@ -92,6 +93,7 @@ class SoftwareRenderer():
         keys = pg.key.get_pressed()
         if keys[pg.K_RSHIFT]:
             self.enemies.append(Enemy(1, (mx, my)))
+            check_collisions(self.enemies[len(self.enemies)-1], self)
         elif keys[pg.K_SPACE]:
             self.enemies = []
 
@@ -124,13 +126,14 @@ class SoftwareRenderer():
 
             # Tick
             for enemy in self.enemies:enemy.tick(self)
-
+            for u in self.UI: u.tick(self)
             for turret in self.turrets:turret.tick(self)
             for b in self.bullets:b.tick(self)
 
             # Set FPS as the name of the window
-            pg.display.set_caption(
-                str(math.floor(self.clock.get_fps()))+"FPS - TD")
+            size = psutil.Process().memory_info().rss
+
+            pg.display.set_caption(f"{str(math.floor(self.clock.get_fps()))}FPS | {round(size/1024**2)}Kb")
 
 
             mx,my = pg.mouse.get_pos()
@@ -161,5 +164,5 @@ if __name__ == "__main__":
     start = time.time()
     game = SoftwareRenderer()
     end = time.time()
-    print("Took " + str(round(end - start, 2)) + "s to initialize")
+    logger.info("Took " + str(round(end - start, 3)) + "s to initialize")
     game.run()

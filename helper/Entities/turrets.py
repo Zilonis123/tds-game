@@ -1,6 +1,6 @@
 import pygame as pg
 from ..Visuals.renderers import text, draw_circle_alpha
-from ..usefulmath import diagonally_pathfind, adjust_color, pointInCircle
+from ..usefulmath import diagonally_pathfind, adjust_color, pointInCircle, findenemy_by_id
 from .bullets import Bullet
 import math
 
@@ -197,16 +197,6 @@ def addTurret(render, t: Turret):
     render.turrets.append(t)
 
 
-def findenemy_by_id(render, uid):
-    enemy = [enemy for enemy in render.enemies if enemy.uid == uid]
-    if len(enemy) == 0:
-        return False
-
-    # we can assume that theres only ever going to be 1 turret by that UId since no 2 turrets
-    # can be in the same x,y coordinates at once
-    # also to insure that isnt the case the uids are taking to factor the type of the
-    # turret
-    return enemy[0]
 
 def tick_turret(self, render):
     if self.attacking == None:

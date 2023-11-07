@@ -23,9 +23,6 @@ def check_collisions(self, render):
             handlecollision(self, t.rect)
             hasCollision = True
 
-    if hasCollision:
-        self.path = BLANK
-
 
 def handlecollision(self, rect2):
     rect1 = self.rect.copy()

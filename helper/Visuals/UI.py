@@ -1,19 +1,27 @@
 import pygame as pg
-from ..usefulmath import translate_rect_to_circ
+from ..usefulmath import translate_rect_to_circ, findenemy_by_id
 from .renderers import square_render, text
 from ..Entities.turrets import Turret
 
 # UIe - UI element
 class UIe:
-    def __init__(self, type: int|str, pos: tuple[int, int], color: str, renderer=square_render):
+    def __init__(self, type: int|str, pos: tuple[int, int], color: str, renderer=square_render, size=(50,50), info={}):
+
+        # info var contains stuff that the UI element should know
+
         self.pos = pos
+        if color.lower() == "clear":
+            color = "red"
+
         self.color: pg.Color = pg.Color(color) # Use pygame Color because its better
         self.top: int = pos[0]
         self.left: int = pos[1]
 
+        self.info = info
+
         self.isTurretspawn: bool = isinstance(type, int)
         self.type: int = type
-        self.rect: pg.Rect = pg.Rect(pos, (50,50))
+        self.rect: pg.Rect = pg.Rect(pos, size)
         self.renderer = renderer
 
         self.cost: int = 100
@@ -60,4 +68,12 @@ class UIe:
             render.UI.remove(self)
             render.actionRN = None
             render.selectedTurret = None
-        
+    
+    def tick(self, render):
+        if self.type == "changeTarget":
+
+            e = findenemy_by_id(render, self.info["id"])
+            if e != None and render.selectedEnemy == e: 
+                self.rect.topleft = e.rect.topright
+            else:
+                render.UI.remove(self)
