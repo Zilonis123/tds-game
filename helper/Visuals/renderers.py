@@ -33,6 +33,14 @@ def triangle_render(render, rect: pg.Rect, color: str | pg.Color, isOutline=0, r
 
 
 def square_render(render, rect: pg.Rect, color: str | pg.Color, width=0, rotation_angle=0):
+    if isinstance(color, pg.Color):
+        # draw with alpha / transparency
+        shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
+        pg.draw.rect(shape_surf, color, shape_surf.get_rect())
+        render.screen.blit(shape_surf, rect)
+        return
+
+
     if rotation_angle != 0:
         # Create a square with a specified rotation angle
         rotated_surface = pg.Surface(rect.size, pg.SRCALPHA)

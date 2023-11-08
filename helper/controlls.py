@@ -69,11 +69,18 @@ def click_enemy(render, mx: float, my: float):
             break
 
     # select the enemy :0
-    if enemyClicked != None:
-        render.selectedEnemy = e
-        render.UI.append(UIe("changeTarget", e.rect.topright, "clear", info={"id": e.uid}))
+    if enemyClicked != None and render.selectedEnemy == None:
+        render.selectedEnemy = enemyClicked
+
+        # calc size
+        font = pg.font.Font("fonts/Gobold.otf", 18)
+        surface = font.render(f"Target {enemyClicked.targetTurret}", True, "black")
+
+        render.UI.append(UIe("changeTarget", enemyClicked.rect.topright, "clear", info={"id": e.uid}, size=surface.get_rect().size))
 
         logger.info(f"Created UI: {len(render.UI)}")
+    else:
+        render.selectedEnemy = None
 
 def _click_turret(render, mx, my):
     # check if we have clicked on a turret

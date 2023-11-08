@@ -11,7 +11,7 @@ class UIe:
 
         self.pos = pos
         if color.lower() == "clear":
-            color = "red"
+            color = pg.Color(0,0,0,0)
 
         self.color: pg.Color = pg.Color(color) # Use pygame Color because its better
         self.top: int = pos[0]
@@ -68,6 +68,10 @@ class UIe:
             render.UI.remove(self)
             render.actionRN = None
             render.selectedTurret = None
+        elif self.type == "changeTarget":
+            e = findenemy_by_id(render, self.info["id"])
+            render.enemies.remove(e)
+            render.selectedEnemy = None
     
     def tick(self, render):
         if self.type == "changeTarget":

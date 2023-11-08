@@ -70,6 +70,9 @@ class Enemy():
         self.cooldown -= 1
         self._move_to_turret(render)
 
+    def change_target(self, target: str):
+        self.path = None
+        self.targetTurret = target
     
  
     def _move_to_turret(self, render):
@@ -127,17 +130,17 @@ class Enemy():
 
             path: list[tuple[int, int]] | None = None
             dist: int = 10000
-            distToT: int | float = math.hypot(self.rect.centerx - turret.rect.centerx, self.rect.centery - turret.rect.centery)
+            distToT: float = math.hypot(self.rect.centerx - turret.rect.centerx, self.rect.centery - turret.rect.centery)
             for p in render.enemypathcache:
                 if p["end"] == turret.rect.center:
 
-                    _a: int | float = math.hypot(self.rect.centerx - p["start"][0], self.rect.centery - p["start"][1])
+                    _a: float = math.hypot(self.rect.centerx - p["start"][0], self.rect.centery - p["start"][1])
 
                     if distToT+20 > p["distToTurret"]+_a and dist > p["distToTurret"]+_a:
                         
                         temp: list[tuple[int, int]] = astar_pathfinding(rect_values, self.rect.center, p["start"], self.speed)
                         path: list[tuple[int, int]] = temp+p["path"]
-                        dist: int | float = p["distToTurret"]+_a
+                        dist: float = p["distToTurret"]+_a
 
             if path == None:
                 self.path: list[tuple[int, int]] = astar_pathfinding(rect_values, self.rect.center,turret.rect.center, self.speed)
