@@ -161,9 +161,6 @@ class Enemy():
             self.pathstart: tuple[int|float,int|float] = self.rect.center
             self.pathon: int = 0
 
-            s: bytes = sys.getsizeof(render.enemypathcache)
-            logger.info(f"enemy cache takes up {s} bytes")
-
     
             if not self.path:
                 return

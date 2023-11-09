@@ -1,5 +1,5 @@
 import pygame as pg
-import sys,os,time,math,psutil
+import sys,os,time,math
 
 from helper.draw import *
 from helper.controlls import *
@@ -34,6 +34,8 @@ class SoftwareRenderer():
             UIe(2, (10,277), "yellow")
         ]
 
+        self.debug = False
+
         # init turrets
         self.turrets = []
         self.selectedTurret = None
@@ -43,7 +45,7 @@ class SoftwareRenderer():
         # Enemies
         self.enemies: list[Enemy] = []
         self.enemypathcache = []
-        self.selectedEnemy: Enemy | None = None
+        self.selectedEnemy : Enemy | None = None
     
 
         # bullets
@@ -54,6 +56,8 @@ class SoftwareRenderer():
 
 
         self.clearconsole()
+
+        self.startTime = time.time()
 
     def addcash(self, cash):
         self.ttext.append({"cash": cash, "time": 0})
@@ -85,6 +89,9 @@ class SoftwareRenderer():
             t["time"] += 1
             if t["time"] > 120:
                 self.ttext.remove(t)
+
+        if self.debug:
+            draw_debug(self)
     
 
     def handleKeyPress(self):
@@ -97,12 +104,19 @@ class SoftwareRenderer():
         elif keys[pg.K_SPACE]:
             self.enemies = []
 
+        
 
 
     def handleEvents(self):
         # Handles pygame events
 
         for event in pg.event.get():
+
+            debug = True if pg.key.get_mods() & pg.KMOD_CTRL == 64 else False
+
+            if debug:
+                self.debug = not self.debug
+
             if event.type == pg.QUIT: 
                 self.running = False
             elif event.type == pg.MOUSEBUTTONDOWN:
@@ -131,9 +145,8 @@ class SoftwareRenderer():
             for b in self.bullets:b.tick(self)
 
             # Set FPS as the name of the window
-            size = psutil.Process().memory_info().rss
 
-            pg.display.set_caption(f"{str(math.floor(self.clock.get_fps()))}FPS | {round(size/1024**2)}Kb")
+            pg.display.set_caption(f"{str(math.floor(self.clock.get_fps()))}FPS")
 
 
             mx,my = pg.mouse.get_pos()
@@ -158,6 +171,10 @@ class SoftwareRenderer():
 
             pg.display.flip()
             self.clock.tick(self.FPS)
+
+    def count_entities(self) -> int:
+        entities = len(self.turrets) + len(self.bullets) + len(self.enemies) + len(self.ttext)
+        return entities
 
 if __name__ == "__main__":
 

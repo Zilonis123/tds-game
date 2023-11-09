@@ -98,7 +98,8 @@ def healthbar(render, pos: tuple[int | float, int | float], health: int, maxheal
     pg.draw.line(render.screen, green, (x-uSize, y), ((x-uSize)+length,y), size)
     text(render, str(health), "white", (x, y-5), 10)
 
-def text(render, text: str, color: pg.Color | str, pos: tuple[int | float, int | float], size=18, type="center", font="freesansbold.ttf"):
+def text(render, text: str, color: pg.Color | str, pos: tuple[int | float, int | float], size=18, type="center", 
+font="freesansbold.ttf", background=False, backgroundClr=pg.Color(0,0,0,70)) -> pg.Rect:
     # init font
 
     font = pg.font.Font(font, size)
@@ -117,4 +118,9 @@ def text(render, text: str, color: pg.Color | str, pos: tuple[int | float, int |
     else:
         rect.bottomright = pos
 
+    if background:
+        square_render(render, rect, backgroundClr)
+
     render.screen.blit(surface, rect)
+
+    return rect

@@ -1,5 +1,5 @@
 
-
+import psutil,time
 import pygame as pg
 from .Visuals.renderers import text
 
@@ -53,3 +53,18 @@ def draw_turrets(render):
                 break
 
         render.selectedTurret.draw(render, rectColor)
+
+def draw_debug(render):
+
+    # memory
+    size = psutil.Process().memory_info().rss
+    size = round(size/1024**2)
+
+    y=0
+    rect = text(render, f"Memory {size}Kb", "white", (render.WIDTH//2, 0), background=True, type="topleft")
+    y+=rect.height
+    rect = text(render, f"FPS {round(render.clock.get_fps())}", "white", (render.WIDTH//2, y), background=True, type="topleft")
+    y+=rect.height
+    rect = text(render, f"Entities {render.count_entities()}", "white", (render.WIDTH//2, y), background=True, type="topleft")
+    y+=rect.height
+    rect = text(render, f"Running for {round(time.time()-render.startTime, 1)}s", "white", (render.WIDTH//2, y), background=True, type="topleft")
