@@ -45,7 +45,7 @@ class SoftwareRenderer():
         # Enemies
         self.enemies: list[Enemy] = []
         self.enemypathcache = []
-        self.selectedEnemy : Enemy | None = None
+        self.selectedEnemy: Enemy | None = None
     
 
         # bullets
@@ -92,7 +92,15 @@ class SoftwareRenderer():
 
         if self.debug:
             draw_debug(self)
-    
+
+        if self.actionRN == "changeTarget":
+
+            # this creates a blur effect
+            square_render(self, pg.Rect((0,0), (self.WIDTH, self.HEIGHT)), pg.Color(255, 255, 255, 75))
+
+            text(self, "Change Target", "black", (self.WIDTH, self.HEIGHT), type="bottomright", 
+            font="fonts/Gobold.otf", background=True)
+
 
     def handleKeyPress(self):
         mx,my = pg.mouse.get_pos()

@@ -79,7 +79,7 @@ def click_enemy(render, mx: float, my: float):
         render.UI.append(UIe("changeTarget", enemyClicked.rect.topright, "clear", info={"id": e.uid}, size=surface.get_rect().size))
 
         logger.info(f"Created UI: {len(render.UI)}")
-    else:
+    elif render.actionRN != "changeTarget":
         render.selectedEnemy = None
 
 def _click_turret(render, mx, my):
@@ -91,7 +91,8 @@ def _click_turret(render, mx, my):
             break
     
     if clickedOn == None:
-        # if we have something selected deselect it
+        
+        # deselect previous turret
         if render.actionRN == "selectTurret":
             remove_delete_btn(render)
             render.actionRN = None
@@ -109,6 +110,14 @@ def _click_turret(render, mx, my):
         if clickedOn == render.selectedTurret:
             render.actionRN = None
             render.selectedTurret = None
+            return
+
+
+    if render.actionRN == "changeTarget":
+        # change enemy target
+        if render.selectedEnemy != None:
+            render.actionRN = None 
+            render.selectedEnemy.change_target(clickedOn.uid)
             return
 
    

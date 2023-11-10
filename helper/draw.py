@@ -65,6 +65,7 @@ def draw_debug(render):
     y+=rect.height
     rect = text(render, f"FPS {round(render.clock.get_fps())}", "white", (render.WIDTH//2, y), background=True, type="topleft")
     y+=rect.height
-    rect = text(render, f"Entities {render.count_entities()}", "white", (render.WIDTH//2, y), background=True, type="topleft")
+    rect = text(render, f"Entities {render.count_entities()} ({len(render.enemies)} Enemies)", 
+    "white", (render.WIDTH//2, y), background=True, type="topleft")
     y+=rect.height
     rect = text(render, f"Running for {round(time.time()-render.startTime, 1)}s", "white", (render.WIDTH//2, y), background=True, type="topleft")

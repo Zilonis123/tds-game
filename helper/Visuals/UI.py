@@ -69,9 +69,11 @@ class UIe:
             render.actionRN = None
             render.selectedTurret = None
         elif self.type == "changeTarget":
-            e = findenemy_by_id(render, self.info["id"])
-            render.enemies.remove(e)
-            render.selectedEnemy = None
+            # e = findenemy_by_id(render, self.info["id"])
+            # render.enemies.remove(e)
+            # render.selectedEnemy = None
+
+            render.actionRN = "changeTarget"
     
     def tick(self, render):
         if self.type == "changeTarget":
