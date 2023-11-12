@@ -2,6 +2,7 @@ import pygame as pg
 from ..usefulmath import translate_rect_to_circ, findenemy_by_id
 from .renderers import square_render, text
 from ..Entities.turrets import Turret
+from random import uniform
 
 # UIe - UI element
 class UIe:
@@ -23,6 +24,8 @@ class UIe:
         self.type: int = type
         self.rect: pg.Rect = pg.Rect(pos, size)
         self.renderer = renderer
+
+        self.uid: str = str(int(uniform(1, 10000)))+str(self.type)
 
         self.cost: int = 100
 
@@ -65,13 +68,13 @@ class UIe:
             render.ttext.append({"cash": -self.cost, "time": 0})
         elif self.type == "delete":
             render.turrets.remove(render.selectedTurret)
-            render.UI.remove(self)
+
+            for ui in render.UI:
+                if ui.uid == self.uid:
+                    render.UI.remove(ui)
             render.actionRN = None
             render.selectedTurret = None
         elif self.type == "changeTarget":
-            # e = findenemy_by_id(render, self.info["id"])
-            # render.enemies.remove(e)
-            # render.selectedEnemy = None
 
             render.actionRN = "changeTarget"
     
@@ -83,3 +86,8 @@ class UIe:
                 self.rect.topleft = e.rect.topright
             else:
                 render.UI.remove(self)
+
+    # def __eq__(self, other):
+    #     if isinstance(other, UIe):
+    #         return self == other
+    #     return False
