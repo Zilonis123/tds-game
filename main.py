@@ -59,6 +59,10 @@ class SoftwareRenderer():
 
         self.startTime = time.time()
 
+        self.ticks = 0 # stores the amount of times run() has ran
+
+        self.cache = {}
+
     def addcash(self, cash):
         self.ttext.append({"cash": cash, "time": 0})
         self.cash += cash
@@ -96,7 +100,7 @@ class SoftwareRenderer():
         if self.actionRN == "changeTarget":
 
             # this creates a blur effect
-            square_render(self, pg.Rect((0,0), (self.WIDTH, self.HEIGHT)), pg.Color(255, 255, 255, 75))
+            blurScreen(self)
 
             text(self, "Change Target", "black", (self.WIDTH, self.HEIGHT), type="bottomright", 
             font="fonts/Gobold.otf", background=True)
@@ -141,6 +145,7 @@ class SoftwareRenderer():
 
         self.running = True
         while self.running:
+            self.ticks += 1
 
             self.draw()
             self.handleEvents()

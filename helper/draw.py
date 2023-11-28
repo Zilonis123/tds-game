@@ -1,7 +1,7 @@
 
 import psutil,time
 import pygame as pg
-from .Visuals.renderers import text
+from .Visuals.renderers import text, square_render
 
 
 def draw_UI(render):
@@ -57,11 +57,14 @@ def draw_turrets(render):
 def draw_debug(render):
 
     # memory
-    size = psutil.Process().memory_info().rss
-    size = round(size/1024**2)
+    if render.ticks%240 or not render.cache["memory"]:
+        size = psutil.Process().memory_info().rss
+        store = round(size/1024**2)
+        render.cache["memory"] = store
 
+    mem = render.cache["memory"]
     y=0
-    rect = text(render, f"Memory {size}Kb", "white", (render.WIDTH//2, 0), background=True, type="topleft")
+    rect = text(render, f"Memory {mem}Kb", "white", (render.WIDTH//2, 0), background=True, type="topleft")
     y+=rect.height
     rect = text(render, f"FPS {round(render.clock.get_fps())}", "white", (render.WIDTH//2, y), background=True, type="topleft")
     y+=rect.height
@@ -69,3 +72,6 @@ def draw_debug(render):
     "white", (render.WIDTH//2, y), background=True, type="topleft")
     y+=rect.height
     rect = text(render, f"Running for {round(time.time()-render.startTime, 1)}s", "white", (render.WIDTH//2, y), background=True, type="topleft")
+
+def blurScreen(render):
+    square_render(self, pg.Rect((0,0), (self.WIDTH, self.HEIGHT)), pg.Color(255, 255, 255, 75))
