@@ -6,7 +6,7 @@ from random import uniform
 
 # UIe - UI element
 class UIe:
-    def __init__(self, type: int|str, pos: tuple[int, int], color: str, renderer=square_render, size=(50,50), info={}):
+    def __init__(self, type: int|str, pos: tuple[int, int], color: str, renderer=square_render, size=(50,50), **info):
 
         # info var contains stuff that the UI element should know
 
@@ -81,7 +81,7 @@ class UIe:
     def tick(self, render):
         if self.type == "changeTarget":
 
-            e = findenemy_by_id(render, self.info["id"])
+            e = findenemy_by_id(render, self.info["turretId"])
             if e != None and render.selectedEnemy == e: 
                 self.rect.topleft = e.rect.topright
             else:

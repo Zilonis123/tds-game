@@ -76,9 +76,11 @@ def click_enemy(render, mx: float, my: float):
         font = pg.font.Font("fonts/Gobold.otf", 18)
         surface = font.render(f"Target {enemyClicked.targetTurret}", True, "black")
 
-        render.UI.append(UIe("changeTarget", enemyClicked.rect.topright, "clear", info={"id": e.uid}, size=surface.get_rect().size))
+        # create delete button
+        deleteBtn = UIe("changeTarget", enemyClicked.rect.topright, "clear", turretId=e.uid, size=surface.get_rect().size)
 
-        logger.info(f"Created UI: {len(render.UI)}")
+        render.UI.append(deleteBtn)
+
     elif render.actionRN != "changeTarget":
         render.selectedEnemy = None
 

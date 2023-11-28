@@ -2,7 +2,7 @@ import pygame as pg
 from ..Visuals.renderers import circle_renderer
 
 class Bullet():
-    def __init__(self, spx, spy, pos, strength, bulletSpeed, turret='none'):
+    def __init__(self, spx, spy, pos, strength, bulletSpeed, **kwargs):
         self.spx = spx
         self.spy = spy
         self.speed = bulletSpeed
@@ -10,7 +10,7 @@ class Bullet():
         self.strength = strength
         self.rect = pg.Rect(pos, (18,18))
 
-        self.turret = turret
+        self.turret = None or kwargs["turret"]
 
     def tick(self, render):
         # move
@@ -33,10 +33,10 @@ class Bullet():
                 render.bullets.remove(self)
                 
                 # increase turret stats
-                if self.turret != "none":
+                if not self.turret:
                     self.turret.damagedealt += self.strength
                     # check if killed
-                    if _find_enemy(render, enemy.uid) == "none":
+                    if _find_enemy(render, enemy.uid) == None:
                         self.turret.kills += 1
                 return
         
@@ -46,7 +46,7 @@ class Bullet():
 
 
 def _find_enemy(render, id):
-    target = "none"
+    target = None
     for enemy in render.enemies:
         if enemy.uid != id:
             continue

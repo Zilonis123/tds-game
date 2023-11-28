@@ -5,7 +5,7 @@ from .bullets import Bullet
 import math
 
 class Turret():
-    def __init__(self, type, x, y, render):
+    def __init__(self, type: int, x: float, y: float, render):
         self.type = type
         self.pos: tuple[int|float,int|float] = (x,y)
         self.size: tuple[int, int] = (50,50) # may be subject to change
