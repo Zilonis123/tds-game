@@ -18,6 +18,7 @@ class SoftwareRenderer():
         self.RES = self.WIDTH, self.HEIGHT = 160*5, 90*5
         self.screen = pg.display.set_mode(self.RES)
         self.FPS = 60
+        self.FPSGraph: list[int] = [0 for i in range(200)]
         self.clock = pg.time.Clock()
         
         self.actionRN = None
@@ -147,6 +148,9 @@ class SoftwareRenderer():
         while self.running:
             self.ticks += 1
 
+            self.FPSGraph.pop(0)
+            self.FPSGraph.append(math.floor(self.clock.get_fps()))
+
             self.draw()
             self.handleEvents()
             self.handleKeyPress()
@@ -159,7 +163,7 @@ class SoftwareRenderer():
 
             # Set FPS as the name of the window
 
-            pg.display.set_caption(f"{str(math.floor(self.clock.get_fps()))}FPS")
+            pg.display.set_caption(f"Tower Defense")
 
 
             mx,my = pg.mouse.get_pos()

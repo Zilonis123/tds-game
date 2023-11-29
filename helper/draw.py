@@ -73,5 +73,27 @@ def draw_debug(render):
     y+=rect.height
     rect = text(render, f"Running for {round(time.time()-render.startTime, 1)}s", "white", (render.WIDTH//2, y), background=True, type="topleft")
 
+    # FPS Graph
+    location = (100, render.HEIGHT-10)
+
+    size = 2 # how big is the graph
+
+    points: list[tuple[float, float]] = []
+
+    for i in range(len(render.FPSGraph)):
+        val: int = render.FPSGraph[i]
+        point: tuple[float, float] = (location[0]+i*size, location[1]-val*size)
+
+        if i-1>=0 and val == render.FPSGraph[i-1]:
+            points.pop()
+
+        points.append(point)
+    
+    if len(points) > 2:
+        pg.draw.lines(render.screen, "red", False, points, width=3)
+
+        square_render(render, pg.Rect((location[0], location[1]-60*size), (len(render.FPSGraph)*size, 60*size)), "white", width=2)
+
+
 def blurScreen(render):
     square_render(self, pg.Rect((0,0), (self.WIDTH, self.HEIGHT)), pg.Color(255, 255, 255, 75))
