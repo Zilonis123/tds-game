@@ -55,6 +55,15 @@ class SoftwareRenderer():
         # self temp text
         self.ttext = []
 
+        # load all the fonts
+        self.fonts: dict[pg.font.Font] = {}
+        directory_path = os.getcwd()+"/fonts"
+        for filename in os.listdir(directory_path):
+            # Check if the path is a file (not a directory)
+            file_path = os.path.join(directory_path, filename)
+            if os.path.isfile(file_path):
+                font = pg.font.Font(file_path, 18)
+                self.fonts[filename+f"-18"] = font
 
         self.clearconsole()
 

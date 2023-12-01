@@ -63,15 +63,23 @@ def draw_debug(render):
         render.cache["memory"] = store
 
     mem = render.cache["memory"]
+
     y=0
     rect = text(render, f"Memory {mem}Kb", "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
     y+=rect.height
+
     rect = text(render, f"FPS {round(render.clock.get_fps())}", "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
     y+=rect.height
+
     rect = text(render, f"{render.count_entities()} entities", 
     "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
     y+=rect.height
+
     rect = text(render, f"Running for {round(time.time()-render.startTime, 1)}s", "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
+    y+=rect.height
+
+    rect = text(render, f"Fonts loaded {len(render.fonts)}"
+    , "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
 
     # FPS Graph
     location = (100, render.HEIGHT-10)
@@ -92,7 +100,7 @@ def draw_debug(render):
     if len(points) > 2:
         pg.draw.lines(render.screen, "red", False, points, width=3)
 
-        square_render(render, pg.Rect((location[0], location[1]-60*size), (len(render.FPSGraph)*size, 60*size)), "white", width=2)
+        square_render(render, pg.Rect((location[0], location[1]-63*size), (len(render.FPSGraph)*size, 63*size)), "white", width=2)
 
 
 def blurScreen(render):

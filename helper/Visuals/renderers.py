@@ -103,8 +103,13 @@ font="freesansbold.ttf", background=False, backgroundClr=pg.Color(0,0,0,70)) -> 
     # init font
     type = type.lower()
 
-    font = pg.font.Font(font, size)
-    surface = font.render(text, True, color)
+    # get a rendered font
+    f = render.fonts.get(font+f"-{size}", False)
+    if not f:
+        f = pg.font.Font(font, size)
+        render.fonts[f"{font}-{size}"] = f
+
+    surface = f.render(text, True, color)
 
     rect = surface.get_rect()
 
