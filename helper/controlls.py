@@ -6,7 +6,7 @@ from .Visuals.UI import UIe
 from loguru import logger
 
 def mouse_click(render):
-    mx,my = pg.mouse.get_pos()
+    mx,my = render.mousePos
 
 
     # Check if mouse was clicked on a UI element and not action is done right now
@@ -23,6 +23,12 @@ def mouse_click(render):
             # check if we are clicking on an enemy
             click_enemy(render, mx, my)
     
+def mouse_move(render, pos: tuple[float, float]):
+    
+    # update hovered values on UI
+    for e in render.UI:
+        e.hovered = e.rect.collidepoint(pos)
+            
 
 def click_UI(render, mx: float|int ,my: float|int):
     # checks if the the given pos is over a "button"

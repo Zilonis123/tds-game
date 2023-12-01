@@ -28,7 +28,7 @@ class SoftwareRenderer():
         # UI
         # This will be an Array that contains UIe class
         # the type variable lets the code know what turret this is for
-        self.UI = [
+        self.UI: list[UIe] = [
             UIe(1, (10,5), "blue"),
             UIe(3, (10,92), "green", renderer=triangle_render),
             UIe(4, (10,185), "brown", renderer=hexagon_render),
@@ -61,8 +61,8 @@ class SoftwareRenderer():
         self.startTime = time.time()
 
         self.ticks = 0 # stores the amount of times run() has ran
-
         self.cache = {}
+        self.mousePos: tuple[float, float] = (0,0)
 
     def addcash(self, cash):
         self.ttext.append({"cash": cash, "time": 0})
@@ -108,7 +108,7 @@ class SoftwareRenderer():
 
 
     def handleKeyPress(self):
-        mx,my = pg.mouse.get_pos()
+        mx,my = self.mousePos
 
         keys = pg.key.get_pressed()
         if keys[pg.K_RSHIFT]:
@@ -151,6 +151,12 @@ class SoftwareRenderer():
             self.FPSGraph.pop(0)
             self.FPSGraph.append(math.floor(self.clock.get_fps()))
 
+            currentMousePos = pg.mouse.get_pos()
+            # check if the mouse moved
+            if currentMousePos != self.mousePos:
+                mouse_move(self, currentMousePos)
+                self.mousePos = currentMousePos
+
             self.draw()
             self.handleEvents()
             self.handleKeyPress()
@@ -166,7 +172,7 @@ class SoftwareRenderer():
             pg.display.set_caption(f"Tower Defense")
 
 
-            mx,my = pg.mouse.get_pos()
+            mx,my = self.mousePos
             keys = pg.key.get_pressed()
 
             # if turret in hand update self.selectedTurret

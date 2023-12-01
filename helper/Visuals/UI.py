@@ -20,6 +20,8 @@ class UIe:
 
         self.info = info
 
+        self.hovered = False # is the mouse over the UIe
+
         self.isTurretspawn: bool = isinstance(type, int)
         self.type: int = type
         self.rect: pg.Rect = pg.Rect(pos, size)
@@ -37,6 +39,7 @@ class UIe:
             self.rect: pg.Rect = pg.Rect(translate_rect_to_circ(self.rect), (self.rect.w, self.rect.h))
 
     def draw(self, render):
+
         if self.type == "delete":
             pg.draw.circle(render.screen, self.color, self.pos, 15) # draw circle
             pg.draw.circle(render.screen, "black", self.pos, 15, 2) # draw outline
@@ -53,6 +56,9 @@ class UIe:
             text(render, str(self.cost), color, (self.rect.centerx, self.rect.centery+(self.rect.h//3*2)),
              font="fonts/Gobold.otf")
             
+        if render.debug:
+            text(render, str(self.hovered), "black", self.rect.center, background=True, backgroundClr=pg.Color(0,0,0,60))
+        
 
     def action(self, render):
         if self.isTurretspawn:

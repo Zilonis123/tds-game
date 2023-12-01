@@ -64,14 +64,14 @@ def draw_debug(render):
 
     mem = render.cache["memory"]
     y=0
-    rect = text(render, f"Memory {mem}Kb", "white", (render.WIDTH//2, 0), background=True, type="topleft")
+    rect = text(render, f"Memory {mem}Kb", "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
     y+=rect.height
-    rect = text(render, f"FPS {round(render.clock.get_fps())}", "white", (render.WIDTH//2, y), background=True, type="topleft")
+    rect = text(render, f"FPS {round(render.clock.get_fps())}", "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
     y+=rect.height
-    rect = text(render, f"Entities {render.count_entities()} ({len(render.enemies)} Enemies)", 
-    "white", (render.WIDTH//2, y), background=True, type="topleft")
+    rect = text(render, f"{render.count_entities()} entities", 
+    "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
     y+=rect.height
-    rect = text(render, f"Running for {round(time.time()-render.startTime, 1)}s", "white", (render.WIDTH//2, y), background=True, type="topleft")
+    rect = text(render, f"Running for {round(time.time()-render.startTime, 1)}s", "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
 
     # FPS Graph
     location = (100, render.HEIGHT-10)

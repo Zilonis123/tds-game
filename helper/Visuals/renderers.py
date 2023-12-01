@@ -101,6 +101,7 @@ def healthbar(render, pos: tuple[int | float, int | float], health: int, maxheal
 def text(render, text: str, color: pg.Color | str, pos: tuple[int | float, int | float], size=18, type="center", 
 font="freesansbold.ttf", background=False, backgroundClr=pg.Color(0,0,0,70)) -> pg.Rect:
     # init font
+    type = type.lower()
 
     font = pg.font.Font(font, size)
     surface = font.render(text, True, color)
@@ -115,7 +116,7 @@ font="freesansbold.ttf", background=False, backgroundClr=pg.Color(0,0,0,70)) -> 
         rect.topright = pos
     elif type == "bottomleft":
         rect.bottomleft = pos
-    else:
+    elif type == "bottomright":
         rect.bottomright = pos
 
     if background:
