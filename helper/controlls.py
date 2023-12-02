@@ -135,7 +135,7 @@ def _click_turret(render, mx, my):
     # create the UI elements needed4
     rect: pg.Rect = clickedOn.rect
     pos: tuple[float, float] = (rect.x+rect.width, rect.y-rect.height//7) # calculate offset
-    deleteBtn: UIe = UIe("delete", pos, "red")
+    deleteBtn: UIe = UIe("delete", pos, "red", size=(30, 30))
     render.UI.append(deleteBtn)
 
     render.selectedTurret: Turret = clickedOn

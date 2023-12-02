@@ -8,8 +8,6 @@ from random import uniform
 class UIe:
     def __init__(self, type: int|str, pos: tuple[int, int], color: str, renderer=square_render, size=(50,50), **info):
 
-        # info var contains stuff that the UI element should know
-
         self.pos = pos
         if color.lower() == "clear":
             color = pg.Color(0,0,0,0)
@@ -20,7 +18,7 @@ class UIe:
 
         self.info = info
 
-        self.hovered = False # is the mouse over the UIe
+        self.hovered: bool = False # is the mouse over the UIe
 
         self.isTurretspawn: bool = isinstance(type, int)
         self.type: int = type
@@ -33,9 +31,6 @@ class UIe:
 
         # delete logic
         if self.type == "delete":
-
-            # "Hitbox"
-            self.rect = pg.Rect(pos, (30,30))
             self.rect: pg.Rect = pg.Rect(translate_rect_to_circ(self.rect), (self.rect.w, self.rect.h))
 
     def draw(self, render):
@@ -47,17 +42,20 @@ class UIe:
             # self.pos - circle center
             pg.draw.line(render.screen, "white", (self.top+8, self.left+8), (self.top-8, self.left-8), 3)
             pg.draw.line(render.screen, "white", (self.top-8, self.left+8), (self.top+8, self.left-8), 3)
-        else:
+        elif self.type != "changeTarget":
             self.renderer(render, self.rect, self.color)
-            color = "GREEN"
+            color = "BLACK"
             if render.cash < self.cost:
                 color = "RED"
             
-            text(render, str(self.cost), color, (self.rect.centerx, self.rect.centery+(self.rect.h//3*2)),
+            text(render, str(self.cost), color, (self.rect.centerx, self.rect.bottom+12), type="center",
              font="fonts/Gobold.otf")
             
         if render.debug:
-            text(render, str(self.hovered), "black", self.rect.center, background=True, backgroundClr=pg.Color(0,0,0,60))
+            text(render, str(self.hovered), "GREEN", self.rect.center, background=True, backgroundClr=pg.Color(0,0,0,75))
+
+        if self.hovered and not self.type == "delete":
+            self.renderer(render, self.rect, "white", width=3)
         
 
     def action(self, render):
@@ -81,7 +79,6 @@ class UIe:
             render.actionRN = None
             render.selectedTurret = None
         elif self.type == "changeTarget":
-
             render.actionRN = "changeTarget"
     
     def tick(self, render):

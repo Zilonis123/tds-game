@@ -4,7 +4,7 @@
 import pygame as pg
 import math
 
-def triangle_render(render, rect: pg.Rect, color: str | pg.Color, isOutline=0, rotation_angle=0):
+def triangle_render(render, rect: pg.Rect, color: str | pg.Color, width=0, rotation_angle=0):
     x: int | float = rect.x
     y: int | float = rect.y
     w: int | float = rect.width
@@ -29,7 +29,7 @@ def triangle_render(render, rect: pg.Rect, color: str | pg.Color, isOutline=0, r
     else:
         rotated_vertices: list[int | float] = vertices
         
-    pg.draw.polygon(render.screen, color, rotated_vertices, isOutline)
+    pg.draw.polygon(render.screen, color, rotated_vertices, width)
 
 
 def square_render(render, rect: pg.Rect, color: str | pg.Color, width=0, rotation_angle=0):
@@ -59,7 +59,7 @@ def square_render(render, rect: pg.Rect, color: str | pg.Color, width=0, rotatio
         pg.draw.rect(render.screen, color, rect, width)
 
 
-def hexagon_render(render, rect: pg.Rect, color: str | pg.Color, isOutline=0, rotation_angle=0):
+def hexagon_render(render, rect: pg.Rect, color: str | pg.Color, width=0, rotation_angle=0):
     x, y=rect.center
     size = rect.width / math.sqrt(3)
 
@@ -72,10 +72,10 @@ def hexagon_render(render, rect: pg.Rect, color: str | pg.Color, isOutline=0, ro
         hexagon_y = y + size * math.sin(angle_rad)
         vertices.append((hexagon_x, hexagon_y))
 
-    pg.draw.polygon(render.screen, color, vertices, isOutline)
+    pg.draw.polygon(render.screen, color, vertices, width)
 
-def circle_renderer(render, rect: pg.Rect, color: str | pg.Color, isOutline=0, radius=15):
-    pg.draw.circle(render.screen, color, rect.center, radius, isOutline)
+def circle_renderer(render, rect: pg.Rect, color: str | pg.Color, width=0, radius=15):
+    pg.draw.circle(render.screen, color, rect.center, radius, width)
 
 def draw_circle_alpha(render, color: str | pg.Color, center: tuple[int | float, int | float], radius: int | float):
     target_rect = pg.Rect(center, (0, 0)).inflate((radius * 2, radius * 2))
