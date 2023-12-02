@@ -68,7 +68,8 @@ def draw_debug(render):
     rect = text(render, f"Memory {mem}Kb", "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
     y+=rect.height
 
-    rect = text(render, f"FPS {round(render.clock.get_fps())}", "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
+    rect = text(render, f"FPS {round(render.FPSGraph[-1])} (AVG {round(sum(render.FPSGraph)/len(render.FPSGraph))})", 
+    "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
     y+=rect.height
 
     rect = text(render, f"{render.count_entities()} entities", 
@@ -100,8 +101,14 @@ def draw_debug(render):
     if len(points) > 2:
         pg.draw.lines(render.screen, "red", False, points, width=3)
 
-        square_render(render, pg.Rect((location[0], location[1]-63*size), (len(render.FPSGraph)*size, 63*size)), "white", width=2)
+        r = pg.Rect((location[0], location[1]-63*size), (len(render.FPSGraph)*size, 63*size))
+        square_render(render, r, "white", width=2)
+        text(render, "FPS", "WHITE", r.midtop, background=True)
 
+        for i in range(render.FPS+2):
+            if i%10 == 0:
+                text(render, str(i), "white", (r.bottomleft[0], location[1]-i*size), type="bottomright", background=True,
+                size=5*size)
 
 def blurScreen(render):
     square_render(self, pg.Rect((0,0), (self.WIDTH, self.HEIGHT)), pg.Color(255, 255, 255, 75))
