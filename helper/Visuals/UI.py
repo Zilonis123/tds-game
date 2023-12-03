@@ -63,7 +63,7 @@ class UIe:
             if render.cash < self.cost:
                 return
             # grab turret
-            mx,my = pg.mouse.get_pos()
+            mx,my = render.mousePos
 
             render.actionRN = "grabturret"
             render.selectedTurret = Turret(self.type, mx, my, render)

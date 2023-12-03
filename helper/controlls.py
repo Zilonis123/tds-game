@@ -74,7 +74,7 @@ def click_enemy(render, mx: float, my: float):
             enemyClicked = e
             break
 
-    # select the enemy :0
+    # select the enemy
     if enemyClicked != None and render.selectedEnemy == None:
         render.selectedEnemy = enemyClicked
 
@@ -140,4 +140,21 @@ def _click_turret(render, mx, my):
 
     render.selectedTurret: Turret = clickedOn
 
-    logger.info(f"Created UI: {len(render.UI)}")
+
+def selectTurret(render, type):
+    mx,my = render.mousePos
+
+    ui = None
+    for e in render.UI:
+        if e.type == type:
+            ui = e
+            break
+    
+    if ui == None or ui.cost > render.cash or render.actionRN != None:
+        return
+
+    render.actionRN = "grabturret"
+    render.selectedTurret = Turret(type, mx, my, render)
+
+    render.cash -= ui.cost
+    render.ttext.append({"cash": -ui.cost, "time": 0})

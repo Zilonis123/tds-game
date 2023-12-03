@@ -22,6 +22,8 @@ def check_collisions(self, render):
         if t.rect.colliderect(self.rect) and t.uid != self.targetTurret:
             handlecollision(self, t.rect)
             hasCollision = True
+            
+    return hasCollision
 
 
 def handlecollision(self, rect2):

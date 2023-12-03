@@ -15,6 +15,11 @@ class SoftwareRenderer():
 
     def __init__(self):
         pg.init()
+        pg.display.set_caption(f"Tower Defense")
+        
+        self.clearconsole()
+
+
         self.RES = self.WIDTH, self.HEIGHT = 160*5, 90*5
         self.screen = pg.display.set_mode(self.RES)
         self.FPS = 60
@@ -30,9 +35,9 @@ class SoftwareRenderer():
         # the type variable lets the code know what turret this is for
         self.UI: list[UIe] = [
             UIe(1, (10,5), "blue"),
-            UIe(3, (10,92), "green", renderer=triangle_render),
-            UIe(4, (10,185), "brown", renderer=hexagon_render),
-            UIe(2, (10,277), "yellow")
+            UIe(3, (10,185), "green", renderer=triangle_render),
+            UIe(4, (10,277), "brown", renderer=hexagon_render),
+            UIe(2, (10,92), "yellow")
         ]
 
         self.debug = False
@@ -64,8 +69,6 @@ class SoftwareRenderer():
             if os.path.isfile(file_path):
                 font = pg.font.Font(file_path, 18)
                 self.fonts[filename+f"-18"] = font
-
-        self.clearconsole()
 
         self.startTime = time.time()
 
@@ -104,9 +107,6 @@ class SoftwareRenderer():
             if t["time"] > 120:
                 self.ttext.remove(t)
 
-        if self.debug:
-            draw_debug(self)
-
         if self.actionRN == "changeTarget":
 
             # this creates a blur effect
@@ -114,6 +114,9 @@ class SoftwareRenderer():
 
             text(self, "Change Target", "black", (self.WIDTH, self.HEIGHT), type="bottomright", 
             font="fonts/Gobold.otf", background=True)
+
+        if self.debug:
+            draw_debug(self)
 
 
     def handleKeyPress(self):
@@ -125,8 +128,17 @@ class SoftwareRenderer():
             check_collisions(self.enemies[len(self.enemies)-1], self)
         elif keys[pg.K_SPACE]:
             self.enemies = []
-
         
+        elif keys[pg.K_1]:
+            selectTurret(self, 1)
+        elif keys[pg.K_2]:
+            selectTurret(self, 2)
+        elif keys[pg.K_3]:
+            selectTurret(self, 3)
+        elif keys[pg.K_4]:
+            selectTurret(self, 4)
+
+                
 
 
     def handleEvents(self):
@@ -175,11 +187,6 @@ class SoftwareRenderer():
             for u in self.UI: u.tick(self)
             for turret in self.turrets:turret.tick(self)
             for b in self.bullets:b.tick(self)
-
-            # Set FPS as the name of the window
-
-            pg.display.set_caption(f"Tower Defense")
-
 
             mx,my = self.mousePos
             keys = pg.key.get_pressed()
