@@ -41,6 +41,7 @@ class SoftwareRenderer():
         ]
 
         self.debug = False
+        self.speedUp = False # if true game runs 2x faster
 
         # init turrets
         self.turrets = []
@@ -128,7 +129,6 @@ class SoftwareRenderer():
             check_collisions(self.enemies[len(self.enemies)-1], self)
         elif keys[pg.K_SPACE]:
             self.enemies = []
-        
         elif keys[pg.K_1]:
             selectTurret(self, 1)
         elif keys[pg.K_2]:
@@ -155,6 +155,11 @@ class SoftwareRenderer():
                 self.running = False
             elif event.type == pg.MOUSEBUTTONDOWN:
                 mouse_click(self)
+
+
+            if event.type == pg.KEYDOWN or event.type == pg.KEYUP:
+                if event.mod & pg.KMOD_ALT:
+                    self.speedUp = not self.speedUp
 
     def clearconsole(self):
         if os.name == 'nt':
@@ -183,6 +188,11 @@ class SoftwareRenderer():
             self.handleKeyPress()
 
             # Tick
+            if self.speedUp:
+                for enemy in self.enemies:enemy.tick(self)
+                for u in self.UI: u.tick(self)
+                for turret in self.turrets:turret.tick(self)
+                for b in self.bullets:b.tick(self)
             for enemy in self.enemies:enemy.tick(self)
             for u in self.UI: u.tick(self)
             for turret in self.turrets:turret.tick(self)

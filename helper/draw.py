@@ -20,6 +20,9 @@ def draw_UI(render):
     if keys[pg.K_LSHIFT]:
         draw_grid(render)
 
+    if render.speedUp:
+        text(render, "2x", "white", (render.WIDTH//2, 20), size=25, background=True, font="fonts/VCR_MONO.ttf")
+
 
 def draw_grid(render):
     # draw horizonatally
