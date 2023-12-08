@@ -73,7 +73,7 @@ def _click_enemy(render):
         render.selectedEnemy = enemyClicked
 
         # calc size
-        font = pg.font.Font("fonts/Gobold.otf", 18)
+        font = render.fonts.get("Gobold.otf-18")
         surface = font.render(f"Target {enemyClicked.targetTurret}", True, "black")
 
         # create delete button
