@@ -32,9 +32,11 @@ def mouse_up(render):
 
 def mouse_move(render, pos: tuple[float, float]):
     
+    render.mousePos = pos
     # update hovered values on UI
-    for e in render.UI:
-        e.hovered = e.rect.collidepoint(pos)
+    for e in render.UI: e.hovered = e.rect.collidepoint(pos)
+    for e in render.turrets: e.hovered = e.rect.collidepoint(pos)
+
             
 def _clean_click_check(render, objects: list):
     for e in objects:

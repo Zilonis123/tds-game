@@ -73,6 +73,8 @@ class Turret():
         tuple_str: str = ''.join(map(str, self.pos))
         self.uid: str = tuple_str + str(self.type)
 
+        self.hovered = False
+
         # choose color
         for UIe in render.UI:
             if UIe.type == type:
@@ -90,6 +92,9 @@ class Turret():
     def draw(self, render, color=None):
         if color == None:
             color = self.color
+
+        if self.hovered:
+            color = adjust_color(color, -45)
         self.renderer(render, self.rect, color)
 
 
@@ -117,6 +122,9 @@ class Turret():
 
                 text(render, f"UId: {self.uid}", "black", (self.rect.topright[0]+10, self.rect.topright[1]+20),
                 type="topleft", font="fonts/Gobold.otf")
+
+        if render.debug and render.selectedTurret != self:
+            text(render, str(self.hovered), "Green", self.rect.center, type="center", background=True)
 
     def _draw_head(self, render, color):
         size: tuple[int|float, int|float] = (self.rect.w//2, self.rect.h//2)

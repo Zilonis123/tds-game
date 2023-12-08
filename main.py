@@ -185,7 +185,6 @@ class SoftwareRenderer():
             # check if the mouse moved
             if currentMousePos != self.mousePos:
                 mouse_move(self, currentMousePos)
-                self.mousePos = currentMousePos
 
             self.draw()
             self.handleEvents()
