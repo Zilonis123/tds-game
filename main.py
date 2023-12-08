@@ -75,7 +75,9 @@ class SoftwareRenderer():
 
         self.ticks = 0 # stores the amount of times run() has ran
         self.cache = {}
+
         self.mousePos: tuple[float, float] = (0,0)
+        self.mouseDown: tuple[float, float] = (-99, -99)
 
     def addcash(self, cash):
         self.ttext.append({"cash": cash, "time": 0})
@@ -154,7 +156,9 @@ class SoftwareRenderer():
             if event.type == pg.QUIT: 
                 self.running = False
             elif event.type == pg.MOUSEBUTTONDOWN:
-                mouse_click(self)
+                mouse_down(self)
+            elif event.type == pg.MOUSEBUTTONUP:
+                mouse_up(self)
 
 
             if event.type == pg.KEYDOWN or event.type == pg.KEYUP:
@@ -222,7 +226,7 @@ class SoftwareRenderer():
             self.clock.tick(self.FPS)
 
     def count_entities(self) -> int:
-        entities = len(self.turrets) + len(self.bullets) + len(self.enemies) + len(self.ttext)
+        entities = len(self.turrets) + len(self.bullets) + len(self.enemies)
         return entities
 
 if __name__ == "__main__":

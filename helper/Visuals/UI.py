@@ -1,10 +1,10 @@
 import pygame as pg
-from ..usefulmath import translate_rect_to_circ, findenemy_by_id
+from ..usefulmath import translate_rect_to_circ, findenemy_by_id, adjust_color
 from .renderers import square_render, text
 from ..Entities.turrets import Turret
 from random import uniform
 
-# UIe - UI element
+# UIe - UI element  
 class UIe:
     def __init__(self, type: int|str, pos: tuple[int, int], color: str, renderer=square_render, size=(50,50), **info):
 
@@ -34,16 +34,19 @@ class UIe:
             self.rect: pg.Rect = pg.Rect(translate_rect_to_circ(self.rect), (self.rect.w, self.rect.h))
 
     def draw(self, render):
+        dcolor = self.color
+        if self.hovered == True:
+            dcolor: pg.Color = adjust_color(dcolor, -45)
 
         if self.type == "delete":
-            pg.draw.circle(render.screen, self.color, self.pos, 15) # draw circle
+            pg.draw.circle(render.screen, dcolor, self.pos, 15) # draw circle
             pg.draw.circle(render.screen, "black", self.pos, 15, 2) # draw outline
             # draw a X
             # self.pos - circle center
             pg.draw.line(render.screen, "white", (self.top+8, self.left+8), (self.top-8, self.left-8), 3)
             pg.draw.line(render.screen, "white", (self.top-8, self.left+8), (self.top+8, self.left-8), 3)
         elif self.type != "changeTarget":
-            self.renderer(render, self.rect, self.color)
+            self.renderer(render, self.rect, dcolor)
             color = "BLACK"
             if render.cash < self.cost:
                 color = "RED"
@@ -54,8 +57,8 @@ class UIe:
         if render.debug:
             text(render, str(self.hovered), "GREEN", self.rect.center, background=True, backgroundClr=pg.Color(0,0,0,75))
 
-        if self.hovered and not self.type == "delete":
-            self.renderer(render, self.rect, "white", width=3)
+        if self.hovered and self.type != "delete":
+            self.renderer(render, self.rect, "white", width=2)
         
 
     def action(self, render):

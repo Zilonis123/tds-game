@@ -5,45 +5,43 @@ from .Visuals.UI import UIe
 
 from loguru import logger
 
-def mouse_click(render):
-    mx,my = render.mousePos
+def mouse_down(render):
+    render.mouseDown = render.mousePos
+    
+def mouse_up(render):
+    clicked = _clean_click_check(render, render.UI)
 
 
-    # Check if mouse was clicked on a UI element and not action is done right now
-    clickedOnUI: bool = click_UI(render, mx,my)
-
-    if not clickedOnUI:
+    if clicked == None:
         # check if we have a turret in our hands
         if render.actionRN == "grabturret":
             _place_turret(render)
         else:
             # check if we are clicking on a placed turret
-            _click_turret(render, mx, my)
+            _click_turret(render)
 
             # check if we are clicking on an enemy
-            click_enemy(render, mx, my)
+            _click_enemy(render)
+
+        render.mouseDown = (-99, -99) # blank values
+        return
     
+    render.mouseDown = (-99, -99) # blank values
+    remove_delete_btn(render)
+    clicked.action(render)    
+
 def mouse_move(render, pos: tuple[float, float]):
     
     # update hovered values on UI
     for e in render.UI:
         e.hovered = e.rect.collidepoint(pos)
             
-
-def click_UI(render, mx: float|int ,my: float|int):
-    # checks if the the given pos is over a "button"
-
-    for UIe in render.UI:
-        if UIe.rect.collidepoint(mx, my):
-
-            # press it
-            remove_delete_btn(render)
-            UIe.action(render)
-            return True
-
-
-    # no ui was clicked
-    return False
+def _clean_click_check(render, objects: list):
+    for e in objects:
+        if e.rect.collidepoint(render.mouseDown):
+            if e.rect.collidepoint(render.mousePos):
+                return e
+    return None
 
 def _place_turret(render):
     # check if turret collides with any existing turret
@@ -66,13 +64,9 @@ def remove_delete_btn(render):
             render.UI.remove(UI)
             break
 
-def click_enemy(render, mx: float, my: float):
-    enemyClicked: None | Enemy = None
-    
-    for e in render.enemies:
-        if e.rect.collidepoint(mx, my):
-            enemyClicked = e
-            break
+def _click_enemy(render):
+   
+    enemyClicked: None | Enemy = _clean_click_check(render, render.enemies)
 
     # select the enemy
     if enemyClicked != None and render.selectedEnemy == None:
@@ -90,13 +84,9 @@ def click_enemy(render, mx: float, my: float):
     elif render.actionRN != "changeTarget":
         render.selectedEnemy = None
 
-def _click_turret(render, mx, my):
+def _click_turret(render):
     # check if we have clicked on a turret
-    clickedOn: None | Turret = None
-    for turret in render.turrets:
-        if turret.rect.collidepoint(mx, my):
-            clickedOn = turret
-            break
+    clickedOn: None | Turret = _clean_click_check(render, render.turrets)
     
     if clickedOn == None:
         
