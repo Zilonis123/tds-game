@@ -2,11 +2,12 @@ import pygame as pg
 import sys,os,time,math
 
 from helper.draw import *
-from helper.run import *
+from helper.gamestate.run import *
+from helper.gamestate.draw import *
+from helper.gamestate.init import change_gamestate
 from helper.controlls import *
 from helper.Visuals.UI import UIe
 from helper.Entities.turrets import Turret
-from helper.Visuals.renderers import *
 from helper.Entities.enemies import Enemy
 from helper.Entities.Enemies.enemycollisions import check_collisions
 
@@ -22,6 +23,7 @@ class SoftwareRenderer():
 
 
         self.RES = self.WIDTH, self.HEIGHT = 160*5, 90*5
+        self.screencenter = self.WIDTH//2, self.HEIGHT//2
         self.screen = pg.display.set_mode(self.RES)
 
         self.FPS = 60
@@ -34,15 +36,12 @@ class SoftwareRenderer():
         self.cash = 10000 # debug value
 
         self.dir = os.getcwd()
-        self.gamestate = "Loading"
 
-        self.UI = []
-        self.UI: list[UIe] = [
-            UIe(1, (10,5), "blue"),
-            UIe(3, (10,185), "green", renderer=triangle_render),
-            UIe(4, (10,277), "brown", renderer=hexagon_render),
-            UIe(2, (10,92), "yellow")
-        ]
+        
+        self.gamestate = None
+        change_gamestate(self, "Loading")
+
+        self.UI = [] 
 
         self.debug = False
         self.speedUp = False # if true game runs 2x faster
@@ -69,7 +68,7 @@ class SoftwareRenderer():
         # generate thing to load
         self.notloaded = {"fonts":[]}
         directory_path = self.dir+"/fonts"
-        font_sizes = [i for i in range(10, 21)] # determines how many sizes we are going to load
+        font_sizes = [i for i in range(15, 51)] # determines how many sizes we are going to load
         self.fonts = {}
 
         for filename in os.listdir(directory_path):
@@ -93,11 +92,9 @@ class SoftwareRenderer():
 
     def draw(self):
         # This func handles anything related to drawing something to the screen
-        
-        if self.gamestate == "game":
-            draw_game(self)
-        elif self.gamestate == "Loading":
-            draw_loading(self)
+        d = {"game": draw_game, "Loading": draw_loading, "mainmenu": draw_mainmenu}
+
+        d[self.gamestate](self)
 
 
     def handleKeyPress(self):

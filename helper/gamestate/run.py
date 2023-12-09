@@ -1,7 +1,8 @@
 
 import os
 import pygame as pg
-from .Entities.turrets import Turret
+from ..Entities.turrets import Turret
+from .init import change_gamestate
 
 
 def run_game(render):
@@ -53,4 +54,4 @@ def run_loading(render):
         # here we would load more things
         pass
     else:
-        render.gamestate = "game"
+        change_gamestate(render, "mainmenu")

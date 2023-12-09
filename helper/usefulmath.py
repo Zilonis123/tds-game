@@ -6,6 +6,9 @@ def translate_rect_to_circ(rect: pg.Rect) -> tuple[float, float]:
     # converts rects pos to match a circles pos -- moves rect to its center
     return (rect.x-rect.width//2, rect.y-rect.height//2)
 
+def changeTuple(tuple: tuple[float, float], changeBy: tuple[float, float]) -> tuple[float, float]:
+    return (tuple[0]+changeBy[0], tuple[1]+changeBy[1])
+
 
 def diagonally_pathfind(b: tuple[float, float], a: tuple[float, float]) -> tuple[float | float]:
     dx: int = round(a[0] - b[0])
