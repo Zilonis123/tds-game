@@ -62,14 +62,8 @@ class SoftwareRenderer():
         self.ttext = []
 
         # load all the fonts
-        self.fonts: dict[pg.font.Font] = {}
-        directory_path = os.getcwd()+"/fonts"
-        for filename in os.listdir(directory_path):
-            # Check if the path is a file (not a directory)
-            file_path = os.path.join(directory_path, filename)
-            if os.path.isfile(file_path):
-                font = pg.font.Font(file_path, 18)
-                self.fonts[filename+f"-18"] = font
+        self._load_items()
+        
 
         self.startTime = time.time()
 
@@ -164,6 +158,22 @@ class SoftwareRenderer():
             if event.type == pg.KEYDOWN or event.type == pg.KEYUP:
                 if event.mod & pg.KMOD_ALT:
                     self.speedUp = not self.speedUp
+
+    def _load_items(self):
+        self.fonts: dict[pg.font.Font] = {}
+        directory_path = os.getcwd()+"/fonts"
+
+        font_sizes = [i for i in range(10, 21)]
+
+        for filename in os.listdir(directory_path):
+            # Check if the path is a file (not a directory)
+            file_path = os.path.join(directory_path, filename)
+            if os.path.isfile(file_path):
+
+                # load multiple font sizes
+                for size in font_sizes:
+                    font = pg.font.Font(file_path, size)
+                    self.fonts[filename+f"-{size}"] = font
 
     def clearconsole(self):
         if os.name == 'nt':
