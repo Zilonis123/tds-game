@@ -69,7 +69,7 @@ class SoftwareRenderer():
         # generate thing to load
         self.notloaded = {"fonts":[]}
         directory_path = self.dir+"/fonts"
-        font_sizes = [i for i in range(10, 50)]
+        font_sizes = [i for i in range(10, 21)] # determines how many sizes we are going to load
         self.fonts = {}
 
         for filename in os.listdir(directory_path):
@@ -181,14 +181,16 @@ class SoftwareRenderer():
             if currentMousePos != self.mousePos:
                 mouse_move(self, currentMousePos)
 
-            self.draw()
-            self.handleEvents()
-
             if self.gamestate == "game":
                 self.handleKeyPress()
                 run_game(self)
             elif self.gamestate == "Loading":
                 run_loading(self)
+
+            self.draw()
+            self.handleEvents()
+
+           
 
             pg.display.flip()
             self.clock.tick(self.FPS)

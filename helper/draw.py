@@ -157,5 +157,14 @@ def draw_game(render):
 
 def draw_loading(render):
     render.screen.fill("black")
-    
-    text(render, str(len(render.notloaded["fonts"])), "white", (render.WIDTH//2, render.HEIGHT//2))
+
+    center = (render.WIDTH//2, render.HEIGHT//2)
+    hsize = 300 # half of the line
+
+    pg.draw.line(render.screen, "gray", (center[0]-hsize, center[1]), (center[0]+hsize, center[1]), 50)
+
+    length: int = round((len(render.notloaded["fonts"])/(len(render.notloaded["fonts"])+len(render.fonts)))*(hsize*2))
+    pg.draw.line(render.screen, "green", (center[0]-hsize, center[1]), ((center[0]-hsize)+length, center[1]), 50)
+
+
+    text(render, f"loaded {len(render.notloaded['fonts'])}/{len(render.notloaded['fonts'])+len(render.fonts)} fonts", "white", center)
