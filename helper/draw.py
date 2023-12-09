@@ -114,4 +114,48 @@ def draw_debug(render):
                 size=5*size)
 
 def blurScreen(render):
-    square_render(self, pg.Rect((0,0), (self.WIDTH, self.HEIGHT)), pg.Color(255, 255, 255, 75))
+    square_render(render, pg.Rect((0,0), (render.WIDTH, render.HEIGHT)), pg.Color(255, 255, 255, 75))
+
+
+
+# game state draw funcs
+def draw_game(render):
+    render.screen.fill("darkgray")
+
+    # draw enemies
+    for e in render.enemies: e.draw(render)
+
+    draw_turrets(render)
+
+    # bullets
+    for b in render.bullets: b.draw(render)
+
+    draw_UI(render)
+
+    for t in render.ttext:
+        prefix = "+"
+        color = "green"
+        if t["cash"] < 0:
+            prefix=""
+            color = "red"
+
+        text(render, prefix+str(t["cash"]), color, (render.WIDTH, 50+t["time"]), type="topright")
+        t["time"] += 1
+        if t["time"] > 120:
+            render.ttext.remove(t)
+
+    if render.actionRN == "changeTarget":
+
+        # this creates a blur effect
+        blurScreen(render)
+
+        text(render, "Change Target", "black", (render.WIDTH, render.HEIGHT), type="bottomright", 
+        font="fonts/Gobold.otf", background=True)
+
+    if render.debug:
+        draw_debug(render)
+
+def draw_loading(render):
+    render.screen.fill("black")
+    
+    text(render, str(len(render.notloaded["fonts"])), "white", (render.WIDTH//2, render.HEIGHT//2))

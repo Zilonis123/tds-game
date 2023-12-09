@@ -2,6 +2,7 @@ import pygame as pg
 import sys,os,time,math
 
 from helper.draw import *
+from helper.run import *
 from helper.controlls import *
 from helper.Visuals.UI import UIe
 from helper.Entities.turrets import Turret
@@ -22,17 +23,20 @@ class SoftwareRenderer():
 
         self.RES = self.WIDTH, self.HEIGHT = 160*5, 90*5
         self.screen = pg.display.set_mode(self.RES)
+
         self.FPS = 60
         self.FPSGraph: list[int] = [0 for i in range(200)]
+
         self.clock = pg.time.Clock()
         
         self.actionRN = None
 
         self.cash = 10000 # debug value
 
-        # UI
-        # This will be an Array that contains UIe class
-        # the type variable lets the code know what turret this is for
+        self.dir = os.getcwd()
+        self.gamestate = "Loading"
+
+        self.UI = []
         self.UI: list[UIe] = [
             UIe(1, (10,5), "blue"),
             UIe(3, (10,185), "green", renderer=triangle_render),
@@ -61,9 +65,19 @@ class SoftwareRenderer():
         # self temp text
         self.ttext = []
 
-        # load all the fonts
-        self._load_items()
-        
+
+        # generate thing to load
+        self.notloaded = {"fonts":[]}
+        directory_path = self.dir+"/fonts"
+        font_sizes = [i for i in range(10, 50)]
+        self.fonts = {}
+
+        for filename in os.listdir(directory_path):
+            # Check if the path is a file (not a directory)
+            file_path = os.path.join(directory_path, filename)
+            if os.path.isfile(file_path):
+                for size in font_sizes:
+                    self.notloaded["fonts"].append((filename, size))
 
         self.startTime = time.time()
 
@@ -80,40 +94,10 @@ class SoftwareRenderer():
     def draw(self):
         # This func handles anything related to drawing something to the screen
         
-        self.screen.fill("darkgray")
-
-        # draw enemies
-        for e in self.enemies: e.draw(self)
-
-        draw_turrets(self)
-
-        # bullets
-        for b in self.bullets: b.draw(self)
-
-        draw_UI(self)
-
-        for t in self.ttext:
-            prefix = "+"
-            color = "green"
-            if t["cash"] < 0:
-                prefix=""
-                color = "red"
-
-            text(self, prefix+str(t["cash"]), color, (self.WIDTH, 50+t["time"]), type="topright")
-            t["time"] += 1
-            if t["time"] > 120:
-                self.ttext.remove(t)
-
-        if self.actionRN == "changeTarget":
-
-            # this creates a blur effect
-            blurScreen(self)
-
-            text(self, "Change Target", "black", (self.WIDTH, self.HEIGHT), type="bottomright", 
-            font="fonts/Gobold.otf", background=True)
-
-        if self.debug:
-            draw_debug(self)
+        if self.gamestate == "game":
+            draw_game(self)
+        elif self.gamestate == "Loading":
+            draw_loading(self)
 
 
     def handleKeyPress(self):
@@ -175,6 +159,7 @@ class SoftwareRenderer():
                     font = pg.font.Font(file_path, size)
                     self.fonts[filename+f"-{size}"] = font
 
+
     def clearconsole(self):
         if os.name == 'nt':
             os.system('cls')
@@ -198,38 +183,12 @@ class SoftwareRenderer():
 
             self.draw()
             self.handleEvents()
-            self.handleKeyPress()
 
-            # Tick
-            if self.speedUp:
-                for enemy in self.enemies:enemy.tick(self)
-                for u in self.UI: u.tick(self)
-                for turret in self.turrets:turret.tick(self)
-                for b in self.bullets:b.tick(self)
-            for enemy in self.enemies:enemy.tick(self)
-            for u in self.UI: u.tick(self)
-            for turret in self.turrets:turret.tick(self)
-            for b in self.bullets:b.tick(self)
-
-            mx,my = self.mousePos
-            keys = pg.key.get_pressed()
-
-            # if turret in hand update self.selectedTurret
-            if self.actionRN == "grabturret":
-                t = self.selectedTurret.type
-                
-                # if grid lines enabled
-                if keys[pg.K_LSHIFT]:
-                    # snap to grid
-                    mx=mx+50/2
-                    my=my+50/2
-                    mx=round(mx/70)*self.gridsize
-                    my=round(my/70)*self.gridsize
-                    mx=mx-50-(self.gridsize-50)//2
-                    my=my-50-(self.gridsize-50)//2
-                else:
-                    mx,my = (mx-self.selectedTurret.rect.w//2, my-self.selectedTurret.rect.h//2)
-                self.selectedTurret = Turret(t, mx, my, self)
+            if self.gamestate == "game":
+                self.handleKeyPress()
+                run_game(self)
+            elif self.gamestate == "Loading":
+                run_loading(self)
 
             pg.display.flip()
             self.clock.tick(self.FPS)
