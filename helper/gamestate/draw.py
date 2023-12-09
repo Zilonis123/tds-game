@@ -72,4 +72,14 @@ def draw_controlls(render):
     for e in render.UI: e.draw(render)
 
 
-    image(render, "/keyboard_light/Alt_Key_Light.png", render.screencenter)
+    controlls = [("/keyboard_light/Alt_Key_Light.png", "Run the game at 2x speed"), ("/keyboard_light/Ctrl_Key_Light.png", "Opens the debug menu")
+    ,("/keyboard_light/Space_Key_Light.png", "Kills all the enemies")]
+
+    y = 0
+    for c in controlls:
+        img,desc = c
+        img = pg.transform.scale(render.imgs[img], (50, 50))
+        image(render, img, (0, y))
+        text(render, desc, "black", (50, y), font="Nexa-ExtraLight.ttf", size=15, type="topleft")
+        y += 50
+        

@@ -132,7 +132,11 @@ font="freesansbold.ttf", background=False, backgroundClr=pg.Color(0,0,0,70)) -> 
     return rect
 
 def image(render, image_name: str, pos: tuple[int, int]):
-    img_surface = render.imgs.get(image_name, None)
+
+    if isinstance(image_name, str):
+        img_surface = render.imgs.get(image_name, None)
+    else:
+        img_surface = image_name
 
 
     if img_surface == None:

@@ -171,6 +171,7 @@ class SoftwareRenderer():
                 mouse_move(self, currentMousePos)
             
             self.draw()
+            self.handleKeyPress()
             self.handleEvents()
 
             d = {"game": run_game, "Loading": run_loading}
