@@ -9,6 +9,12 @@ def translate_rect_to_circ(rect: pg.Rect) -> tuple[float, float]:
 def changeTuple(tuple: tuple[float, float], changeBy: tuple[float, float]) -> tuple[float, float]:
     return (tuple[0]+changeBy[0], tuple[1]+changeBy[1])
 
+def remove_string(base_string, prefix):
+    if base_string.startswith(prefix):
+        return base_string[len(prefix):]
+    else:
+        return base_string
+
 
 def diagonally_pathfind(b: tuple[float, float], a: tuple[float, float]) -> tuple[float | float]:
     dx: int = round(a[0] - b[0])

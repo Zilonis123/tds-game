@@ -1,4 +1,5 @@
 from ..draw import *
+from ..Visuals.renderers import image
 
 
 # game state draw funcs
@@ -33,7 +34,7 @@ def draw_game(render):
         blurScreen(render)
 
         text(render, "Change Target", "black", (render.WIDTH, render.HEIGHT), type="bottomright", 
-        font="fonts/Gobold.otf", background=True)
+        font="Gobold.otf", background=True)
 
     if render.debug:
         draw_debug(render)
@@ -44,13 +45,19 @@ def draw_loading(render):
     center = render.screencenter
     hsize = 300 # half of the line
 
+    t = f"{len(render.notloaded['fonts'])}/{len(render.notloaded['fonts'])+len(render.fonts)} fonts"
+    length: int = round((len(render.notloaded["fonts"])/(len(render.notloaded["fonts"])+len(render.fonts)))*(hsize*2))
+
+    if len(render.notloaded["fonts"]) <= 0:
+        t = f"{len(render.notloaded['imgs'])}/{len(render.notloaded['imgs'])+len(render.imgs)} images"
+        length: int = round((len(render.notloaded["imgs"])/(len(render.notloaded["imgs"])+len(render.imgs)))*(hsize*2))
+
     pg.draw.line(render.screen, "gray", (center[0]-hsize, center[1]), (center[0]+hsize, center[1]), 50)
 
-    length: int = round((len(render.notloaded["fonts"])/(len(render.notloaded["fonts"])+len(render.fonts)))*(hsize*2))
     pg.draw.line(render.screen, "green", (center[0]-hsize, center[1]), ((center[0]-hsize)+length, center[1]), 50)
 
 
-    text(render, f"loaded {len(render.notloaded['fonts'])}/{len(render.notloaded['fonts'])+len(render.fonts)} fonts", "white", center)
+    text(render, "loaded "+t, "white", center)
 
 def draw_mainmenu(render):
     render.screen.fill("lightblue")
@@ -58,3 +65,11 @@ def draw_mainmenu(render):
     text(render, "Some Tower Defense", "black", changeTuple(render.screencenter, (0, -90)), size=46, font="Nexa-Heavy.ttf")
 
     for e in render.UI: e.draw(render)
+
+def draw_controlls(render):
+    render.screen.fill("lightblue")
+
+    for e in render.UI: e.draw(render)
+
+
+    image(render, "/keyboard_light/Alt_Key_Light.png", render.screencenter)

@@ -1,6 +1,7 @@
 from ..Visuals.renderers import *
 from ..Visuals.UI import UIe
-
+from ..usefulmath import changeTuple, remove_string
+import os
 
 def change_gamestate(render, to: str):
     
@@ -14,8 +15,48 @@ def change_gamestate(render, to: str):
     elif to == "mainmenu":
         def action(render):
             change_gamestate(render, "game")
-        render.UI = [UIe("mainmenu-start", render.screencenter, "gray", size=(200, 50), align="center", action=action)]
+        render.UI = [UIe("mainmenu", render.screencenter, "gray", size=(200, 50), align="center", action=action, text="START")]
+        def action(render):
+            change_gamestate(render, "controlls")
+        render.UI.append(
+            UIe("mainmenu", changeTuple(render.screencenter, (0, 70)), "gray", size=(200, 50), align="center", 
+            action=action, text="CONTROLLS")
+            )
+    elif to == "Loading":
+        # generate thing to load
+        render.notloaded = {"fonts":[], "imgs": []}
 
+        directory_path = os.path.join(render.dir, "assets/fonts")
 
+        # fonts
+        font_sizes = [i for i in range(15, 51)] # determines how many sizes we are going to load
+
+        for filename in os.listdir(directory_path):
+            # Check if the path is a file (not a directory)
+            file_path = os.path.join(directory_path, filename)
+            if os.path.isfile(file_path):
+                for size in font_sizes:
+                    render.notloaded["fonts"].append((filename, size))
+
+        # imgs
+        path = os.path.join(render.dir, "assets/imgs")
+        find_unloaded(render, path, "imgs")
+    elif to == "controlls":
+        def action(render):
+            change_gamestate(render, "mainmenu")
+        render.UI = [
+            UIe("mainmenu", (render.WIDTH, render.HEIGHT), "gray", size=(200, 50), align="bottomright", 
+            action=action, text="Back")
+        ]
 
     render.gamestate = to
+
+
+def find_unloaded(render, path, type):
+    for filename in os.listdir(path):
+        # Check if the path is a file (not a directory)
+        file_path = os.path.join(path, filename)
+        if os.path.isfile(file_path):
+            render.notloaded[type].append(remove_string(path, os.path.join(render.dir, "assets/imgs"))+"/"+filename)
+        else:
+            find_unloaded(render, os.path.join(path, filename), type)

@@ -9,9 +9,14 @@ class UIe:
     def __init__(self, type: int|str, pos: tuple[int, int], color: str, renderer=square_render, size=(50,50), align="topleft", **info):
 
         self.pos = pos
+
+        self.top = pos[0]
+        self.left = pos[1]
         
         if align == "center":
             self.pos = changeTuple(self.pos, (-size[0]//2, size[1]//2))
+        elif align == "bottomright":
+            self.pos = changeTuple(self.pos, (-size[0], -size[1]))
 
         if color.lower() == "clear":
             color = pg.Color(0,0,0,0)
@@ -60,11 +65,12 @@ class UIe:
                 color = "RED"
             
             text(render, str(self.cost), color, (self.rect.centerx, self.rect.bottom+12), type="center",
-             font="fonts/Gobold.otf")
-        elif self.type == "mainmenu-start":
+             font="Gobold.otf")
+        elif self.type == "mainmenu":
             self.renderer(render, self.rect, dcolor)
 
-            text(render, "START", "BLACK", self.rect.center, font="fonts/Gobold.otf")
+            text(render, self.info["text"], "BLACK", self.rect.center, font="Gobold.otf")
+       
             
         if render.debug:
             text(render, str(self.hovered), "GREEN", self.rect.center, background=True, backgroundClr=pg.Color(0,0,0,75))

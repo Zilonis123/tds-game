@@ -37,7 +37,7 @@ class SoftwareRenderer():
 
         self.dir = os.getcwd()
 
-        
+
         self.gamestate = None
         change_gamestate(self, "Loading")
 
@@ -65,18 +65,8 @@ class SoftwareRenderer():
         self.ttext = []
 
 
-        # generate thing to load
-        self.notloaded = {"fonts":[]}
-        directory_path = self.dir+"/fonts"
-        font_sizes = [i for i in range(15, 51)] # determines how many sizes we are going to load
         self.fonts = {}
-
-        for filename in os.listdir(directory_path):
-            # Check if the path is a file (not a directory)
-            file_path = os.path.join(directory_path, filename)
-            if os.path.isfile(file_path):
-                for size in font_sizes:
-                    self.notloaded["fonts"].append((filename, size))
+        self.imgs = {}
 
         self.startTime = time.time()
 
@@ -92,9 +82,11 @@ class SoftwareRenderer():
 
     def draw(self):
         # This func handles anything related to drawing something to the screen
-        d = {"game": draw_game, "Loading": draw_loading, "mainmenu": draw_mainmenu}
+        d = {"game": draw_game, "Loading": draw_loading, "mainmenu": draw_mainmenu, "controlls": draw_controlls}
 
-        d[self.gamestate](self)
+        draw_func = d.get(self.gamestate, None)
+        if draw_func != None:
+            draw_func(self)
 
 
     def handleKeyPress(self):
@@ -177,17 +169,15 @@ class SoftwareRenderer():
             # check if the mouse moved
             if currentMousePos != self.mousePos:
                 mouse_move(self, currentMousePos)
-
-            if self.gamestate == "game":
-                self.handleKeyPress()
-                run_game(self)
-            elif self.gamestate == "Loading":
-                run_loading(self)
-
+            
             self.draw()
             self.handleEvents()
 
-           
+            d = {"game": run_game, "Loading": run_loading}
+
+            run_f = d.get(self.gamestate, None)
+            if run_f != None:
+                run_f(self)
 
             pg.display.flip()
             self.clock.tick(self.FPS)

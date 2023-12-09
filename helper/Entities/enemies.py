@@ -56,7 +56,7 @@ class Enemy():
 
         # if we are selected draw more shit
         if render.selectedEnemy == self:
-            text(render, f"Target {self.targetTurret}", "black", self.rect.topright, type="topleft", font="fonts/Gobold.otf")
+            text(render, f"Target {self.targetTurret}", "black", self.rect.topright, type="topleft", font="Gobold.otf")
 
             if self.path != None:
                 draw_path(render.screen, self.path, self.pathstart, 5, self.pastPath)

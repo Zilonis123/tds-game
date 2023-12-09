@@ -115,13 +115,13 @@ class Turret():
             # display stats
             if render.actionRN != "grabturret":
                 text(render, f"Kills: {self.kills}", "black", (self.rect.topleft[0]-100, self.rect.topleft[1]), 
-                type="topleft", font="fonts/Gobold.otf")
+                type="topleft", font="Gobold.otf")
 
                 text(render, f"Damage: {self.damagedealt}", "black", (self.rect.topleft[0]-100, self.rect.topleft[1]+20),
-                type="topleft", font="fonts/Gobold.otf")
+                type="topleft", font="Gobold.otf")
 
                 text(render, f"UId: {self.uid}", "black", (self.rect.topright[0]+10, self.rect.topright[1]+20),
-                type="topleft", font="fonts/Gobold.otf")
+                type="topleft", font="Gobold.otf")
 
         if render.debug and render.selectedTurret != self:
             text(render, str(self.hovered), "Green", self.rect.center, type="center", background=True)

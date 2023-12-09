@@ -43,12 +43,21 @@ def run_game(render):
 
 def run_loading(render):
 
-    if len(render.notloaded["fonts"]) > 0:
-        f: tuple[str, int] = render.notloaded["fonts"].pop()
-        file_path = os.path.join(render.dir+"/fonts", f[0])
-        if os.path.isfile(file_path):
-            font = pg.font.Font(file_path, f[1])
-            render.fonts[f[0]+f"-{f[1]}"] = font
+    if len(render.notloaded["fonts"]) > 0 or len(render.notloaded["imgs"]) > 0:
+
+        if len(render.notloaded["fonts"]) > 0:
+            f: tuple[str, int] = render.notloaded["fonts"].pop()
+            file_path = os.path.join(render.dir+"/assets/fonts", f[0])
+            if os.path.isfile(file_path):
+                font = pg.font.Font(file_path, f[1])
+                render.fonts[f[0]+f"-{f[1]}"] = font
+        else:
+            i: str = render.notloaded["imgs"].pop()
+            file_path = f"{render.dir}/assets/imgs/{i}"
+            if os.path.isfile(file_path):
+                img = pg.image.load(file_path).convert_alpha()
+                render.imgs[i] = img
+                print(i)
 
     elif 1==2:
         # here we would load more things
