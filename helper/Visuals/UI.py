@@ -60,12 +60,6 @@ class UIe:
             pg.draw.line(render.screen, "white", (self.top-8, self.left+8), (self.top+8, self.left-8), 3)
         elif self.isTurretspawn:
             self.renderer(render, self.rect, dcolor)
-            color = "BLACK"
-            if render.cash < self.cost:
-                color = "RED"
-            
-            text(render, str(self.cost), color, (self.rect.centerx, self.rect.bottom+12), type="center",
-             font="Gobold.otf")
         elif self.type == "mainmenu":
             self.renderer(render, self.rect, dcolor)
 
@@ -77,7 +71,14 @@ class UIe:
 
         if self.hovered and self.type != "delete":
             self.renderer(render, self.rect, "white", width=2)
-        
+
+            if self.isTurretspawn:
+                mx,my = render.mousePos
+                r = text(render, f"{self.cost}$", "white", (mx+23, my), type="topleft",
+             font="VCR_MONO.ttf", background=True)
+                
+                text(render, f"Type: {self.type}", "white", (mx+23, my+r.height), type="topleft",
+                    font="VCR_MONO.ttf", background=True)
 
     def action(self, render):
         if self.isTurretspawn:
