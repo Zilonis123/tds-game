@@ -25,10 +25,8 @@ class Enemy():
 
         self.speed: int | float = 2
 
-        self.path: list | None = None
+        self.path: list = []
         self.pathstart: tuple[int|float, int|float] | None = None
-        self.pastPath: bool = False
-        self.pathon: int = 0
 
         self.cooldown: int = -1 # if higher than 0 cant attack
         self.strength: int = 10
@@ -58,8 +56,8 @@ class Enemy():
         if render.selectedEnemy == self:
             text(render, f"Target {self.targetTurret}", "black", self.rect.topright, type="topleft", font="Gobold.otf")
 
-            if self.path != None:
-                draw_path(render.screen, self.path, self.pathstart, 5, self.pastPath)
+            if self.path != []:
+                draw_path(render.screen, self.path, self.pathstart, 5)
 
             self.renderer(render, self.rect, "white", 2)
 
@@ -71,7 +69,7 @@ class Enemy():
         self._move_to_turret(render)
 
     def change_target(self, target: str):
-        self.path = None
+        self.path = []
         self.targetTurret = target
     
  
@@ -94,7 +92,7 @@ class Enemy():
             # meaning the turret was deleted or destroyed
             self.targetTurret = None
 
-            self.path = None
+            self.path = []
             return
         
         # check if we can move
@@ -103,71 +101,18 @@ class Enemy():
             if self.cooldown < 0:
                 turret.damage(render, self.strength)
 
-                self.path = None
+                self.path = []
                 self.cooldown = 30
             return
 
-        # direction = diagonally_pathfind(self.rect.center, turret.rect.center)
-
-
-        rect_values: list[pg.Rect] = []
-    
-        # # Extract "rect" values from the first list
-        # for t in render.turrets:
-        #     if t.uid != self.targetTurret:
-        #         rect_values.append(t.rect)
-        
-        # # Extract "rect" values from the second list
-        # for e in render.enemies:
-        #     if e != self:
-        #         rect_values.append(e.rect)
-
-        if self.path != None and self.pathon+1 > len(self.path):
-            self.path = None
-
-        if self.path == None:
-            #check_collisions(self, render)
-
-            path: list[tuple[int, int]] | None = None
-            dist: int = 10000
-            distToT: float = math.hypot(self.rect.centerx - turret.rect.centerx, self.rect.centery - turret.rect.centery)
-            for p in render.enemypathcache:
-                if p["end"] == turret.rect.center:
-
-                    _a: float = math.hypot(self.rect.centerx - p["start"][0], self.rect.centery - p["start"][1])
-
-                    if distToT+20 > p["distToTurret"]+_a and dist > p["distToTurret"]+_a:
-                        
-                        temp: list[tuple[int, int]] = astar_pathfinding(rect_values, self.rect.center, p["start"], self.speed)
-                        path: list[tuple[int, int]] = temp+p["path"]
-                        dist: float = p["distToTurret"]+_a
-
-            if path == None:
-                self.path: list[tuple[int, int]] = astar_pathfinding(rect_values, self.rect.center,turret.rect.center, self.speed)
-
-                self.pastPath: bool = False
-
-
-                render.enemypathcache.append({
-                    "path": self.path,
-                    "end": turret.rect.center,
-                    "start": self.rect.center,
-                    "distToTurret": distToT
-                })
+        if self.path == []:
+            self.path = astar_pathfinding(self.rect.center, turret.rect.center, 1)
+            if self.path != []:
+                self.pathstart = self.rect.center
             else:
-                self.path: list[tuple[int, int]] = path
-                self.pastPath: bool = True
-            
-            self.pathstart: tuple[int|float,int|float] = self.rect.center
-            self.pathon: int = 0
-
-    
-            if not self.path:
                 return
 
-        direction: tuple[int,int] = self.path[self.pathon]
-        self.pathon += 1
-
+        direction: tuple[int,int] = self.path.pop()
 
         self.rect: pg.Rect = self.rect.move(direction[0], direction[1])
 

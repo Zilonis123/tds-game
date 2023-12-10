@@ -15,19 +15,19 @@ def remove_string(base_string, prefix):
     else:
         return base_string
 
+def diagonally_pathfind(b: tuple[float, float], a: tuple[float, float]) -> tuple[float, float]:
+    dx: float = a[0] - b[0]
+    dy: float = a[1] - b[1]
 
-def diagonally_pathfind(b: tuple[float, float], a: tuple[float, float]) -> tuple[float | float]:
-    dx: int = round(a[0] - b[0])
-    dy: int = round(a[1] - b[1])
+    magnitude: float = math.sqrt(dx**2 + dy**2)
 
-    magnitude: int|float = math.sqrt(dx**2 + dy**2)
-
-    if 2 > magnitude < 2:
+    if magnitude < 2:
         direction = (0, 0)
     else:
-        direction = ((dx / magnitude), (dy / magnitude))
+        direction = (dx / magnitude, dy / magnitude)
 
     return direction
+
 
 def adjust_color(color: str | pg.Color, adjustment: int) -> pg.Color:
     # makes a color lighter or darker

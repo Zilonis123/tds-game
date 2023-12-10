@@ -1,5 +1,5 @@
 import pygame as pg
-from ..Visuals.renderers import text, draw_circle_alpha
+from ..Visuals.renderers import text, draw_circle_alpha, square_render
 from ..usefulmath import diagonally_pathfind, adjust_color, pointInCircle, findenemy_by_id
 from .bullets import Bullet
 import math
@@ -26,7 +26,8 @@ class Turret():
         # figure out the turrets cooldown increase
 
         # range - radius of the "range" circle
-
+        self.color = "BLACK"
+        self.renderer = square_render
 
         self.cIncrease: int
         self.strenght: int
