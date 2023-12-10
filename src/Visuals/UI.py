@@ -3,6 +3,7 @@ from ..usefulmath import translate_rect_to_circ, findenemy_by_id, adjust_color, 
 from .renderers import square_render, text
 from ..Entities.turrets import Turret
 from random import uniform
+import json
 
 # UIe - UI element  
 class UIe:
@@ -36,7 +37,17 @@ class UIe:
 
         self.uid: str = str(int(uniform(1, 10000)))+str(self.type)
 
-        self.cost: int = 100
+        self.cost: int = 100 # default value
+
+        # if shop then get info about me
+        if self.isTurretspawn:
+            f = open("info/turrets.json")
+            data = json.load(f)
+            data = data[str(type)] # get the data about ourselfes
+
+            self.name = data["name"]
+            self.description = data["description"]
+            self.cost = data["cost"]
 
         # delete logic
         if self.type == "delete":
@@ -74,10 +85,18 @@ class UIe:
 
             if self.isTurretspawn:
                 mx,my = render.mousePos
-                r = text(render, f"{self.cost}$", "white", (mx+23, my), type="topleft",
-             font="VCR_MONO.ttf", background=True)
-                
-                text(render, f"Type: {self.type}", "white", (mx+23, my+r.height), type="topleft",
+                OFFSET = 23
+                y = my
+
+                r = text(render, f"Name: {self.name}", "white", (mx+OFFSET, y), type="topleft",
+                    font="VCR_MONO.ttf", background=True)
+                y += r.height
+
+                r = text(render, f"{self.cost}$", "white" if render.cash >= self.cost else "red", (mx+OFFSET, y), type="topleft",
+                font="VCR_MONO.ttf", background=True)
+                y += r.height
+
+                text(render, f'"{self.description}"', "white", (mx+OFFSET, y), type="topleft",
                     font="VCR_MONO.ttf", background=True)
 
     def action(self, render):

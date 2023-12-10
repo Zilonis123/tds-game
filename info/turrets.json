@@ -1,0 +1,22 @@
+{
+    "1": {
+        "name": "Basic Turret",
+        "description": "The most basic of turrets",
+        "cost": 100
+    },
+    "2": {
+        "name": "Farm",
+        "description": "Generates 50$ every now and then",
+        "cost": 300
+    },
+    "3": {
+        "name": "Sniper",
+        "description": "A strong turret with long range attacks",
+        "cost": 250
+    },
+    "4": {
+        "name": "idk yet",
+        "description": "Better version of the basic turret",
+        "cost": 150
+    }
+}
