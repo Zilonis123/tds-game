@@ -2,6 +2,7 @@
 import psutil,time
 import pygame as pg
 from .Visuals.renderers import text, square_render
+from .usefulmath import changeTuple
 
 
 def draw_UI(render):
@@ -13,7 +14,7 @@ def draw_UI(render):
         UIe.draw(render)
 
     # draw text
-    text(render, str(render.cash), "BLACK", (render.WIDTH, 0), size=30, type="topright", font="fonts/Gobold.otf")
+    text(render, str(render.cash), "BLACK", (render.WIDTH, 0), size=30, type="topright", font="Gobold.otf")
 
     # draw grid lines if SHIFT pressed
     keys = pg.key.get_pressed()
@@ -21,7 +22,7 @@ def draw_UI(render):
         draw_grid(render)
 
     if render.speedUp:
-        text(render, "2x", "white", (render.WIDTH//2, 20), size=25, background=True, font="fonts/VCR_MONO.ttf")
+        text(render, "2x", "white", (render.WIDTH//2, 20), size=25, background=True, font="VCR_MONO.ttf")
 
 
 def draw_grid(render):
@@ -85,6 +86,11 @@ def draw_debug(render):
     rect = text(render, f"Fonts loaded {len(render.fonts)}"
     , "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
 
+    y+=rect.height
+
+    rect = text(render, f"Imgs loaded {len(render.imgs)}"
+    , "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
+
     # FPS Graph
     location = (100, render.HEIGHT-10)
 
@@ -114,4 +120,7 @@ def draw_debug(render):
                 size=5*size)
 
 def blurScreen(render):
-    square_render(self, pg.Rect((0,0), (self.WIDTH, self.HEIGHT)), pg.Color(255, 255, 255, 75))
+    square_render(render, pg.Rect((0,0), (render.WIDTH, render.HEIGHT)), pg.Color(255, 255, 255, 75))
+
+
+

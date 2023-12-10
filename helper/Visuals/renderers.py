@@ -130,3 +130,16 @@ font="freesansbold.ttf", background=False, backgroundClr=pg.Color(0,0,0,70)) -> 
     render.screen.blit(surface, rect)
 
     return rect
+
+def image(render, image_name: str, pos: tuple[int, int]):
+
+    if isinstance(image_name, str):
+        img_surface = render.imgs.get(image_name, None)
+    else:
+        img_surface = image_name
+
+
+    if img_surface == None:
+        return
+    
+    render.screen.blit(img_surface, pos)

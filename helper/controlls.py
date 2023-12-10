@@ -14,18 +14,24 @@ def mouse_up(render):
 
     if clicked == None:
         # check if we have a turret in our hands
+        clicked = False
         if render.actionRN == "grabturret":
             _place_turret(render)
         else:
             # check if we are clicking on a placed turret
-            _click_turret(render)
+            clicked = _click_turret(render)
 
-            # check if we are clicking on an enemy
-            _click_enemy(render)
+            if not clicked:
+                # check if we are clicking on an enemy
+                clicked = _click_enemy(render)
 
         render.mouseDown = (-99, -99) # blank values
+
+        if clicked:
+            play(render, "Minimalist11.mp3")
         return
     
+    play(render, "Minimalist11.mp3")
     render.mouseDown = (-99, -99) # blank values
     remove_delete_btn(render)
     clicked.action(render)    
@@ -79,12 +85,14 @@ def _click_enemy(render):
         surface = font.render(f"Target {enemyClicked.targetTurret}", True, "black")
 
         # create delete button
-        deleteBtn = UIe("changeTarget", enemyClicked.rect.topright, "clear", turretId=e.uid, size=surface.get_rect().size)
+        deleteBtn = UIe("changeTarget", enemyClicked.rect.topright, "clear", turretId=enemyClicked.targetTurret, size=surface.get_rect().size)
 
         render.UI.append(deleteBtn)
 
     elif render.actionRN != "changeTarget":
         render.selectedEnemy = None
+
+    return enemyClicked != None
 
 def _click_turret(render):
     # check if we have clicked on a turret
@@ -110,7 +118,7 @@ def _click_turret(render):
         if clickedOn == render.selectedTurret:
             render.actionRN = None
             render.selectedTurret = None
-            return
+            return True
 
 
     if render.actionRN == "changeTarget":
@@ -118,7 +126,7 @@ def _click_turret(render):
         if render.selectedEnemy != None:
             render.actionRN = None 
             render.selectedEnemy.change_target(clickedOn.uid)
-            return
+            return True
 
    
     # select the turret
@@ -131,6 +139,8 @@ def _click_turret(render):
     render.UI.append(deleteBtn)
 
     render.selectedTurret: Turret = clickedOn
+
+    return True
 
 
 def selectTurret(render, type):
@@ -150,3 +160,10 @@ def selectTurret(render, type):
 
     render.cash -= ui.cost
     render.ttext.append({"cash": -ui.cost, "time": 0})
+
+def play(render, sound: str):
+    sound = render.sounds.get(sound, False)
+    if not sound:
+        return
+
+    sound.play()

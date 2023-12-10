@@ -1,20 +1,29 @@
 import pygame as pg
-from ..usefulmath import translate_rect_to_circ, findenemy_by_id, adjust_color
+from ..usefulmath import translate_rect_to_circ, findenemy_by_id, adjust_color, changeTuple
 from .renderers import square_render, text
 from ..Entities.turrets import Turret
 from random import uniform
 
 # UIe - UI element  
 class UIe:
-    def __init__(self, type: int|str, pos: tuple[int, int], color: str, renderer=square_render, size=(50,50), **info):
+    def __init__(self, type: int|str, pos: tuple[int, int], color: str, renderer=square_render, size=(50,50), align="topleft", **info):
 
         self.pos = pos
+
+        self.top = pos[0]
+        self.left = pos[1]
+        
+        if align == "center":
+            self.pos = changeTuple(self.pos, (-size[0]//2, size[1]//2))
+        elif align == "bottomright":
+            self.pos = changeTuple(self.pos, (-size[0], -size[1]))
+
         if color.lower() == "clear":
             color = pg.Color(0,0,0,0)
 
         self.color: pg.Color = pg.Color(color) # Use pygame Color because its better
-        self.top: int = pos[0]
-        self.left: int = pos[1]
+        
+
 
         self.info = info
 
@@ -22,7 +31,7 @@ class UIe:
 
         self.isTurretspawn: bool = isinstance(type, int)
         self.type: int = type
-        self.rect: pg.Rect = pg.Rect(pos, size)
+        self.rect: pg.Rect = pg.Rect(self.pos, size)
         self.renderer = renderer
 
         self.uid: str = str(int(uniform(1, 10000)))+str(self.type)
@@ -32,6 +41,10 @@ class UIe:
         # delete logic
         if self.type == "delete":
             self.rect: pg.Rect = pg.Rect(translate_rect_to_circ(self.rect), (self.rect.w, self.rect.h))
+
+        # if provided with a different action script .. use that
+        if info.get("action", None) != None:
+            self.action = info.get("action")
 
     def draw(self, render):
         dcolor = self.color
@@ -45,21 +58,27 @@ class UIe:
             # self.pos - circle center
             pg.draw.line(render.screen, "white", (self.top+8, self.left+8), (self.top-8, self.left-8), 3)
             pg.draw.line(render.screen, "white", (self.top-8, self.left+8), (self.top+8, self.left-8), 3)
-        elif self.type != "changeTarget":
+        elif self.isTurretspawn:
             self.renderer(render, self.rect, dcolor)
-            color = "BLACK"
-            if render.cash < self.cost:
-                color = "RED"
-            
-            text(render, str(self.cost), color, (self.rect.centerx, self.rect.bottom+12), type="center",
-             font="fonts/Gobold.otf")
+        elif self.type == "mainmenu":
+            self.renderer(render, self.rect, dcolor)
+
+            text(render, self.info["text"], "BLACK", self.rect.center, font="Gobold.otf")
+       
             
         if render.debug:
             text(render, str(self.hovered), "GREEN", self.rect.center, background=True, backgroundClr=pg.Color(0,0,0,75))
 
         if self.hovered and self.type != "delete":
             self.renderer(render, self.rect, "white", width=2)
-        
+
+            if self.isTurretspawn:
+                mx,my = render.mousePos
+                r = text(render, f"{self.cost}$", "white", (mx+23, my), type="topleft",
+             font="VCR_MONO.ttf", background=True)
+                
+                text(render, f"Type: {self.type}", "white", (mx+23, my+r.height), type="topleft",
+                    font="VCR_MONO.ttf", background=True)
 
     def action(self, render):
         if self.isTurretspawn:
@@ -71,8 +90,7 @@ class UIe:
             render.actionRN = "grabturret"
             render.selectedTurret = Turret(self.type, mx, my, render)
 
-            render.cash -= self.cost
-            render.ttext.append({"cash": -self.cost, "time": 0})
+            render.addcash(-self.cost)
         elif self.type == "delete":
             render.turrets.remove(render.selectedTurret)
 

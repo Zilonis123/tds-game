@@ -3,15 +3,14 @@ import heapq
 import pygame
 
 from ...usefulmath import diagonally_pathfind
+from ...decorators import timer
 
 
-def draw_path(screen, path: list[tuple[int,int]], start: tuple[float, float], rect_size: int, green: bool):
+def draw_path(screen, path: list[tuple[int,int]], start: tuple[float, float], rect_size: int):
     current = start
     a = 0
 
     clr = "RED"
-    if green:
-        clr = "GREEN"
 
     for dx, dy in path:
         new_x = current[0] + dx
@@ -20,31 +19,25 @@ def draw_path(screen, path: list[tuple[int,int]], start: tuple[float, float], re
         current = (new_x, new_y)
         a+=1
 
-def astar_pathfinding(map_rects, start: tuple, end: tuple, speed: int):
+
+MAX_PATH_LENGTH = 500
+@timer
+def astar_pathfinding(start: tuple[int, int], end: tuple[int, int], speed: int):
     path: list[tuple] = []
-    x,y = start
+    x, y = start
     at = (round(x), round(y))
-    x,y = end
+    x, y = end
     end = (round(x), round(y))
 
-
-
-
-    done = False
-    while not done:
-
-
-
+    while 1==1:
         dx, dy = diagonally_pathfind(at, end)
         scaled_dx, scaled_dy = round(dx * speed), round(dy * speed)
         at = (at[0] + scaled_dx, at[1] + scaled_dy)
         path.append((scaled_dx, scaled_dy))
 
+        if len(path) > MAX_PATH_LENGTH or (dx, dy) == (0, 0):
+            break
 
-    
-        if len(path) > 700 or (dx,dy) == (0,0):
-            done = True
-    
     return path
 
 def point_collides_with_rect(point, rect):
