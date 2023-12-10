@@ -2,8 +2,10 @@ import pygame as pg
 from .Entities.turrets import *
 from .Entities.enemies import Enemy
 from .Visuals.UI import UIe
+from .sound import play
 
 from loguru import logger
+
 
 def mouse_down(render):
     render.mouseDown = render.mousePos
@@ -160,9 +162,3 @@ def selectTurret(render, type):
 
     render.addcash(-ui.cost)
 
-def play(render, sound: str):
-    sound = render.sounds.get(sound, False)
-    if not sound:
-        return
-
-    sound.play()

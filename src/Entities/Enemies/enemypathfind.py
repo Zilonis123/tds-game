@@ -21,7 +21,6 @@ def draw_path(screen, path: list[tuple[int,int]], start: tuple[float, float], re
 
 
 MAX_PATH_LENGTH = 500
-@timer
 def astar_pathfinding(start: tuple[int, int], end: tuple[int, int], speed: int):
     path: list[tuple] = []
     x, y = start

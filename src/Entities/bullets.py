@@ -1,5 +1,7 @@
 import pygame as pg
 from ..Visuals.renderers import circle_renderer
+from ..sound import play
+
 
 class Bullet():
     def __init__(self, spx, spy, pos, strength, bulletSpeed, **kwargs):
@@ -12,7 +14,14 @@ class Bullet():
 
         self.turret = None or kwargs["turret"]
 
+        # sfx
+        self.playedFire = False
+
     def tick(self, render):
+        if not self.playedFire:
+            play(render, "Shoot.wav")
+            self.playedFire = True
+
         # move
         self.x += self.spx*self.speed
         self.y += self.spy*self.speed
