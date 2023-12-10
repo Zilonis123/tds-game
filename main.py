@@ -38,23 +38,24 @@ class SoftwareRenderer():
 
         self.dir = os.getcwd()
 
-
-        
-
-        self.UI = [] 
-
         self.debug = False
         self.speedUp = False # if true game runs 2x faster
-
-        # init turrets
-        self.turrets = [Turret(2, self.screencenter[0], self.screencenter[1]-100, self)]
-        self.selectedTurret = None
-
         self.gridsize=60
 
+        # init turrets
+        self.turrets = []
+        self.selectedTurret = None
+
+        
+        self.UI = [] 
+
+
         # Enemies
-        self.enemies: list[Enemy] = [Enemy(1, self.screencenter)]
+        self.enemies: list[Enemy] = []
         self.selectedEnemy: Enemy | None = None
+        
+        self.wave = 1
+        self.waveIsLoading = False
     
 
         # bullets
@@ -108,7 +109,7 @@ class SoftwareRenderer():
 
         keys = pg.key.get_pressed()
         if keys[pg.K_RSHIFT]:
-            self.enemies.append(Enemy(1, (mx, my)))
+            self.enemies.append(Enemy("normal", (mx, my)))
             check_collisions(self.enemies[len(self.enemies)-1], self)
         elif keys[pg.K_SPACE]:
             self.enemies = []

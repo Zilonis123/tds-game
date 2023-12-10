@@ -16,6 +16,7 @@ class Bullet():
 
         # sfx
         self.playedFire = False
+        
 
     def tick(self, render):
         if not self.playedFire:

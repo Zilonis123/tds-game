@@ -21,7 +21,7 @@
     },
     "3": {
         "name": "Sniper",
-        "description": "A strong turret with long range attacks",
+        "description": "A strong turret with slowlong range attacks",
         "cost": 250,
         "cooldown": 60,
         "health": 80,
@@ -32,11 +32,11 @@
     "4": {
         "name": "Rapid Fire",
         "description": "Better version of the basic turret",
-        "cost": 150,
-        "cooldown": 15,
+        "cost": 200,
+        "cooldown": 10,
         "health": 100,
-        "range": 150,
-        "bulletSpeed": 11,
-        "damage": 7
+        "range": 170,
+        "bulletSpeed": 6,
+        "damage": 10
     }
 }

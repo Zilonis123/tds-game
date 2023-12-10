@@ -16,7 +16,7 @@ import math
 from random import uniform
 
 class Enemy():
-    def __init__(self, type: int, pos: tuple[int | float, int | float], renderer=circle_renderer):
+    def __init__(self, type: str, pos: tuple[int | float, int | float], renderer=circle_renderer):
         self.type = type
         self.pos: tuple[int | float, int | float] = pos
         self.health: int = 100
@@ -40,7 +40,7 @@ class Enemy():
 
         self.targetTurret: str | None  = None
 
-        if type==1:
+        if type=="normal":
             self.color: str = "darkgreen"
 
     def draw(self, render):
