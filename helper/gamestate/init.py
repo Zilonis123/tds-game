@@ -15,11 +15,9 @@ def change_gamestate(render, to: str):
     elif to == "mainmenu":
         def action(render):
             change_gamestate(render, "game")
-            render.sounds["Minimalist11.mp3"].play()
         render.UI = [UIe("mainmenu", render.screencenter, "gray", size=(200, 50), align="center", action=action, text="START")]
         def action(render):
             change_gamestate(render, "controlls")
-            render.sounds["Minimalist11.mp3"].play()
 
         render.UI.append(
             UIe("mainmenu", changeTuple(render.screencenter, (0, 70)), "gray", size=(200, 50), align="center", 
@@ -57,7 +55,6 @@ def change_gamestate(render, to: str):
     elif to == "controlls":
         def action(render):
             change_gamestate(render, "mainmenu")
-            render.sounds["Minimalist11.mp3"].play()
 
         render.UI = [
             UIe("mainmenu", (render.WIDTH, render.HEIGHT), "gray", size=(200, 50), align="bottomright", 
