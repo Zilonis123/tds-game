@@ -17,16 +17,8 @@ def draw_game(render):
     draw_UI(render)
 
     for t in render.ttext:
-        prefix = "+"
-        color = "green"
-        if t["cash"] < 0:
-            prefix=""
-            color = "red"
-
-        text(render, prefix+str(t["cash"]), color, (render.WIDTH, 50+t["time"]), type="topright")
-        t["time"] += 1
-        if t["time"] > 120:
-            render.ttext.remove(t)
+        t.draw(render)
+        t.func(t, render)
 
     if render.actionRN == "changeTarget":
 

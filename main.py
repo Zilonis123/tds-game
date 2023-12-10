@@ -10,6 +10,7 @@ from helper.Visuals.UI import UIe
 from helper.Entities.turrets import Turret
 from helper.Entities.enemies import Enemy
 from helper.Entities.Enemies.enemycollisions import check_collisions
+from helper.Entities.ttext import Ttext
 
 from loguru import logger 
 
@@ -77,7 +78,14 @@ class SoftwareRenderer():
         self.mouseDown: tuple[float, float] = (-99, -99)
 
     def addcash(self, cash):
-        self.ttext.append({"cash": cash, "time": 0})
+        def cash_f(self, render):
+            self.timeAlive += 1
+            self.pos = changeTuple(self.pos, (0, 1))
+
+            if self.timeAlive > 120:
+                render.ttext.remove(self)
+        t = Ttext(str(cash), (self.WIDTH, 50), cash_f, color="RED" if cash < 0 else "GREEN")
+        self.ttext.append(t)
         self.cash += cash
 
     def draw(self):
