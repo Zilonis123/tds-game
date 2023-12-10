@@ -7,7 +7,7 @@ from .Enemies.enemytargets import *
 
 from .turrets import Turret
 
-from helper.Entities.Enemies.enemypathfind import astar_pathfinding, draw_path
+from .Enemies.enemypathfind import astar_pathfinding, draw_path
 
 import sys
 from loguru import logger

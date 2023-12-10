@@ -1,16 +1,16 @@
 import pygame as pg
 import sys,os,time,math
 
-from helper.draw import *
-from helper.gamestate.run import *
-from helper.gamestate.draw import *
-from helper.gamestate.init import change_gamestate
-from helper.controlls import *
-from helper.Visuals.UI import UIe
-from helper.Entities.turrets import Turret
-from helper.Entities.enemies import Enemy
-from helper.Entities.Enemies.enemycollisions import check_collisions
-from helper.Entities.ttext import Ttext
+from src.draw import *
+from src.gamestate.run import *
+from src.gamestate.draw import *
+from src.gamestate.init import change_gamestate
+from src.controlls import *
+from src.Visuals.UI import UIe
+from src.Entities.turrets import Turret
+from src.Entities.enemies import Enemy
+from src.Entities.Enemies.enemycollisions import check_collisions
+from src.Entities.ttext import Ttext
 
 from loguru import logger 
 
