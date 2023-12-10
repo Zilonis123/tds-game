@@ -2,15 +2,13 @@ import pygame as pg
 from ..Visuals.renderers import text, draw_circle_alpha, square_render
 from ..usefulmath import diagonally_pathfind, adjust_color, pointInCircle, findenemy_by_id
 from .bullets import Bullet
-import math
+import math, json
 
 class Turret():
     def __init__(self, type: int, x: float, y: float, render):
         self.type = type
         self.pos: tuple[int|float,int|float] = (x,y)
         self.size: tuple[int, int] = (50,50) # may be subject to change
-        self.health: int = 100
-        self.maxhealth: int = 100
 
         self.cooldown: int = -1 # if >0 then can shoot
         self.attacking: None|str = None # stores uid
@@ -36,31 +34,19 @@ class Turret():
         self.health: int
         self.maxhealth: int
 
+        f = open("info/turrets.json")
+        data = json.load(f)
+        data = data[str(type)]
 
-        if type == 1:
-            self.cIncrease = 15
-            self.strenght = 7
-            self.bSpeed = 10
-            self.range = 120
-            self.health = self.maxhealth = 200
-        elif type == 2:
-            self.cIncrease = 60
-            self.range = 0
-            self.health = self.maxhealth = 75
+        self.cIncrease = data["cooldown"]
+        self.strenght = data["damage"]
+        self.bSpeed = data["bulletSpeed"]
+        self.range = data["range"]
+        self.health = self.maxhealth = data["health"]
+        if type == 2:
             self.turretheadclr = 0
         elif type == 3:
-            self.cIncrease = 60
-            self.strenght = 15
-            self.bSpeed = 30
-            self.range = 230
-            self.health = self.maxhealth = 50
             self.turretheadclr = -100
-        elif type == 4:
-            self.cIncrease = 30
-            self.strenght = 10
-            self.bSpeed = 12
-            self.range = 150
-            self.health = self.maxhealth = 100
         
 
 

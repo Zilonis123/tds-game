@@ -1,22 +1,42 @@
 {
     "1": {
         "name": "Basic Turret",
-        "description": "The most basic of turrets",
-        "cost": 100
+        "description": "Basic, but balanced",
+        "cost": 100,
+        "cooldown": 30,
+        "health": 200,
+        "range": 120,
+        "bulletSpeed": 15,
+        "damage": 8
     },
     "2": {
         "name": "Farm",
         "description": "Generates 50$ every now and then",
-        "cost": 300
+        "cost": 300,
+        "cooldown": 60,
+        "health": 75,
+        "range": 0,
+        "bulletSpeed": -999,
+        "damage": -999
     },
     "3": {
         "name": "Sniper",
         "description": "A strong turret with long range attacks",
-        "cost": 250
+        "cost": 250,
+        "cooldown": 60,
+        "health": 80,
+        "range": 230,
+        "bulletSpeed": 30,
+        "damage": 15
     },
     "4": {
-        "name": "idk yet",
+        "name": "Rapid Fire",
         "description": "Better version of the basic turret",
-        "cost": 150
+        "cost": 150,
+        "cooldown": 15,
+        "health": 100,
+        "range": 150,
+        "bulletSpeed": 11,
+        "damage": 7
     }
 }
