@@ -39,8 +39,7 @@ class SoftwareRenderer():
         self.dir = os.getcwd()
 
 
-        self.gamestate = None
-        change_gamestate(self, "Loading")
+        
 
         self.UI = [] 
 
@@ -67,7 +66,10 @@ class SoftwareRenderer():
 
         self.fonts = {}
         self.imgs = {}
+
         self.sounds = {}
+        self.musicPlaying = None
+
 
         self.startTime = time.time()
 
@@ -76,6 +78,10 @@ class SoftwareRenderer():
 
         self.mousePos: tuple[float, float] = (0,0)
         self.mouseDown: tuple[float, float] = (-99, -99)
+
+
+        self.gamestate = None
+        change_gamestate(self, "Loading")
 
     def addcash(self, cash):
         def cash_f(self, render):

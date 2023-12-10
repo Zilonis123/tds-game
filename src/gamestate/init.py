@@ -1,9 +1,13 @@
 from ..Visuals.renderers import *
 from ..Visuals.UI import UIe
 from ..usefulmath import changeTuple, remove_string
+from ..sound import play_music
 import os
 
 def change_gamestate(render, to: str):
+
+    # fadeout music
+    play_music(render, None)
     
     if to == "game":
         render.UI: list[UIe] = [
@@ -24,6 +28,8 @@ def change_gamestate(render, to: str):
             UIe("mainmenu", changeTuple(render.screencenter, (0, 70)), "gray", size=(200, 50), align="center", 
             action=action, text="CONTROLLS")
             )
+
+        play_music(render, "music/mainmenu-theme.mp3")
             
     elif to == "Loading":
         # generate thing to load
@@ -52,6 +58,15 @@ def change_gamestate(render, to: str):
             file_path = os.path.join(directory_path, filename)
             if os.path.isfile(file_path):
                 render.notloaded["sounds"].append(filename)
+            else:
+                # directory
+                x = directory_path+f"/{filename}"
+                n = filename
+                for filename in os.listdir(x):
+                    # Check if the path is a file (not a directory)
+                    file_path = os.path.join(x, filename)
+                    if os.path.isfile(file_path):
+                        render.notloaded["sounds"].append(os.path.join(n, filename))
 
     elif to == "controlls":
         def action(render):

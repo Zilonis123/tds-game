@@ -1,8 +1,17 @@
 
 
-def play(render, sound: str):
+def play(render, sound: str) -> bool:
     sound = render.sounds.get(sound, False)
     if not sound:
-        return
+        return False
 
     sound.play()
+    return sound
+
+def play_music(render, sound: str):
+    if render.musicPlaying != None:
+        render.musicPlaying.fadeout(2000)
+    
+    s = play(render, sound)
+    if s:
+        render.musicPlaying = s
