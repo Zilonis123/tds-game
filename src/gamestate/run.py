@@ -44,21 +44,20 @@ def run_game(render):
 def run_loading(render):
 
     if len(render.notloaded["fonts"]) > 0:
-
-        if len(render.notloaded["fonts"]) > 0:
-            f: tuple[str, int] = render.notloaded["fonts"].pop()
-            file_path = os.path.join(render.dir+"/assets/fonts", f[0])
-            if os.path.isfile(file_path):
-                font = pg.font.Font(file_path, f[1])
-                render.fonts[f[0]+f"-{f[1]}"] = font
+        f: tuple[str, int] = render.notloaded["fonts"].pop()
+        file_path = os.path.join(render.dir+"/assets/fonts", f[0])
+        if os.path.isfile(file_path):
+            font = pg.font.Font(file_path, f[1])
+            render.fonts[f[0]+f"-{f[1]}"] = font
             
-    elif len(render.notloaded["imgs"]) > 0:
+    if len(render.notloaded["imgs"]) > 0:
         i: str = render.notloaded["imgs"].pop()
         file_path = f"{render.dir}/assets/imgs/{i}"
         if os.path.isfile(file_path):
             img = pg.image.load(file_path).convert_alpha()
             render.imgs[i] = img
-    elif len(render.notloaded["sounds"]) > 0:
+
+    if len(render.notloaded["sounds"]) > 0:
         i: str = render.notloaded["sounds"].pop()
         file_path = f"{render.dir}/assets/sounds/{i}"
         if not pg.mixer.get_init():
@@ -66,5 +65,5 @@ def run_loading(render):
         sfx = pg.mixer.Sound(file_path)
         render.sounds[i] = sfx
 
-    else:
+    if sum(len(lst) for lst in render.notloaded.values()) <= 0:
         change_gamestate(render, "mainmenu")

@@ -32,24 +32,35 @@ def draw_game(render):
         draw_debug(render)
 
 def draw_loading(render):
+    def draw_bar(render, type: str, tt: str, y: int):
+        hsize = 300 # half of the line
+        center = render.screencenter
+
+        length: int = round((len(render.notloaded[type])/(len(render.notloaded[type])+len(render.fonts)))*(hsize*2))
+
+        
+        pg.draw.line(render.screen, "gray", (center[0]-hsize, y), (center[0]+hsize, y), 50)
+        pg.draw.line(render.screen, "green", (center[0]-hsize, y), ((center[0]-hsize)+length, y), 50)
+
+        t = f"Loaded {len(render.notloaded[type])}/{len(render.notloaded[type])+len(render.fonts)} {tt}"
+
+        text(render, t, "white", (center[0], y))
+
+
     render.screen.fill("black")
 
-    center = render.screencenter
-    hsize = 300 # half of the line
-
-    t = f"{len(render.notloaded['fonts'])}/{len(render.notloaded['fonts'])+len(render.fonts)} fonts"
-    length: int = round((len(render.notloaded["fonts"])/(len(render.notloaded["fonts"])+len(render.fonts)))*(hsize*2))
-
-    if len(render.notloaded["fonts"]) <= 0:
-        t = f"{len(render.notloaded['imgs'])}/{len(render.notloaded['imgs'])+len(render.imgs)} images"
-        length: int = round((len(render.notloaded["imgs"])/(len(render.notloaded["imgs"])+len(render.imgs)))*(hsize*2))
-
-    pg.draw.line(render.screen, "gray", (center[0]-hsize, center[1]), (center[0]+hsize, center[1]), 50)
-
-    pg.draw.line(render.screen, "green", (center[0]-hsize, center[1]), ((center[0]-hsize)+length, center[1]), 50)
+    
+    
 
 
-    text(render, "loaded "+t, "white", center)
+    if len(render.notloaded["fonts"]) > 0:
+        draw_bar(render, "fonts", "fonts", render.HEIGHT-70)
+    
+    if len(render.notloaded["imgs"]) > 0:
+        draw_bar(render, "imgs", "images", render.HEIGHT-130)
+
+    if len(render.notloaded["sounds"]) > 0:
+        draw_bar(render, "sounds", "sounds", render.HEIGHT-190)
 
 def draw_mainmenu(render):
     render.screen.fill("lightblue")
