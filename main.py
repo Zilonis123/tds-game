@@ -162,6 +162,7 @@ class SoftwareRenderer():
             if currentMousePos != self.mousePos:
                 mouse_move(self, currentMousePos)
             
+
             self.draw()
             self.handleKeyPress()
             self.handleEvents()

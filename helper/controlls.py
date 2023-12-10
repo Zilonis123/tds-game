@@ -158,8 +158,7 @@ def selectTurret(render, type):
     render.actionRN = "grabturret"
     render.selectedTurret = Turret(type, mx, my, render)
 
-    render.cash -= ui.cost
-    render.ttext.append({"cash": -ui.cost, "time": 0})
+    render.addcash(-ui.cost)
 
 def play(render, sound: str):
     sound = render.sounds.get(sound, False)
