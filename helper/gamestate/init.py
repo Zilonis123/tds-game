@@ -15,16 +15,20 @@ def change_gamestate(render, to: str):
     elif to == "mainmenu":
         def action(render):
             change_gamestate(render, "game")
+            render.sounds["Minimalist11.mp3"].play()
         render.UI = [UIe("mainmenu", render.screencenter, "gray", size=(200, 50), align="center", action=action, text="START")]
         def action(render):
             change_gamestate(render, "controlls")
+            render.sounds["Minimalist11.mp3"].play()
+
         render.UI.append(
             UIe("mainmenu", changeTuple(render.screencenter, (0, 70)), "gray", size=(200, 50), align="center", 
             action=action, text="CONTROLLS")
             )
+            
     elif to == "Loading":
         # generate thing to load
-        render.notloaded = {"fonts":[], "imgs": []}
+        render.notloaded = {"fonts":[], "imgs": [], "sounds": []}
 
         directory_path = os.path.join(render.dir, "assets/fonts")
 
@@ -41,9 +45,20 @@ def change_gamestate(render, to: str):
         # imgs
         path = os.path.join(render.dir, "assets/imgs")
         find_unloaded(render, path, "imgs")
+
+        directory_path = os.path.join(render.dir, "assets/sounds")
+
+        for filename in os.listdir(directory_path):
+            # Check if the path is a file (not a directory)
+            file_path = os.path.join(directory_path, filename)
+            if os.path.isfile(file_path):
+                render.notloaded["sounds"].append(filename)
+
     elif to == "controlls":
         def action(render):
             change_gamestate(render, "mainmenu")
+            render.sounds["Minimalist11.mp3"].play()
+
         render.UI = [
             UIe("mainmenu", (render.WIDTH, render.HEIGHT), "gray", size=(200, 50), align="bottomright", 
             action=action, text="Back")

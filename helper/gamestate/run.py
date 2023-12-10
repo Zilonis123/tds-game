@@ -58,5 +58,13 @@ def run_loading(render):
         if os.path.isfile(file_path):
             img = pg.image.load(file_path).convert_alpha()
             render.imgs[i] = img
+    elif len(render.notloaded["sounds"]) > 0:
+        i: str = render.notloaded["sounds"].pop()
+        file_path = f"{render.dir}/assets/sounds/{i}"
+        if not pg.mixer.get_init():
+            pg.mixer.init()
+        sfx = pg.mixer.Sound(file_path)
+        render.sounds[i] = sfx
+
     else:
         change_gamestate(render, "mainmenu")

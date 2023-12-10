@@ -67,6 +67,7 @@ class SoftwareRenderer():
 
         self.fonts = {}
         self.imgs = {}
+        self.sounds = {}
 
         self.startTime = time.time()
 
