@@ -1,0 +1,12 @@
+{
+  "normal": {
+    "damage": 5,
+    "health": 100,
+    "speed": 1
+  },
+  "strong": {
+    "damage": 8,
+    "health": 200,
+    "speed": 0.5
+  }
+}
