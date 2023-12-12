@@ -34,7 +34,7 @@ class SoftwareRenderer():
         
         self.actionRN = None
 
-        self.cash = 10000 # debug value
+        self.cash = sys.maxsize # debug value
 
         self.dir = os.getcwd()
 
