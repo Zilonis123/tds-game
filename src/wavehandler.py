@@ -1,4 +1,4 @@
-import json, random
+import json, random, pygame
 from .Entities.enemies import Enemy
 
 
@@ -21,14 +21,15 @@ def start_next_wave(render):
 def generate_random_coordinates(render):
     box_x = 0
     box_y = 0
-    box_width = render.WIDTH
-    box_height = render.HEIGHT
+    box_width = render.WIDTH+100
+    box_height = render.HEIGHT+100
+    rect = pygame.Rect(-50,-50,box_width, box_height)
     while True:
-        x = random.uniform(-10, render.WIDTH+10)
-        y = random.uniform(-10, render.HEIGHT+10)
+        x = random.uniform(-100, render.WIDTH+100)
+        y = random.uniform(-100, render.HEIGHT+100)
 
         # Check if the coordinates are outside the box
-        if not (box_x < x < box_x + box_width and box_y < y < box_y + box_height):
+        if not rect.collidepoint(x,y):
             return x, y
 
 def getNextWave(render, data, wave: int) -> dict:

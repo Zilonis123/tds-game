@@ -54,7 +54,7 @@ class SoftwareRenderer():
         self.enemies: list[Enemy] = []
         self.selectedEnemy: Enemy | None = None
         
-        self.wave = 1
+        self.wave = 0
         self.waveIsLoading = False
     
 
