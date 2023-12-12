@@ -9,10 +9,8 @@ def start_next_wave(render):
     f = open("info/waves.json")
     data = json.load(f)
     
-    waveInfo = data.get(str(render.wave), None)
-    if waveInfo == None:
-        return
-
+    waveInfo = getNextWave(render, data, render.wave)
+    
     for enemy, amount in waveInfo.items():
         for i in range(amount):
             pos = generate_random_coordinates(render)
@@ -32,3 +30,9 @@ def generate_random_coordinates(render):
         # Check if the coordinates are outside the box
         if not (box_x < x < box_x + box_width and box_y < y < box_y + box_height):
             return x, y
+
+def getNextWave(render, data, wave: int) -> dict:
+    waveInfo = data.get(str(wave), None)
+    if waveInfo == None:
+        return getNextWave(render, data, wave-1)
+    return waveInfo

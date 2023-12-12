@@ -45,10 +45,10 @@ class Enemy():
         data = data.get(type, None)
 
         if data != None:
-            self.health= self.maxhealth = data["health"]
-            self.strength = data["damage"]
-            self.speed = data["speed"]
-            self.cooldown_increase = data["cooldown"]
+            self.health = self.maxhealth = data["health"]
+            self.strength: int = data["damage"]
+            self.speed: float = data["speed"]
+            self.cooldown_increase: int = data["cooldown"]
             self.color = data["color"]
     
         
@@ -77,31 +77,30 @@ class Enemy():
         # tick cooldown
         self.cooldown -= 1
         self._move_to_turret(render)
+        if self.type == "strong":
+            pass
 
     def change_target(self, target: str):
         self.path = []
         self.targetTurret = target
+
+        
     
  
     def _move_to_turret(self, render):
         if self.targetTurret == None:
             # search for a turret that's the closest to the enemy
             turret: str = find_turret(self, render)
-            if turret != None:
-                self.targetTurret = turret.uid
-
-        if self.targetTurret == None:
-            return
+            if turret == None:
+                return
+            self.targetTurret = turret.uid
 
         # if we have a turret selected go attack it
 
         # for precausion let's check if the turret exists
         turret = findturret_by_id(render, self.targetTurret)
         if turret == None:
-            # no turret by that id was found
-            # meaning the turret was deleted or destroyed
             self.targetTurret = None
-
             self.path = []
             return
         

@@ -9,7 +9,7 @@
   "strong": {
     "damage": 15,
     "health": 200,
-    "speed": 0.5,
+    "speed": 1,
     "color": "darkred",
     "cooldown": 28
   }

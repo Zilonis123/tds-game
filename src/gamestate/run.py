@@ -21,6 +21,7 @@ def run_game(render):
 
 
     if is_wave_finished(render):
+        render.wave += 1
         start_next_wave(render)
 
     mx,my = render.mousePos
