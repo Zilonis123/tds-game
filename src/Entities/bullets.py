@@ -8,7 +8,7 @@ class Bullet():
         self.spx = spx
         self.spy = spy
         self.speed = bulletSpeed
-        self.x, self.y = pos
+        self.x, self.y = pos # we use these values because pygame rects dont support floating points
         self.strength = strength
         self.rect = pg.Rect(pos, (18,18))
 
@@ -39,26 +39,9 @@ class Bullet():
             if enemy.rect.colliderect(self.rect):
                 enemy.damage(render, self.strength)
 
-                # we are ded
                 render.bullets.remove(self)
-                
-                # increase turret stats
-                if not self.turret:
-                    self.turret.damagedealt += self.strength
-                    # check if killed
-                    if _find_enemy(render, enemy.uid) == None:
-                        self.turret.kills += 1
                 return
         
 
     def draw(self, render):
         circle_renderer(render, self.rect, "yellow", radius=self.rect.width//2)
-
-
-def _find_enemy(render, id):
-    target = None
-    for enemy in render.enemies:
-        if enemy.uid != id:
-            continue
-        target = enemy.uid
-    return target

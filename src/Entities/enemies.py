@@ -1,35 +1,26 @@
 from ..Visuals.renderers import circle_renderer, healthbar, text
 import pygame as pg
-from ..usefulmath import diagonally_pathfind, findturret_by_id
-
+from ..usefulmath import diagonally_pathfind, findturret_by_id, multiplyTuple
 from .Enemies.enemycollisions import *
 from .Enemies.enemytargets import *
-
 from .turrets import Turret
-
 from .Enemies.enemypathfind import astar_pathfinding, draw_path
 
-import sys
+import sys, math, json
 from loguru import logger
-
-import math
 from random import uniform
 
 class Enemy():
     def __init__(self, type: str, pos: tuple[int | float, int | float], renderer=circle_renderer):
         self.type = type
         self.pos: tuple[int | float, int | float] = pos
-        self.health: int = 100
-        self.maxhealth: int = 100
         self.renderer = renderer
 
-        self.speed: int | float = 2
 
         self.path: list = []
         self.pathstart: tuple[int|float, int|float] | None = None
 
-        self.cooldown: int = -1 # if higher than 0 cant attack
-        self.strength: int = 10
+        
 
         self.rect: pg.Rect = pg.Rect(pos, (30,30))
 
@@ -40,8 +31,27 @@ class Enemy():
 
         self.targetTurret: str | None  = None
 
-        if type=="normal":
-            self.color: str = "darkgreen"
+        # default values
+        self.health= self.maxhealth = 100
+        self.speed: int | float = 2
+        self.cooldown: int = -1
+        self.strength: int = 10
+        self.cooldown_increase = 30
+        self.color = "black"
+
+        # get info about ourselfes
+        f = open("info/enemies.json")
+        data = json.load(f)
+        data = data.get(type, None)
+
+        if data != None:
+            self.health= self.maxhealth = data["health"]
+            self.strength = data["damage"]
+            self.speed = data["speed"]
+            self.cooldown_increase = data["cooldown"]
+            self.color = data["color"]
+    
+        
 
     def draw(self, render):
         self.renderer(render, self.rect, self.color)
@@ -102,17 +112,18 @@ class Enemy():
                 turret.damage(render, self.strength)
 
                 self.path = []
-                self.cooldown = 30
+                self.cooldown = self.cooldown_increase
             return
 
         if self.path == []:
-            self.path = astar_pathfinding(self.rect.center, turret.rect.center, 1)
+            self.path = astar_pathfinding(self.rect.center, turret.rect.center, self.speed)
             if self.path != []:
                 self.pathstart = self.rect.center
             else:
                 return
 
         direction: tuple[int,int] = self.path.pop()
+        direction: tuple[float,float] = multiplyTuple(direction, (self.speed, self.speed))
 
         self.rect: pg.Rect = self.rect.move(direction[0], direction[1])
 

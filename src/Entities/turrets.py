@@ -13,9 +13,6 @@ class Turret():
         self.cooldown: int = -1 # if >0 then can shoot
         self.attacking: None|str = None # stores uid
 
-        # stats
-        self.kills: int = 0
-        self.damagedealt: int = 0
 
         self.turretheadclr: int = 50 # this is not the color, but the difference in the color between the body
         # positive = lighter 
@@ -101,12 +98,6 @@ class Turret():
 
             # display stats
             if render.actionRN != "grabturret":
-                text(render, f"Kills: {self.kills}", "black", (self.rect.topleft[0]-100, self.rect.topleft[1]), 
-                type="topleft", font="Gobold.otf")
-
-                text(render, f"Damage: {self.damagedealt}", "black", (self.rect.topleft[0]-100, self.rect.topleft[1]+20),
-                type="topleft", font="Gobold.otf")
-
                 text(render, f"UId: {self.uid}", "black", (self.rect.topright[0]+10, self.rect.topright[1]+20),
                 type="topleft", font="Gobold.otf")
 
