@@ -1,6 +1,6 @@
 from ..Visuals.renderers import circle_renderer, healthbar, text
 import pygame as pg
-from ..usefulmath import diagonally_pathfind, findturret_by_id, multiplyTuple
+from ..usefulmath import findturret_by_id, multiplyTuple
 from .Enemies.enemycollisions import *
 from .Enemies.enemytargets import *
 from .turrets import Turret
@@ -47,7 +47,7 @@ class Enemy():
         if data != None:
             self.health = self.maxhealth = data["health"]
             self.strength: int = data["damage"]
-            self.speed: float = data["speed"]
+            self.speed: int = data["speed"]
             self.cooldown_increase: int = data["cooldown"]
             self.color = data["color"]
     

@@ -33,6 +33,7 @@ def change_gamestate(render, to: str):
             
     elif to == "Loading":
         # generate thing to load
+        render.FPS = 999
         render.notloaded = {"fonts":[], "imgs": [], "sounds": []}
 
         directory_path = os.path.join(render.dir, "assets/fonts")

@@ -73,3 +73,4 @@ def run_loading(render):
 
     if sum(len(lst) for lst in render.notloaded.values()) <= 0:
         change_gamestate(render, "mainmenu")
+        render.FPS = 60
