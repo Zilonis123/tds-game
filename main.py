@@ -76,7 +76,6 @@ class SoftwareRenderer():
         self.startTime = time.time()
 
         self.ticks = 0 # stores the amount of times run() has ran
-        self.cache = {}
 
         self.mousePos: tuple[float, float] = (0,0)
         self.mouseDown: tuple[float, float] = (-99, -99)
@@ -103,6 +102,10 @@ class SoftwareRenderer():
         draw_func = d.get(self.gamestate, None)
         if draw_func != None:
             draw_func(self)
+
+
+        if self.debug:
+            draw_debug(self)
 
 
     def handleKeyPress(self):

@@ -101,9 +101,7 @@ class Turret():
                 text(render, f"UId: {self.uid}", "black", (self.rect.topright[0]+10, self.rect.topright[1]+20),
                 type="topleft", font="Gobold.otf")
 
-        if render.debug and render.selectedTurret != self:
-            text(render, str(self.hovered), "Green", self.rect.center, type="center", background=True)
-
+                
     def _draw_head(self, render, color):
         size: tuple[int|float, int|float] = (self.rect.w//2, self.rect.h//2)
         pos: tuple[int|float, int|float] = (self.rect.center[0]-size[0]//2, self.rect.center[1]-size[1]//2)

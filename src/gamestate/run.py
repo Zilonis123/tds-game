@@ -7,7 +7,7 @@ from src.wavehandler import *
 
 
 def run_game(render):
-    # Tick
+    # Tickr
     if render.speedUp:
         for enemy in render.enemies:enemy.tick(render)
         for u in render.UI: u.tick(render)
@@ -17,7 +17,7 @@ def run_game(render):
     for enemy in render.enemies:enemy.tick(render)
     for u in render.UI: u.tick(render)
     for turret in render.turrets:turret.tick(render)
-    for b in render.bullets:b.tick(render)
+    for b in render.bullets:b.tick(ender)
 
 
     if is_wave_finished(render):

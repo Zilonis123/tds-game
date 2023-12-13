@@ -77,9 +77,6 @@ class UIe:
             text(render, self.info["text"], "BLACK", self.rect.center, font="Gobold.otf")
        
             
-        if render.debug:
-            text(render, str(self.hovered), "GREEN", self.rect.center, background=True, backgroundClr=pg.Color(0,0,0,75))
-
         if self.hovered and self.type != "delete":
             self.renderer(render, self.rect, "white", width=2)
 

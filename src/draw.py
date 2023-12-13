@@ -60,17 +60,7 @@ def draw_turrets(render):
 
 def draw_debug(render):
 
-    # memory
-    if render.ticks%240 or not render.cache["memory"]:
-        size = psutil.Process().memory_info().rss
-        store = round(size/1024**2)
-        render.cache["memory"] = store
-
-    mem = render.cache["memory"]
-
     y=0
-    rect = text(render, f"Memory {mem}Kb", "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
-    y+=rect.height
 
     rect = text(render, f"FPS {round(render.FPSGraph[-1])} (AVG {round(sum(render.FPSGraph)/len(render.FPSGraph))})", 
     "white", (render.WIDTH, render.HEIGHT-y), background=True, type="bottomright")
@@ -110,7 +100,8 @@ def draw_debug(render):
     if len(points) > 2:
         pg.draw.lines(render.screen, "red", False, points, width=3)
 
-        r = pg.Rect((location[0], location[1]-63*size), (len(render.FPSGraph)*size, 63*size))
+        ADJUSTED_FPS = render.FPS+3
+        r = pg.Rect((location[0], location[1]-ADJUSTED_FPS*size), (len(render.FPSGraph)*size, ADJUSTED_FPS*size))
         square_render(render, r, "white", width=2)
         text(render, "FPS", "WHITE", r.midtop, background=True)
 

@@ -28,8 +28,7 @@ def draw_game(render):
         text(render, "Change Target", "black", (render.WIDTH, render.HEIGHT), type="bottomright", 
         font="Gobold.otf", background=True)
 
-    if render.debug:
-        draw_debug(render)
+
 
 def draw_loading(render):
     def draw_bar(render, type: str, tt: str, y: int):
