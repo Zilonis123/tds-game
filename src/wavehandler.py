@@ -1,11 +1,32 @@
 import json, random, pygame
 from .Entities.enemies import Enemy
+from .Visuals.renderers import text
 
+
+FRAMES_TEXT_ALIVE = 120
 
 def is_wave_finished(render):
    return render.waveIsLoading == False and len(render.enemies) == 0 
 
+
+def wave_text(render):
+    
+    text(render, f"Wave {render.wave}", "white", render.screencenter, size=50, 
+    font="Nexa-Heavy.ttf", opacity=255-round((render.ticks-render.waveStartedAt)/FRAMES_TEXT_ALIVE*255))
+
+
 def start_next_wave(render):
+
+    if render.waveStartedAt == -1:
+        render.waveStartedAt = render.ticks
+
+    if render.ticks-render.waveStartedAt <= FRAMES_TEXT_ALIVE:
+        wave_text(render)
+        return
+
+    render.waveStartedAt = -1
+    render.wave += 1
+
     f = open("info/waves.json")
     data = json.load(f)
     

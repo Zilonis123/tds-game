@@ -56,6 +56,7 @@ class SoftwareRenderer():
         
         self.wave = 0
         self.waveIsLoading = False
+        self.waveStartedAt = -1 # stores the tick at which the wave started
     
 
         # bullets

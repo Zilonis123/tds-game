@@ -99,7 +99,7 @@ def healthbar(render, pos: tuple[int | float, int | float], health: int, maxheal
     text(render, str(health), "white", (x, y-5), 10)
 
 def text(render, text: str, color: pg.Color | str, pos: tuple[int | float, int | float], size=18, type="center", 
-font="freesansbold.ttf", background=False, backgroundClr=pg.Color(0,0,0,70)) -> pg.Rect:
+font="freesansbold.ttf", background=False, backgroundClr=pg.Color(0,0,0,70), opacity=255) -> pg.Rect:
     # init font
     type = type.lower()
 
@@ -110,6 +110,8 @@ font="freesansbold.ttf", background=False, backgroundClr=pg.Color(0,0,0,70)) -> 
         render.fonts[f"{font}-{size}"] = f
 
     surface = f.render(text, True, color)
+    if opacity != 255:
+        surface.set_alpha(opacity)
 
     rect = surface.get_rect()
 

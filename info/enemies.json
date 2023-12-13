@@ -1,14 +1,14 @@
 {
   "normal": {
     "damage": 10,
-    "health": 100,
+    "health": 75,
     "speed": 1,
     "color": "darkgreen",
     "cooldown": 30
   },
   "strong": {
     "damage": 15,
-    "health": 200,
+    "health": 100,
     "speed": 1,
     "color": "darkred",
     "cooldown": 28
