@@ -206,7 +206,7 @@ def tick_turret(self, render):
         direction = diagonally_pathfind(self.rect.center, enemy.rect.center)
 
         # create bullet
-        b = Bullet(direction[0], direction[1], self.rect.center, self.cIncrease, self.bSpeed, turret=self)
+        b = Bullet(direction[0], direction[1], self.rect.center, self.cIncrease, self.bSpeed)
         render.bullets.append(b)
 
         # cooldown

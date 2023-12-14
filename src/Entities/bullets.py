@@ -1,25 +1,24 @@
 import pygame as pg
 from ..Visuals.renderers import circle_renderer
 from ..sound import play
+from dataclasses import dataclass
 
-
+@dataclass
 class Bullet():
-    def __init__(self, spx, spy, pos, strength, bulletSpeed, **kwargs):
-        self.spx = spx
-        self.spy = spy
-        self.speed = bulletSpeed
-        self.x, self.y = pos # we use these values because pygame rects dont support floating points
-        self.strength = strength
-        self.rect = pg.Rect(pos, (18,18))
+    spx: int
+    spy: int
+    pos: tuple[int, int]
+    strength: float | int
+    speed: float
 
-        self.turret = None or kwargs["turret"]
+    def __post_init__(self):
+        self.x, self.y = self.pos
+        self.rect = pg.Rect(self.pos, (18,18))
 
-        # sfx
         self.playedFire = False
-        
 
     def tick(self, render):
-        if not self.playedFire:
+        if self.playedFire == False:
             play(render, "Shoot.wav")
             self.playedFire = True
 
