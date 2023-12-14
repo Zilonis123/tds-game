@@ -8,6 +8,10 @@ FRAMES_TEXT_ALIVE = 120
 def is_wave_finished(render):
    return render.waveIsLoading == False and len(render.enemies) == 0 
 
+def wave_handler(render):
+    if is_wave_finished(render):
+        start_next_wave(render)
+        
 
 def wave_text(render):
     

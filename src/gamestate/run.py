@@ -3,7 +3,7 @@ import os
 import pygame as pg
 from ..Entities.turrets import Turret
 from .init import change_gamestate
-from src.wavehandler import *
+from src.waves.wavehandler import *
 
 
 def run_game(render):
@@ -20,8 +20,7 @@ def run_game(render):
     for b in render.bullets:b.tick(render)
 
 
-    if is_wave_finished(render):
-        start_next_wave(render)
+    wave_handler(render)
 
     mx,my = render.mousePos
     keys = pg.key.get_pressed()
