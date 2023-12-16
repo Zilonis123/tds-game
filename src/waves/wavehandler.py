@@ -40,6 +40,7 @@ def start_next_wave(render):
     render.currentWave = wave
 
     wave.spawn_all(render)
+    render.addcash(50*render.wave//2)
     render.wave += 1
 
 

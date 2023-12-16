@@ -28,7 +28,8 @@ class Bullet():
         self.rect.x = round(self.x)
         self.rect.y = round(self.y)
 
-        outofbounds = self.x>render.WIDTH or self.x<0 or self.y>render.HEIGHT or self.y<0
+        rect = pg.Rect(-50,-50,render.WIDTH+100, render.HEIGHT+100)
+        outofbounds = not rect.collidepoint(self.x, self.y)
         if outofbounds:
             render.bullets.remove(self)
             return
