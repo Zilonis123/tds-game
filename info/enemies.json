@@ -7,16 +7,16 @@
     "cooldown": 30
   },
   "strong": {
-    "damage": 15,
-    "health": 100,
-    "speed": 1,
+    "damage": 18,
+    "health": 175,
+    "speed": 0.85,
     "color": "darkred",
     "cooldown": 28
   },
   "fast": {
     "damage": 6,
-    "health": 68,
-    "speed": 2,
+    "health": 50,
+    "speed": 1.5,
     "color": "lightblue",
     "cooldown": 24
   }

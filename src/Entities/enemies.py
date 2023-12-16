@@ -1,6 +1,6 @@
 from ..Visuals.renderers import circle_renderer, healthbar, text
 import pygame as pg
-from ..usefulmath import findturret_by_id, multiplyTuple
+from ..usefulmath import findturret_by_id, multiplyTuple, changeTuple
 from .Enemies.enemycollisions import *
 from .Enemies.enemytargets import *
 from .turrets import Turret
@@ -11,9 +11,9 @@ from loguru import logger
 from random import uniform
 
 class Enemy():
-    def __init__(self, type: str, pos: tuple[int | float, int | float], renderer=circle_renderer):
-        self.type = type
-        self.pos: tuple[int | float, int | float] = pos
+    def __init__(self, type: str, pos: tuple[int, int], renderer=circle_renderer):
+        self.type: str = type
+        self.pos: tuple[int, int] = pos
         self.renderer = renderer
 
 
@@ -21,7 +21,8 @@ class Enemy():
         self.pathstart: tuple[int|float, int|float] | None = None
 
         
-
+        self.x = pos[0]
+        self.y = pos[1]
         self.rect: pg.Rect = pg.Rect(pos, (30,30))
 
         # UId
@@ -33,7 +34,7 @@ class Enemy():
 
         # default values
         self.health= self.maxhealth = 100
-        self.speed: int | float = 2
+        self.speed: int = 2
         self.cooldown: int = -1
         self.strength: int = 10
         self.cooldown_increase = 30
@@ -47,7 +48,7 @@ class Enemy():
         if data != None:
             self.health = self.maxhealth = data["health"]
             self.strength: int = data["damage"]
-            self.speed: int = data["speed"]
+            self.speed: float = data["speed"]
             self.cooldown_increase: int = data["cooldown"]
             self.color = data["color"]
     
@@ -121,10 +122,11 @@ class Enemy():
             else:
                 return
 
-        direction: tuple[int,int] = self.path.pop()
-        direction: tuple[float,float] = multiplyTuple(direction, (self.speed, self.speed))
-
-        self.rect: pg.Rect = self.rect.move(direction[0], direction[1])
+        direction: tuple[float,float] = self.path.pop()
+        self.x, self.y = changeTuple((self.x, self.y), direction)
+        
+        self.rect.x = self.x
+        self.rect.y = self.y
 
         # check for collisions
         

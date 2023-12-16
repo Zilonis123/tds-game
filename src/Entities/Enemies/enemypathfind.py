@@ -2,7 +2,7 @@ import math
 import heapq
 import pygame
 
-from ...usefulmath import diagonally_pathfind
+from ...usefulmath import diagonally_pathfind, changeTuple
 from ...decorators import timer
 
 
@@ -13,15 +13,13 @@ def draw_path(screen, path: list[tuple[int,int]], start: tuple[float, float], re
     clr = "RED"
 
     for dx, dy in path:
-        new_x = current[0] + dx
-        new_y = current[1] + dy
         if a%4 == 0: pygame.draw.circle(screen, clr, current, 3)
-        current = (new_x, new_y)
+        current = changeTuple(current, (dx, dy))
         a+=1
 
 
 MAX_PATH_LENGTH = 500
-def astar_pathfinding(start: tuple[int, int], end: tuple[int, int], speed: int):
+def astar_pathfinding(start: tuple[int, int], end: tuple[int, int], speed: float):
     path: list[tuple] = []
     x, y = start
     at = (round(x), round(y))
@@ -30,8 +28,9 @@ def astar_pathfinding(start: tuple[int, int], end: tuple[int, int], speed: int):
 
     while 1==1:
         dx, dy = diagonally_pathfind(at, end)
-        scaled_dx, scaled_dy = round(dx * speed), round(dy * speed)
-        at = (at[0] + scaled_dx, at[1] + scaled_dy)
+        scaled_dx, scaled_dy = dx * speed, dy * speed
+        
+        at = changeTuple(at, (scaled_dx, scaled_dy))
         path.append((scaled_dx, scaled_dy))
 
         if len(path) > MAX_PATH_LENGTH or (dx, dy) == (0, 0):
