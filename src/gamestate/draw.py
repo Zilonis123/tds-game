@@ -4,7 +4,7 @@ from ..Visuals.renderers import image
 
 # game state draw funcs
 def draw_game(render):
-    render.screen.fill("darkgray")
+    draw_game_background(render)
 
     
     draw_turrets(render)
