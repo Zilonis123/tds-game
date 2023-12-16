@@ -1,4 +1,4 @@
-from ..Visuals.renderers import circle_renderer, healthbar, text
+from ..Visuals.renderers import circle_renderer, healthbar, text, draw_circle_alpha
 import pygame as pg
 from ..usefulmath import findturret_by_id, multiplyTuple, changeTuple
 from .Enemies.enemycollisions import *
@@ -23,7 +23,8 @@ class Enemy():
         
         self.x = pos[0]
         self.y = pos[1]
-        self.rect: pg.Rect = pg.Rect(pos, (30,30))
+        self.size = 30
+        self.rect: pg.Rect = pg.Rect(pos, (self.size,self.size))
 
         # UId
         tuple_str: str = ''.join(map(str, self.pos))
@@ -55,8 +56,10 @@ class Enemy():
         
 
     def draw(self, render):
+        # draw shadow
+        draw_circle_alpha(render, pg.Color(0,0,0,65), changeTuple(self.rect.center, (self.size//8, self.size//7)), 15)
         self.renderer(render, self.rect, self.color)
-        # self.renderer(render, self.rect, "black", 1)
+        self.renderer(render, self.rect, "black", width=2)
 
         # healthbar
         # only display healthbar if its smaller than max health
