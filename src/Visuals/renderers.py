@@ -84,19 +84,26 @@ def draw_circle_alpha(render, color: str | pg.Color, center: tuple[int | float, 
     render.screen.blit(shape_surf, target_rect)
 
 def healthbar(render, pos: tuple[int | float, int | float], health: int, maxhealth: int, size=5):
-    darkred = pg.Color(83,0,0)
-    green = pg.Color(0,206,17)
+    TRANSPARENCY = 220
+
+    darkred = pg.Color(83,0,0, TRANSPARENCY)
+    green = pg.Color(0,206,17, TRANSPARENCY)
     
     x,y=pos
 
     uSize = 25 # uSize - universal size // half of the line
 
-    # line background
-    pg.draw.line(render.screen, darkred, (x-uSize, y), (x+uSize, y), size)
+    surface = pg.Surface(render.screen.get_size(), pg.SRCALPHA)
 
     length: int = round((health/maxhealth)*(uSize*2))
-    pg.draw.line(render.screen, green, (x-uSize, y), ((x-uSize)+length,y), size)
-    text(render, str(health), "white", (x, y-5), 10)
+    
+    # empty health
+    pg.draw.line(surface, darkred, (x-uSize+length, y), (x+uSize, y), size)
+
+    # full health
+    pg.draw.line(surface, green, (x-uSize, y), ((x-uSize)+length,y), size)
+
+    render.screen.blit(surface, (0,0))
 
 def text(render, text: str, color: pg.Color | str, pos: tuple[int | float, int | float], size=18, type="center", 
 font="freesansbold.ttf", background=False, backgroundClr=pg.Color(0,0,0,70), opacity=255) -> pg.Rect:

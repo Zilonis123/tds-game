@@ -61,11 +61,7 @@ class Enemy():
         self.renderer(render, self.rect, self.color)
         self.renderer(render, self.rect, "black", width=2)
 
-        # healthbar
-        # only display healthbar if its smaller than max health
-        if self.health < self.maxhealth:
-            healthbar(render, (self.rect.center[0], self.rect.center[1]-20), self.health, self.maxhealth)
-
+        
         # if we are selected draw more shit
         if render.selectedEnemy == self:
             text(render, f"Target {self.targetTurret}", "black", self.rect.topright, type="topleft", font="Gobold.otf")
@@ -74,6 +70,12 @@ class Enemy():
                 draw_path(render.screen, self.path, self.pathstart, 5)
 
             self.renderer(render, self.rect, "white", 2)
+
+    def draw_after(self, render):
+        # healthbar
+        # only display healthbar if its smaller than max health
+        if self.health < self.maxhealth:
+            healthbar(render, (self.rect.center[0], self.rect.center[1]-20), self.health, self.maxhealth)
 
 
 

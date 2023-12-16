@@ -6,13 +6,16 @@ from ..Visuals.renderers import image
 def draw_game(render):
     render.screen.fill("darkgray")
 
-    # draw enemies
-    for e in render.enemies: e.draw(render)
-
+    
     draw_turrets(render)
 
     # bullets
     for b in render.bullets: b.draw(render)
+
+    # draw enemies
+    for e in render.enemies: e.draw(render)
+    for e in render.enemies: e.draw_after(render) # We do this so that enemies dont cover things like health
+
 
     draw_UI(render)
 
