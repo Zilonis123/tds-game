@@ -34,13 +34,12 @@ def start_next_wave(render):
         return
 
     render.waveStartedAt = -1
-    render.wave += 1
-
     
     wave = Wave(render.wave)
 
     render.currentWave = wave
 
     wave.spawn_all(render)
+    render.wave += 1
 
 

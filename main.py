@@ -55,7 +55,7 @@ class SoftwareRenderer():
         self.enemies: list[Enemy] = []
         self.selectedEnemy: Enemy | None = None
         
-        self.wave = 0
+        self.wave = 1
         self.currentWave: Wave = Wave(-1)
         self.waveStartedAt = -1 # stores the tick at which the wave started
     

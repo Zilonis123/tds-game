@@ -12,5 +12,12 @@
     "speed": 1,
     "color": "darkred",
     "cooldown": 28
+  },
+  "fast": {
+    "damage": 6,
+    "health": 68,
+    "speed": 2,
+    "color": "lightblue",
+    "cooldown": 24
   }
 }
