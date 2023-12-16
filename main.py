@@ -10,6 +10,7 @@ from src.Visuals.UI import UIe
 from src.Entities.turrets import Turret
 from src.Entities.enemies import Enemy
 from src.Entities.Enemies.enemycollisions import check_collisions
+from src.waves.wave import Wave
 from src.Entities.ttext import Ttext
 
 from loguru import logger 
@@ -55,7 +56,7 @@ class SoftwareRenderer():
         self.selectedEnemy: Enemy | None = None
         
         self.wave = 0
-        self.waveIsLoading = False
+        self.currentWave: Wave = Wave(-1)
         self.waveStartedAt = -1 # stores the tick at which the wave started
     
 
@@ -91,7 +92,9 @@ class SoftwareRenderer():
 
             if self.timeAlive > 120:
                 render.ttext.remove(self)
-        t = Ttext(str(cash), (self.WIDTH, 50), cash_f, color="RED" if cash < 0 else "GREEN")
+
+        clr = "RED" if cash < 0 else "GREEN"
+        t = Ttext(str(cash), (self.WIDTH, 50), cash_f, clr, "topright")
         self.ttext.append(t)
         self.cash += cash
 
