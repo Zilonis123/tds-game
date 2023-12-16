@@ -72,12 +72,12 @@ class UIe:
         elif self.isTurretspawn:
             self.renderer(render, self.rect, dcolor)
         elif self.type == "mainmenu":
-            self.renderer(render, self.rect, dcolor)
+            self.renderer(render, self.rect, dcolor, border=30)
 
-            text(render, self.info["text"], "BLACK", self.rect.center, font="Gobold.otf")
+            text(render, self.info["text"], "BLACK", self.rect.center, font="Nexa-Heavy.ttf")
        
             
-        if self.hovered and self.type != "delete":
+        if self.hovered and self.type != "delete" and self.type != "mainmenu":
             self.renderer(render, self.rect, "white", width=2)
 
             if self.isTurretspawn:
