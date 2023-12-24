@@ -1,4 +1,4 @@
-from ..Visuals.renderers import circle_renderer, healthbar, text
+from ..Visuals.renderers import circle_renderer, healthbar, text, draw_circle_alpha
 import pygame as pg
 from ..usefulmath import findturret_by_id, multiplyTuple, changeTuple
 from .Enemies.enemycollisions import *
@@ -23,7 +23,8 @@ class Enemy():
         
         self.x = pos[0]
         self.y = pos[1]
-        self.rect: pg.Rect = pg.Rect(pos, (30,30))
+        self.size = 30
+        self.rect: pg.Rect = pg.Rect(pos, (self.size,self.size))
 
         # UId
         tuple_str: str = ''.join(map(str, self.pos))
@@ -55,14 +56,12 @@ class Enemy():
         
 
     def draw(self, render):
+        # draw shadow
+        # draw_circle_alpha(render, pg.Color(0,0,0,65), changeTuple(self.rect.center, (self.size//8, self.size//7)), 15)
         self.renderer(render, self.rect, self.color)
-        # self.renderer(render, self.rect, "black", 1)
+        self.renderer(render, self.rect, "black", width=2)
 
-        # healthbar
-        # only display healthbar if its smaller than max health
-        if self.health < self.maxhealth:
-            healthbar(render, (self.rect.center[0], self.rect.center[1]-20), self.health, self.maxhealth)
-
+        
         # if we are selected draw more shit
         if render.selectedEnemy == self:
             text(render, f"Target {self.targetTurret}", "black", self.rect.topright, type="topleft", font="Gobold.otf")
@@ -71,6 +70,12 @@ class Enemy():
                 draw_path(render.screen, self.path, self.pathstart, 5)
 
             self.renderer(render, self.rect, "white", 2)
+
+    def draw_after(self, render):
+        # healthbar
+        # only display healthbar if its smaller than max health
+        if self.health < self.maxhealth:
+            healthbar(render, (self.rect.center[0], self.rect.center[1]-20), self.health, self.maxhealth)
 
 
 

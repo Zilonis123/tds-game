@@ -10,7 +10,7 @@ def play(render, sound: str) -> bool:
 
 def play_music(render, sound: str):
     if render.musicPlaying != None:
-        render.musicPlaying.fadeout(2000)
+        render.musicPlaying.fadeout(500)
     
     s = play(render, sound)
     if s:

@@ -4,6 +4,13 @@ import pygame as pg
 from .Visuals.renderers import text, square_render
 from .usefulmath import changeTuple
 
+def draw_game_background(render):
+    color = [pg.Color(61,133,198), pg.Color(111,168,220)]
+    sqsize = 75
+    for x in range(render.WIDTH//sqsize+1):
+        for y in range(render.HEIGHT//sqsize+1):
+            r = pg.Rect((x*sqsize,y*sqsize), (sqsize, sqsize))
+            pg.draw.rect(render.screen, color[(y+x%2)%2], r)
 
 def draw_UI(render):
     bRect = pg.Rect((0,0), (80, render.HEIGHT))

@@ -32,11 +32,11 @@ def triangle_render(render, rect: pg.Rect, color: str | pg.Color, width=0, rotat
     pg.draw.polygon(render.screen, color, rotated_vertices, width)
 
 
-def square_render(render, rect: pg.Rect, color: str | pg.Color, width=0, rotation_angle=0):
+def square_render(render, rect: pg.Rect, color: str | pg.Color, width=0, rotation_angle=0, border=0):
     if isinstance(color, pg.Color):
         # draw with alpha / transparency
         shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
-        pg.draw.rect(shape_surf, color, shape_surf.get_rect())
+        pg.draw.rect(shape_surf, color, shape_surf.get_rect(), border_radius=border)
         render.screen.blit(shape_surf, rect)
         return
 
@@ -45,7 +45,7 @@ def square_render(render, rect: pg.Rect, color: str | pg.Color, width=0, rotatio
         # Create a square with a specified rotation angle
         rotated_surface = pg.Surface(rect.size, pg.SRCALPHA)
         rotated_surface.fill((0, 0, 0, 0))  # Fill with transparent color
-        square = pg.draw.rect(rotated_surface, color, (0, 0, rect.width, rect.height), width)
+        square = pg.draw.rect(rotated_surface, color, (0, 0, rect.width, rect.height), width, border_radius=border)
 
         # Rotate the square
         rotated_square = pg.transform.rotate(rotated_surface, rotation_angle)
@@ -56,7 +56,7 @@ def square_render(render, rect: pg.Rect, color: str | pg.Color, width=0, rotatio
         # Blit the rotated square onto the screen
         render.screen.blit(rotated_square, rotated_rect.topleft)
     else:
-        pg.draw.rect(render.screen, color, rect, width)
+        pg.draw.rect(render.screen, color, rect, width, border_radius=border)
 
 
 def hexagon_render(render, rect: pg.Rect, color: str | pg.Color, width=0, rotation_angle=0):
@@ -84,19 +84,26 @@ def draw_circle_alpha(render, color: str | pg.Color, center: tuple[int | float, 
     render.screen.blit(shape_surf, target_rect)
 
 def healthbar(render, pos: tuple[int | float, int | float], health: int, maxhealth: int, size=5):
-    darkred = pg.Color(83,0,0)
-    green = pg.Color(0,206,17)
+    TRANSPARENCY = 220
+
+    darkred = pg.Color(83,0,0, TRANSPARENCY)
+    green = pg.Color(0,206,17, TRANSPARENCY)
     
     x,y=pos
 
     uSize = 25 # uSize - universal size // half of the line
 
-    # line background
-    pg.draw.line(render.screen, darkred, (x-uSize, y), (x+uSize, y), size)
+    surface = pg.Surface(render.screen.get_size(), pg.SRCALPHA)
 
     length: int = round((health/maxhealth)*(uSize*2))
-    pg.draw.line(render.screen, green, (x-uSize, y), ((x-uSize)+length,y), size)
-    text(render, str(health), "white", (x, y-5), 10)
+    
+    # empty health
+    pg.draw.line(surface, darkred, (x-uSize+length, y), (x+uSize, y), size)
+
+    # full health
+    pg.draw.line(surface, green, (x-uSize, y), ((x-uSize)+length,y), size)
+
+    render.screen.blit(surface, (0,0))
 
 def text(render, text: str, color: pg.Color | str, pos: tuple[int | float, int | float], size=18, type="center", 
 font="freesansbold.ttf", background=False, backgroundClr=pg.Color(0,0,0,70), opacity=255) -> pg.Rect:
