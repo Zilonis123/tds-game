@@ -19,7 +19,7 @@ class Bullet():
 
     def tick(self, render):
         if self.playedFire == False:
-            play(render, "Shoot.wav")
+            # play(render, "Shoot.wav")
             self.playedFire = True
 
         # move

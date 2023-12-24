@@ -19,7 +19,6 @@ def change_gamestate(render, to: str):
     elif to == "mainmenu":
         def action(render):
             change_gamestate(render, "game")
-            render.sounds["Minimalist11.mp3"].play()
         render.UI = [UIe("mainmenu", render.screencenter, "gray", size=(200, 50), align="center", action=action, text="START")]
         def action(render):
             change_gamestate(render, "controlls")
@@ -29,7 +28,7 @@ def change_gamestate(render, to: str):
             action=action, text="CONTROLLS")
             )
 
-        play_music(render, "music/mainmenu-theme.mp3")
+        # play_music(render, "music/mainmenu-theme.mp3")
             
     elif to == "Loading":
         # generate thing to load

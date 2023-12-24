@@ -57,7 +57,7 @@ class Enemy():
 
     def draw(self, render):
         # draw shadow
-        draw_circle_alpha(render, pg.Color(0,0,0,65), changeTuple(self.rect.center, (self.size//8, self.size//7)), 15)
+        # draw_circle_alpha(render, pg.Color(0,0,0,65), changeTuple(self.rect.center, (self.size//8, self.size//7)), 15)
         self.renderer(render, self.rect, self.color)
         self.renderer(render, self.rect, "black", width=2)
 
